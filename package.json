@@ -7,22 +7,22 @@
     "build": "remix build",
     "dev": "remix dev --manual -c \"npm run start\"",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
-    "start": "wrangler pages dev --compatibility-date=2023-06-21 ./public",
+    "start": "wrangler pages dev --compatibility-date=2024-01-14 ./public",
     "typecheck": "tsc",
     "pages:deploy": "npm run build && wrangler pages deploy ./public"
   },
   "dependencies": {
-    "@remix-run/cloudflare": "^2.4.1",
-    "@remix-run/cloudflare-pages": "^2.4.1",
-    "@remix-run/css-bundle": "^2.4.1",
-    "@remix-run/react": "^2.4.1",
+    "@remix-run/cloudflare": "2.5.0",
+    "@remix-run/cloudflare-pages": "2.5.0",
+    "@remix-run/css-bundle": "2.5.0",
+    "@remix-run/react": "2.5.0",
     "isbot": "^4.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20230518.0",
-    "@remix-run/dev": "^2.4.1",
+    "@remix-run/dev": "2.5.0",
     "@types/react": "^18.2.47",
     "@types/react-dom": "^18.2.18",
     "@typescript-eslint/eslint-plugin": "^6.18.1",
@@ -33,6 +33,7 @@
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3",
     "wrangler": "3.22.4"
   },
