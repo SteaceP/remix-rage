@@ -17,6 +17,7 @@ export default function Index() {
     <div className="flex flex-col min-h-screen">
       {/* Header Section */}
       <header className="flex flex-col items-center justify-center flex-grow">
+        <h1>
           Welcome to <span className="font-bold">Code Rage</span>
         </h1>
         <h3>This website is under RE-construction</h3>
