@@ -1,4 +1,5 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
+import { FaGithub, FaTwitter, FaFacebook } from "react-icons/fa";
 
 export const meta: MetaFunction = () => {
   return [
@@ -13,26 +14,52 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <>
-      <header className="flex justify-center items-center flex-col mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold">Welcome to Code Rage</h1>
-        <h3 className="text-lg">This website is under RE-construction</h3>
-        <p className="text-base">Please be patient.</p>
+    <div className="flex flex-col min-h-screen">
+      {/* Header Section */}
+      <header className="flex flex-col items-center justify-center flex-grow">
+          Welcome to <span className="font-bold">Code Rage</span>
+        </h1>
+        <h3>This website is under RE-construction</h3>
+        <p>Please be patient...</p>
       </header>
-      <main className="flex justify-center items-center mt-8">
-        <div className="flex justify-center items-center overflow-auto">
-          <img
-            src="/assets/images/website-rebuild.jpg"
-            alt="Code Rage Website Rebuild"
-            className="max-w-full h-auto"
-          />
-        </div>
+
+      {/* Main Content Section */}
+      <main className="flex flex-grow justify-center">
+        <img
+          src="/assets/images/website-rebuild.jpg"
+          alt="Code Rage Website Rebuild"
+          className="w-3/4 md:w-1/2"
+        />
       </main>
-      <footer className="text-center mt-8 absolute bottom-0">
-        <div className="flex justify-center items-center">
-          <p className="mx-auto">© 2024 Code Rage. All rights reserved.</p>
+
+      {/* Footer Section */}
+      <footer className="flex flex-col items-center justify-center p-4">
+        <div className="flex space-x-6">
+          <a
+            href="https://github.com/SteaceP"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaGithub size={24} />
+          </a>
+          <a
+            href="https://twitter.com/PaquetteSteacy"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaTwitter size={24} />
+          </a>
+          <a
+            href="https://facebook.com/steacyp"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaFacebook size={24} />
+          </a>
         </div>
+
+        <p className="mt-4">© 2024 Code Rage. All rights reserved.</p>
       </footer>
-    </>
+    </div>
   );
 }
