@@ -15,7 +15,6 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Header Section */}
       <header className="flex flex-col items-center justify-center flex-grow">
         <h1>
           Welcome to <span className="font-bold">Code Rage</span>
@@ -24,7 +23,6 @@ export default function Index() {
         <p>Please be patient...</p>
       </header>
 
-      {/* Main Content Section */}
       <main className="flex flex-grow justify-center">
         <img
           src="/assets/images/website-rebuild.jpg"
@@ -33,7 +31,6 @@ export default function Index() {
         />
       </main>
 
-      {/* Footer Section */}
       <footer className="flex flex-col items-center justify-center p-4">
         <div className="flex space-x-6">
           <a
