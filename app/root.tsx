@@ -1,5 +1,4 @@
-import type { LinksFunction } from "@remix-run/cloudflare";
-// import { cssBundleHref } from "@remix-run/css-bundle";
+import type { LinksFunction, MetaFunction } from "@remix-run/cloudflare";
 import {
   Links,
   Meta,
@@ -7,6 +6,8 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import { Header } from "~/components/Header"; 
+import { Footer } from "~/components/Footer";
 
 import "./tailwind.css";
 
@@ -23,6 +24,16 @@ export const links: LinksFunction = () => [
   },
 ];
 
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Code Rage" },
+    {
+      name: "description",
+      content: "Welcome to Code Rage! The website is going for a overhaul! Please be patient.",
+    },
+  ];
+};
+
 export default function App() {
   return (
     <html lang="en">
@@ -32,8 +43,10 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="flex flex-col min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-gray-950 dark:to-gray-900">
+        <Header />
         <Outlet />
+        <Footer />
         <ScrollRestoration />
         <Scripts />
       </body>
