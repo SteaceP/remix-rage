@@ -1,56 +1,47 @@
-import type { AppLoadContext } from "@remix-run/cloudflare";
+import { createCookie } from "@remix-run/cloudflare";
+import { generateToken, validateToken } from "./token.server";
 
-export const CSRF_HEADER_NAME = 'X-CSRF-Token';
-const CSRF_COOKIE_NAME = 'csrf-token';
-const TOKEN_BYTES = 32;
-
-declare global {
-    interface Env {
-        CSRF_SECRET: string;
-    }
+export function createCsrfCookie(secret: string) {
+  return createCookie("csrf-token", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+    path: "/",
+    secrets: [secret],
+    maxAge: 3600
+  });
 }
 
-class CSRFProtection {
-    private secret: string;
-
-    constructor(env: Env) {
-        this.secret = env.CSRF_SECRET || 'default-csrf-secret';
-    }
-
-    generateToken(): string {
-        const array = new Uint8Array(TOKEN_BYTES);
-        crypto.getRandomValues(array);
-        return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
-    }
-
-    async createHash(token: string): Promise<string> {
-        const encoder = new TextEncoder();
-        const data = encoder.encode(token + this.secret);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        return hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
-    }
-
-    async validateToken(token: string, hash: string): Promise<boolean> {
-        const computedHash = await this.createHash(token);
-        return computedHash === hash;
-    }
-
-    getTokenFromRequest(request: Request): string | null {
-        const cookie = request.headers.get('Cookie');
-        if (!cookie) return null;
-
-        const match = cookie.match(new RegExp(`${CSRF_COOKIE_NAME}=([^;]+)`));
-        return match ? match[1] : null;
-    }
-
-    createCookieHeader(token: string): string {
-        return `${CSRF_COOKIE_NAME}=${token}; Path=/; HttpOnly; SameSite=Strict; Secure`;
-    }
+export async function createCsrfToken(request: Request, secret: string) {
+  const csrfCookie = createCsrfCookie(secret);
+  try {
+    const existingToken = await csrfCookie.parse(request.headers.get("Cookie"));
+    const token = existingToken || generateToken();
+    const serialized = await csrfCookie.serialize(token);
+    
+    return { token, cookieHeader: serialized };
+  } catch (error) {
+    console.error("CSRF Token creation error:", error);
+    const token = generateToken();
+    const serialized = await csrfCookie.serialize(token);
+    return { token, cookieHeader: serialized };
+  }
 }
 
-export function createCSRFProtection(context: AppLoadContext) {
-    return new CSRFProtection(context.env as Env);
-}
+export async function validateCsrfToken(request: Request, formToken: string, secret: string) {
+  const csrfCookie = createCsrfCookie(secret);
+  try {
+    const cookieToken = await csrfCookie.parse(request.headers.get("Cookie"));
+    
+    if (!cookieToken || !formToken) {
+      throw new Error("Missing CSRF token");
+    }
 
-export type { CSRFProtection }; 
+    if (!validateToken(cookieToken, formToken)) {
+      throw new Error("Invalid CSRF token");
+    }
+  } catch (error) {
+    console.error("CSRF Validation error:", error);
+    throw new Error("Invalid CSRF token");
+  }
+}

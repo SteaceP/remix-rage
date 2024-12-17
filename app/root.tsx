@@ -2,10 +2,8 @@ import type { LinksFunction, MetaFunction } from "@remix-run/cloudflare";
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
 import Header from "~/components/Header";
 import Footer from "~/components/Footer";
-import { setupCSRFHeader } from "~/utils/csrf.client";
 
 import "./tailwind.css";
-import { useEffect } from "react";
 
 export const links: LinksFunction = () => [
     { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -31,10 +29,6 @@ export const meta: MetaFunction = () => {
 };
 
 export default function App() {
-    useEffect(() => {
-        setupCSRFHeader();
-    }, []);
-
     return (
         <html lang="en">
             <head>

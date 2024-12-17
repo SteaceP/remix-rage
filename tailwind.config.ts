@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import forms from '@tailwindcss/forms';
 
 export default {
   content: ["./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}"],
@@ -42,5 +43,7 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    forms,
+  ],
 } satisfies Config;
