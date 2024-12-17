@@ -15,7 +15,11 @@ interface ActionData {
     success?: boolean;
 }
 
-export function ContactForm() {
+interface ContactFormProps {
+    csrfToken: string;
+}
+
+export function ContactForm({ csrfToken }: ContactFormProps) {
     const formRef = useRef<HTMLFormElement>(null);
     const actionData = useActionData<ActionData>();
     const navigation = useNavigation();
@@ -30,6 +34,11 @@ export function ContactForm() {
 
     return (
         <Form ref={formRef} method="post" className={form.form} noValidate>
+            <input 
+                type="hidden" 
+                name="csrf-token" 
+                value={csrfToken} 
+            />
             <div className={form.formGroup}>
                 <label htmlFor="name" className={form.label}>
                     Name

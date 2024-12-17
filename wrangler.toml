@@ -1,0 +1,2 @@
+[vars]
+CSRF_SECRET = "your-development-secret"

@@ -1,44 +1,97 @@
-import type { MetaFunction, ActionFunction, ActionFunctionArgs } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
+import type { MetaFunction, ActionFunction, ActionFunctionArgs, LoaderFunction, LoaderFunctionArgs } from "@remix-run/cloudflare";
+import { useLoaderData } from "@remix-run/react";
 import { ContactForm } from "~/components/ContactForm";
-import { sendContactEmail } from "~/utils/email.server";
+import { sendContactEmail, emailSchema } from "~/utils/email.server";
+import { rateLimiter } from "~/utils/rateLimiter.server";
+import { createCSRFProtection, CSRF_HEADER_NAME } from "~/utils/csrf.server";
 
-interface FormData {
-    name: string;
-    email: string;
-    subject: string;
-    message: string;
-}
+type LoaderData = {
+    csrfToken: string;
+};
 
-export const action: ActionFunction = async ({ request }: ActionFunctionArgs) => {
-    const formData = await request.formData();
-    const data = {
-        name: formData.get("name")?.toString() || "",
-        email: formData.get("email")?.toString() || "",
-        subject: formData.get("subject")?.toString() || "",
-        message: formData.get("message")?.toString() || "",
-    };
+export const loader: LoaderFunction = async ({ context }: LoaderFunctionArgs) => {
+    const csrf = createCSRFProtection(context);
+    const token = csrf.generateToken();
+    const hash = await csrf.createHash(token);
+    const cookieHeader = csrf.createCookieHeader(hash);
+    
+    return json(
+        { csrfToken: token },
+        {
+            headers: {
+                "Set-Cookie": cookieHeader
+            }
+        }
+    );
+};
 
-    const errors: Partial<FormData> = {};
+export const action: ActionFunction = async ({ request, context }: ActionFunctionArgs) => {
+    const csrf = createCSRFProtection(context);
+    
+    // Validate CSRF token
+    const storedHash = csrf.getTokenFromRequest(request);
+    const headerToken = request.headers.get(CSRF_HEADER_NAME);
 
-    if (!data.name) errors.name = "Name is required";
-    if (!data.email) {
-        errors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-        errors.email = "Please enter a valid email address";
+    if (!storedHash || !headerToken || !await csrf.validateToken(headerToken, storedHash)) {
+        return json(
+            { 
+                errors: { 
+                    _form: "Invalid CSRF token. Please refresh the page and try again." 
+                } 
+            },
+            { status: 403 }
+        );
     }
-    if (!data.subject) errors.subject = "Subject is required";
-    if (!data.message) errors.message = "Message is required";
 
-    if (Object.keys(errors).length > 0) {
-        return Response.json({ errors }, { status: 400 });
+    const formData = await request.formData();
+    const data = Object.fromEntries(formData);
+    
+    // Get IP address or some unique identifier
+    const identifier = request.headers.get("CF-Connecting-IP") || "unknown";
+    
+    // Check rate limit
+    if (rateLimiter.isRateLimited(identifier)) {
+        const remainingTime = Math.ceil(3600 - (Date.now() % 3600000) / 1000 / 60);
+        return json(
+            {
+                errors: {
+                    _form: `Too many attempts. Please try again in ${remainingTime} minutes.`
+                }
+            },
+            { status: 429 }
+        );
+    }
+
+    // Use Zod validation
+    const result = emailSchema.safeParse(data);
+    
+    if (!result.success) {
+        return json(
+            { errors: result.error.flatten().fieldErrors },
+            { status: 400 }
+        );
     }
 
     try {
-        await sendContactEmail(data);
-        return Response.json({ success: true });
+        await sendContactEmail(result.data);
+        return json({ 
+            success: true,
+            remainingAttempts: rateLimiter.getRemainingAttempts(identifier)
+        });
     } catch (error) {
         console.error("Failed to send message:", error);
-        return Response.json({ errors: { message: "Failed to send message. Please try again." } }, { status: 500 });
+        return json(
+            { 
+                errors: { 
+                    _form: error instanceof Error 
+                        ? error.message 
+                        : "Failed to send message. Please try again." 
+                },
+                remainingAttempts: rateLimiter.getRemainingAttempts(identifier)
+            }, 
+            { status: 500 }
+        );
     }
 };
 
@@ -62,6 +115,8 @@ const styles = {
 };
 
 export default function Contact() {
+    const { csrfToken } = useLoaderData<LoaderData>();
+    
     return (
         <div className={styles.container}>
             <div className={styles.content}>
@@ -72,7 +127,7 @@ export default function Contact() {
                         I&apos;ll get back to you as soon as possible.
                     </p>
                 </div>
-                <ContactForm />
+                <ContactForm csrfToken={csrfToken} />
             </div>
         </div>
     );
