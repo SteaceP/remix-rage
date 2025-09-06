@@ -1,4 +1,1 @@
 # Will be overridden by Cloudflare Pages environment variables
-[vars]
-CSRF_SECRET = ""
-BREVO_API_KEY = ""

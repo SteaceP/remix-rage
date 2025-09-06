@@ -13,7 +13,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -33,6 +32,9 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           environment: production
           command: pages deploy ./public --project-name=${{ vars.CF_PAGES_PROJECT_NAME }}
+        env:
+          CSRF_SECRET: ${{ secrets.CSRF_SECRET }}
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
 
       - name: Print Wrangler Command Output
         env:
