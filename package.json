@@ -19,7 +19,7 @@
     "@remix-run/css-bundle": "2.17.0",
     "@remix-run/react": "2.17.0",
     "isbot": "^4.4.0",
-    "react": "^18.2.0",
+    "react": "^19.1.1",
     "react-dom": "^18.2.0",
     "react-icons": "^5.5.0",
     "zod": "^4.1.5"
@@ -28,7 +28,7 @@
     "@cloudflare/workers-types": "^4.20250906.0",
     "@remix-run/dev": "2.17.0",
     "@tailwindcss/forms": "^0.5.10",
-    "@types/react": "^18.2.48",
+    "@types/react": "^19.1.12",
     "@types/react-dom": "^18.2.18",
     "@typescript-eslint/eslint-plugin": "^6.19.0",
     "autoprefixer": "^10.4.21",
