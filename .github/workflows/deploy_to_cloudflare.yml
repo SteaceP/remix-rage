@@ -30,11 +30,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          environment: production
-          command: pages deploy ./public --project-name=${{ vars.CF_PAGES_PROJECT_NAME }}
-        env:
-          CSRF_SECRET: ${{ secrets.CSRF_SECRET }}
-          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          command: pages deploy ./build/client --project-name=${{ vars.CF_PAGES_PROJECT_NAME }}
 
       - name: Print Wrangler Command Output
         env:
