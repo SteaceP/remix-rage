@@ -49,8 +49,8 @@ A modern service business website built with **React Router v7** and deployed on
 
 ### Prerequisites
 ```bash
-node >= 18.0.0
-npm >= 8.0.0
+node >= 22.12.0
+npm >= 10.9.0
 ```
 
 ### Setup
