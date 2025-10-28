@@ -6,6 +6,6 @@ compatibility_flags = ["nodejs_compat"]
 command = "npm run build"
 
 # Development environment variables
-[vars]
+[env.development.vars]
 CSRF_SECRET = "your-development-csrf-secret-here"
 BREVO_API_KEY = "your-brevo-api-key"

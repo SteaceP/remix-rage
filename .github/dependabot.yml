@@ -1,16 +1,75 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
+# Dependabot configuration for Remix Rage
+# React Router v7 application deployed on Cloudflare Pages
 # https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
 
 version: 2
 updates:
+  # NPM dependencies
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
-    ignore:
-      - dependency-name: "remix-run*"
-        update-types: ["version-update:semver-major"]
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "SteaceP"
     commit-message:
-      prefix: "chore: "
+      prefix: "chore(deps):"
+      include: "scope"
+    groups:
+      # Group React Router packages together
+      react-router:
+        patterns:
+          - "react-router"
+          - "@react-router/*"
+      # Group React packages together
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+      # Group Cloudflare packages together
+      cloudflare:
+        patterns:
+          - "@cloudflare/*"
+          - "wrangler"
+      # Group Tailwind CSS packages together
+      tailwind:
+        patterns:
+          - "tailwindcss"
+          - "@tailwindcss/*"
+          - "autoprefixer"
+          - "postcss"
+      # Group ESLint packages together
+      eslint:
+        patterns:
+          - "eslint"
+          - "eslint-*"
+          - "@typescript-eslint/*"
+      # Group development tools
+      dev-tools:
+        patterns:
+          - "vite"
+          - "vite-*"
+          - "typescript"
+    ignore:
+      # Pin wrangler to avoid breaking changes
+      - dependency-name: "wrangler"
+        update-types: ["version-update:semver-major"]
+      # Let React updates be manual for major versions
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+
+  # GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    commit-message:
+      prefix: "chore(ci):"

@@ -66,7 +66,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
 
 export default function Contact() {
   const { csrfToken } = useLoaderData<typeof loader>() as { csrfToken: string };
-  const actionData = useActionData<typeof action>() as { error?: string; success?: boolean };
+  const actionData = useActionData<typeof action>() as { error?: string; success?: boolean } | undefined;
   
   return (
     <div className={styles.wrapper}>
