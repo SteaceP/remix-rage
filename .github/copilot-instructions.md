@@ -16,16 +16,18 @@ This is a **React Router v7** application (migrated from Remix v2) deployed on *
 
 ```bash
 # Local development (Vite dev server)
-npm run dev          # Starts on http://localhost:5173
+pnpm run dev          # Starts on http://localhost:5173
+# or
+pnpm dev              # Shorthand
 
 # Build and deploy
-npm run build        # React Router build
-npm run deploy       # Wrangler deploy after build
-npm run preview      # Preview build locally
+pnpm run build        # React Router build
+pnpm run deploy       # Wrangler deploy after build
+pnpm run preview      # Preview build locally
 
 # Type checking
-npm run typecheck    # TypeScript validation + Cloudflare types
-npm run cf-typegen   # Generate Cloudflare Workers types
+pnpm run typecheck    # TypeScript validation + Cloudflare types
+pnpm run cf-typegen   # Generate Cloudflare Workers types
 ```
 
 ## Project-Specific Patterns

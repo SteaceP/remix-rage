@@ -50,19 +50,21 @@ A modern service business website built with **React Router v7** and deployed on
 ### Prerequisites
 ```bash
 node >= 22.12.0
-npm >= 10.9.0
+pnpm >= 9.0.0
 ```
 
 ### Setup
 ```bash
 # Install dependencies
-npm install
+pnpm install
 
 # Generate Cloudflare types
-npm run cf-typegen
+pnpm run cf-typegen
 
 # Start development server
-npm run dev
+pnpm run dev
+# or
+pnpm dev
 ```
 
 The dev server will start at [http://localhost:5173](http://localhost:5173)
@@ -70,12 +72,12 @@ The dev server will start at [http://localhost:5173](http://localhost:5173)
 ### Available Scripts
 
 ```bash
-npm run dev          # Start Vite dev server
-npm run build        # Build for production
-npm run preview      # Preview production build locally
-npm run deploy       # Deploy to Cloudflare Pages (after build)
-npm run typecheck    # Run TypeScript validation
-npm run cf-typegen   # Generate Cloudflare Workers types
+pnpm run dev         # Start Vite dev server (or: pnpm dev)
+pnpm run build       # Build for production
+pnpm run preview     # Preview production build locally
+pnpm run deploy      # Deploy to Cloudflare Pages (after build)
+pnpm run typecheck   # Run TypeScript validation
+pnpm run cf-typegen  # Generate Cloudflare Workers types
 ```
 
 ## 📦 Project Structure
@@ -123,7 +125,7 @@ public/
 
 1. **Connect Repository**: Link your GitHub/GitLab repository to Cloudflare Pages
 2. **Configure Build**:
-   - Build command: `npm run build`
+   - Build command: `pnpm run build`
    - Build output directory: `build/client`
    - Root directory: `/`
 3. **Environment Variables**: Set in Cloudflare dashboard:
@@ -131,12 +133,12 @@ public/
    - `BREVO_API_KEY`
    - `FROM_EMAIL`
    - `TO_EMAIL`
-4. **Deploy**: Push to main branch or use `npm run deploy`
+4. **Deploy**: Push to main branch or use `pnpm run deploy`
 
 ### Manual Deployment
 ```bash
-npm run build
-npm run deploy
+pnpm run build
+pnpm run deploy
 ```
 
 ## 🎨 Style Guidelines
