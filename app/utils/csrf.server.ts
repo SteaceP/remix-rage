@@ -1,4 +1,4 @@
-import { createCookie } from "@remix-run/cloudflare";
+import { createCookie } from "react-router";
 import { generateToken, validateToken } from "./token.server";
 
 export function createCsrfCookie(secret: string) {

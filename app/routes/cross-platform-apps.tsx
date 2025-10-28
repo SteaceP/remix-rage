@@ -1,5 +1,5 @@
-import type { MetaFunction } from "@remix-run/cloudflare";
-import { Link } from "@remix-run/react";
+import type { MetaFunction } from "react-router";
+import { Link } from "react-router";
 import { FaMobile, FaDesktop, FaCode, FaRocket } from "react-icons/fa";
 
 export const meta: MetaFunction = () => {
