@@ -14,6 +14,16 @@ type Cloudflare = Omit<PlatformProxy<Env>, "dispose">;
 
 declare module "react-router" {
   interface AppLoadContext {
-    cloudflare: Cloudflare;
+    // Production: context.cloudflare.env
+    cloudflare?: Cloudflare;
+    // Development: context.env (uses process.env from .env file)
+    env?: Env & {
+      CSRF_SECRET?: string;
+      BREVO_API_KEY?: string;
+    };
   }
 }
+
+// Note: This file is only used for type definitions
+// Environment variables in development are accessed directly in route files
+// via import.meta.env or configured through Vite

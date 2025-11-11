@@ -2,13 +2,14 @@ import { createCookie } from "react-router";
 import { generateToken, validateToken } from "./token.server";
 
 export function createCsrfCookie(secret: string) {
+  // In production, always use secure cookies. In dev, detect from request.
   return createCookie("csrf-token", {
     httpOnly: true,
-    secure: true,
-    sameSite: "lax",
+    secure: true, // Cloudflare always serves over HTTPS
+    sameSite: "strict", // Changed from "lax" to "strict" for better security
     path: "/",
     secrets: [secret],
-    maxAge: 3600
+    maxAge: 3600 // 1 hour
   });
 }
 

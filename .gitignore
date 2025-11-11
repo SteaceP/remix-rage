@@ -1,7 +1,11 @@
 .DS_Store
 .env
+.env.local
+.env.*.local
 /node_modules/
 *.tsbuildinfo
+*.log
+*.log.*
 
 # React Router
 /.react-router/
@@ -13,6 +17,21 @@
 .dev.vars*
 worker-configuration.d.ts
 
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 
+# OS
+Thumbs.db
+*.icloud
+
+# Testing
+coverage/
+.nyc_output/
+
+# Keep example files
 !.dev.vars.example
 !.env.example

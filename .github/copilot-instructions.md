@@ -7,15 +7,15 @@ This is a **React Router v7** application (migrated from Remix v2) deployed on *
 - **Runtime**: Cloudflare Workers (not Node.js) - use Web APIs, not Node.js APIs
 - **Routing**: React Router v7 with file-based routing via `@react-router/fs-routes`
 - **Styling**: Tailwind CSS v4 with centralized style objects in `app/styles/`
-- **Forms**: Progressive enhancement with CSRF protection and Zod validation
-- **Email**: Brevo API integration for contact forms with HTML templates
+- **Forms**: Progressive enhancement with CSRF protection, Zod validation, and rate limiting
+- **Email**: Brevo API integration with HTML sanitization to prevent XSS
 - **Assets**: Static files in `public/` served directly by Cloudflare
-- **Security**: Comprehensive headers via `public/_headers` and CSRF tokens
+- **Security**: Comprehensive security headers, CSRF tokens, rate limiting, and input validation (see SECURITY.md)
 
 ## Critical Development Workflows
 
 ```bash
-# Local development (Vite dev server)
+ # Local development
 pnpm run dev          # Starts on http://localhost:5173
 # or
 pnpm dev              # Shorthand
@@ -30,6 +30,7 @@ pnpm run typecheck    # TypeScript validation + Cloudflare types
 pnpm run cf-typegen   # Generate Cloudflare Workers types
 
 # Note: cf-typegen runs automatically on postinstall
+# Note: Environment variables loaded from .env file in development
 ```
 
 ## Project-Specific Patterns
@@ -98,22 +99,26 @@ export async function action({ request, context }: ActionFunctionArgs) {
 }
 ```
 
-### Form Handling
+### Form Handling & Security
 
-- **CSRF protection**: All forms use `createCsrfToken()`/`validateCsrfToken()` with secure cookies
-- **Token generation**: Uses Web Crypto API (`crypto.getRandomValues()`) in `app/utils/token.server.ts`
-- **Validation**: Zod schemas in server utilities (`emailSchema` in `app/utils/email.server.ts`)
+- **CSRF protection**: All forms use `createCsrfToken()`/`validateCsrfToken()` with secure, HTTP-only cookies (sameSite=strict)
+- **Token generation**: Uses Web Crypto API (`crypto.getRandomValues()`) with constant-time comparison in `app/utils/token.server.ts`
+- **Rate limiting**: Contact form limited to 3 requests/minute per IP via `app/utils/rate-limit.server.ts`
+- **Input validation**: Strict Zod schemas with length limits and regex patterns (see `emailSchema` in `app/utils/email.server.ts`)
+- **XSS prevention**: HTML escaping for all user input in emails
 - **Progressive enhancement**: Forms work without JavaScript
-- **Error handling**: Server-side validation with user-friendly error messages
-- **Token flow**: Loader creates token, action validates it before processing
+- **Error handling**: Detailed errors logged server-side, generic messages to client
+- **Token flow**: Loader creates token, action validates + rate limits before processing
 
 ### Environment Variables
 
-- **Access pattern**: `context.cloudflare.env.VARIABLE_NAME` in loaders/actions
+- **Access pattern**: Use `context.cloudflare?.env || context.env` to support both dev and production
+    - Production: `context.cloudflare.env.VARIABLE_NAME`
+    - Development: `context.env.VARIABLE_NAME` (loaded from process.env via .env file)
 - **Type safety**: Extend `Env` interface in `load-context.ts`
-- **Local development**: Variables set in Wrangler, production in Cloudflare dashboard
-
-### Cloudflare Specifics
+- **Local development**: Variables in `.env` file (gitignored, copy from `.env.example`)
+- **Production**: Set in Cloudflare Pages dashboard
+- **Always check**: `if (!env?.VARIABLE_NAME) throw new Error("Not configured")`### Cloudflare Specifics
 
 - **Functions**: Single handler in `functions/[[path]].ts` routes all requests to React Router
 - **Headers**: Security headers configured in `public/_headers`
@@ -141,11 +146,12 @@ export async function action({ request, context }: ActionFunctionArgs) {
 3. **Environment variables**: Must be accessed via `context.cloudflare.env` in server code
 4. **TypeScript**: Use `@remix-run/cloudflare` types, not Node.js types
 5. **Deployment**: Cloudflare Pages handles routing; React Router handles app logic
+6. **DO NOT use @cloudflare/vite-plugin**: This plugin causes 404 errors in development with React Router v7. The app deploys to Cloudflare Pages without it.
 
 ## Key Files to Reference
 
-- `vite.config.ts`: React Router v7 configuration with Vite
-- `react-router.config.ts`: React Router specific configuration
+- `vite.config.ts`: React Router v7 configuration with Vite (simple setup - no Cloudflare Vite plugin needed)
+- `react-router.config.ts`: React Router specific configuration with SSR enabled
 - `app/routes.ts`: File-based routing configuration using `@react-router/fs-routes`
 - `app/root.tsx`: Global layout with Header/Footer structure
 - `app/styles/`: Centralized Tailwind class organization (navigation, cards, form, footer)
@@ -154,3 +160,6 @@ export async function action({ request, context }: ActionFunctionArgs) {
 - `load-context.ts`: TypeScript interface extensions for Cloudflare environment
 - `app/utils/csrf.server.ts`: CSRF token generation and validation utilities
 - `app/utils/email.server.ts`: Brevo API integration with Zod validation schemas
+- `app/utils/rate-limit.server.ts`: In-memory rate limiting for form submissions
+- `app/utils/token.server.ts`: Cryptographically secure token generation with timing-safe comparison
+- `SECURITY.md`: Comprehensive security documentation and best practices
