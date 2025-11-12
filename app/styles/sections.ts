@@ -1,5 +1,5 @@
 export const hero = {
-    hero: "w-full px-4 py-24 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-900 dark:to-blue-900/30",
+    hero: "w-full px-4 py-24 bg-linear-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-900 dark:to-blue-900/30",
     heroContent: "max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12",
     heroText: "flex-1 text-left",
     heroTitle: "text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight",
@@ -29,7 +29,7 @@ export const services = {
 };
 
 export const cta = {
-    ctaSection: "w-full py-20 px-4 text-center bg-gradient-to-br from-blue-600 to-purple-600 dark:from-blue-900 dark:to-purple-900",
+    ctaSection: "w-full py-20 px-4 text-center bg-linear-to-br from-blue-600 to-purple-600 dark:from-blue-900 dark:to-purple-900",
     ctaContent: "max-w-4xl mx-auto",
     ctaTitle: "text-4xl md:text-5xl font-bold text-white mb-8",
     ctaText: "text-xl md:text-2xl text-white/90 mb-10 leading-relaxed",
@@ -39,12 +39,12 @@ export const cta = {
 // Shared page-level styles
 export const page = {
     layout: "flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900",
-    header: "flex flex-col items-center justify-center py-24 md:py-32 px-4 text-center bg-gradient-to-br from-blue-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900 relative overflow-hidden",
+    header: "flex flex-col items-center justify-center py-24 md:py-32 px-4 text-center bg-linear-to-br from-blue-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-gray-900 relative overflow-hidden",
     heading: "text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-gray-900 dark:text-white relative z-10",
-    headingSpan: "font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 text-transparent bg-clip-text",
+    headingSpan: "font-bold bg-linear-to-r from-blue-600 via-purple-600 to-blue-600 text-transparent bg-clip-text",
     subheading: "text-2xl md:text-3xl mt-6 text-gray-700 dark:text-gray-200 font-semibold relative z-10",
     paragraph: "text-xl mt-6 text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed relative z-10",
-    main: "flex-grow flex flex-col items-center justify-center px-4 py-16 w-full max-w-7xl mx-auto gap-16",
+    main: "grow flex flex-col items-center justify-center px-4 py-16 w-full max-w-7xl mx-auto gap-16",
     section: "w-full",
     sectionTitle: "text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-8",
 };
@@ -64,7 +64,7 @@ export const pricing = {
     section: "w-full bg-white dark:bg-gray-800/50 rounded-3xl p-12 mb-16 border border-gray-200 dark:border-gray-700 shadow-xl",
     grid: "grid grid-cols-1 md:grid-cols-2 gap-8",
     card: "bg-gray-50 dark:bg-gray-800 rounded-2xl shadow-xl p-10 border-2 border-gray-200 dark:border-gray-700 transition-all duration-300 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-2xl hover:scale-105 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100",
-    price: "text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6",
+    price: "text-4xl md:text-5xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6",
     title: "text-2xl font-bold text-gray-900 dark:text-white mb-4",
     description: "text-gray-600 dark:text-gray-300 leading-relaxed",
 };

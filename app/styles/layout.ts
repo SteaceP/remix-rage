@@ -1,8 +1,8 @@
 export const layout = {
-    container: "flex-grow flex flex-col w-full py-16 px-4",
+    container: "grow flex flex-col w-full py-16 px-4",
     content: "w-full max-w-4xl mx-auto",
     layout: "flex flex-col min-h-screen",
-    main: "flex-grow flex flex-col items-center justify-center px-4 py-12 w-full max-w-6xl mx-auto gap-8",
+    main: "grow flex flex-col items-center justify-center px-4 py-12 w-full max-w-6xl mx-auto gap-8",
     section: "w-full",
 };
 
@@ -15,7 +15,7 @@ export const header = {
     title: "text-4xl font-bold text-gray-900 dark:text-white mb-4",
     subtitle: "text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto",
     heading: "text-4xl md:text-5xl font-medium tracking-tight text-gray-900 dark:text-white",
-    headingSpan: "font-bold bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text",
+    headingSpan: "font-bold bg-linear-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text",
     subheading: "text-xl md:text-2xl mt-4 text-gray-700 dark:text-gray-200",
     paragraph: "text-lg mt-3 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto",
 };

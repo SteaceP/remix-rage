@@ -15,15 +15,15 @@ export const meta: MetaFunction = () => {
 
 const styles = {
     // Layout
-    main: "flex-grow flex flex-col items-center justify-start w-full",
+    main: "grow flex flex-col items-center justify-start w-full",
 
     // Hero Section
-    hero: "w-full px-4 py-24 md:py-32 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 dark:from-gray-900 dark:via-gray-900 dark:to-blue-900/20 relative overflow-hidden",
+    hero: "w-full px-4 py-24 md:py-32 bg-linear-to-br from-blue-600 via-indigo-600 to-purple-600 dark:from-gray-900 dark:via-gray-900 dark:to-blue-900/20 relative overflow-hidden",
     heroContent: "max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 relative z-10",
     heroText: "flex-1 text-left space-y-6",
     heroTitle: "text-5xl md:text-6xl lg:text-7xl font-bold text-white dark:text-white leading-tight tracking-tight",
     heroTitleSpan:
-        "bg-gradient-to-r from-yellow-200 via-pink-200 to-purple-200 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent drop-shadow-lg",
+        "bg-linear-to-r from-yellow-200 via-pink-200 to-purple-200 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent drop-shadow-lg",
     heroSubtitle: "text-xl md:text-2xl text-white/90 dark:text-gray-300 max-w-2xl leading-relaxed",
     heroCTA: "flex flex-wrap gap-4 items-center",
     heroPrimaryButton:
@@ -68,13 +68,13 @@ const styles = {
     cardsContainer: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mx-auto",
     card: "bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 transition-all duration-300 hover:shadow-xl hover:scale-105 flex flex-col h-full",
     cardTitle: "text-xl font-semibold text-gray-900 dark:text-white mb-3",
-    cardDescription: "text-gray-600 dark:text-gray-300 flex-grow",
+    cardDescription: "text-gray-600 dark:text-gray-300 grow",
     cardButton:
         "w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors mt-6",
 
     // CTA Section
     ctaSection:
-        "w-full py-24 px-4 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-900 dark:via-purple-900 dark:to-blue-900 relative overflow-hidden",
+        "w-full py-24 px-4 bg-linear-to-br from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-900 dark:via-purple-900 dark:to-blue-900 relative overflow-hidden",
     ctaContent: "max-w-4xl mx-auto text-center relative z-10",
     ctaTitle: "text-4xl md:text-5xl font-bold text-white mb-6",
     ctaText: "text-xl md:text-2xl text-white/90 dark:text-gray-300 mb-10 leading-relaxed",
