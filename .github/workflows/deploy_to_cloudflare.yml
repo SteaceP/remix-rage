@@ -1,48 +1,53 @@
 name: Deploy to Cloudflare Pages
 
 on:
-  push:
-    branches:
-      - master
+    push:
+        branches:
+            - master
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+    deploy:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v5
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v5
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22
+            - name: Set up Node.js
+              uses: actions/setup-node@v6
+              with:
+                  node-version-file: ".node-version"
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.14.4
+            - name: Install pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: 10.21.0
 
-      - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
+            - name: Install Dependencies
+              run: pnpm install --frozen-lockfile
 
-      - name: Build
-        run: pnpm run build
+            - name: Type Check
+              run: pnpm run typecheck
 
-      - name: Deploy to Cloudflare Pages
-        id: deploy
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy ./build/client --project-name=${{ vars.CF_PAGES_PROJECT_NAME }}
+            - name: Build
+              run: pnpm run build
+              env:
+                  NODE_ENV: production
 
-      - name: Print Wrangler Command Output
-        env:
-          CMD_OUTPUT: ${{ steps.deploy.outputs.command-output }}
-        run: echo $CMD_OUTPUT
+            - name: Deploy to Cloudflare Pages
+              id: deploy
+              uses: cloudflare/wrangler-action@v3
+              with:
+                  apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                  accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+                  command: pages deploy ./build/client --project-name=${{ vars.CF_PAGES_PROJECT_NAME }}
 
-      - name: Print Deployment URL
-        env:
-          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
-        run: echo $DEPLOYMENT_URL
+            - name: Print Wrangler Command Output
+              env:
+                  CMD_OUTPUT: ${{ steps.deploy.outputs.command-output }}
+              run: echo $CMD_OUTPUT
+
+            - name: Print Deployment URL
+              env:
+                  DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
+              run: echo $DEPLOYMENT_URL
