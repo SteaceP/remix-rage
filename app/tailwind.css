@@ -1,9 +1,71 @@
 @import "tailwindcss";
+@import "@tailwindcss/forms";
+
+@theme {
+  /* Font Families */
+  --font-sans: Inter, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-handwriting: "Permanent Marker", cursive;
+
+  /* Animations */
+  --animate-draw-arrow: draw-arrow 1.5s ease-out forwards;
+  --animate-marquee: marquee 25s linear infinite;
+  --animate-marquee2: marquee2 25s linear infinite;
+  --animate-wave: wave 2s ease-in-out infinite;
+
+  /* Keyframes */
+  @keyframes draw-arrow {
+    0% {
+      stroke-dashoffset: 60;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes marquee2 {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(0%);
+    }
+  }
+
+  @keyframes wave {
+    0%, 100% {
+      transform: rotate(0deg);
+    }
+    10%, 30% {
+      transform: rotate(14deg);
+    }
+    20% {
+      transform: rotate(-8deg);
+    }
+    40% {
+      transform: rotate(-4deg);
+    }
+    50% {
+      transform: rotate(10deg);
+    }
+    60% {
+      transform: rotate(0deg);
+    }
+  }
+}
 
 html {
-    color-scheme: light;
+  color-scheme: light;
 }
 
 html.dark {
-    color-scheme: dark;
+  color-scheme: dark;
 }
