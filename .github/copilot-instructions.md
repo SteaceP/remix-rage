@@ -148,13 +148,127 @@ export async function action({ request, context }: ActionFunctionArgs) {
 5. **Deployment**: Cloudflare Pages handles routing; React Router handles app logic
 6. **DO NOT use @cloudflare/vite-plugin**: This plugin causes 404 errors in development with React Router v7. The app deploys to Cloudflare Pages without it.
 
+## Styling Best Practices
+
+All styles follow modern best practices for accessibility, performance, and user experience:
+
+### 1. Accessibility Standards (WCAG 2.1 AA)
+
+**Focus Management:**
+
+```typescript
+// ✅ All interactive elements have focus-visible states
+navLink: "... focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ...";
+button: "... focus-visible:ring-2 focus-visible:ring-offset-2 ...";
+input: "... focus:ring-4 focus:ring-blue-500/20 focus-visible:outline-none ...";
+```
+
+**Implemented:**
+
+- `focus-visible` for keyboard navigation (not mouse clicks)
+- `focus-within` for card containers with interactive children
+- Ring offsets for contrast on different backgrounds
+- Proper disabled states with cursor indicators
+
+### 2. Motion Preferences
+
+Respects `prefers-reduced-motion` media query:
+
+```typescript
+// ✅ All animations are motion-safe
+card: "... hover:scale-105 motion-reduce:transition-none motion-reduce:hover:scale-100";
+button: "... transition-all duration-300 motion-reduce:transition-none";
+```
+
+Applied to: scale transforms, translations, all transitions, smooth scrolling
+
+### 3. Interactive State Patterns
+
+**Consistent progression:** default → hover → active → disabled
+
+```typescript
+// Buttons
+button: "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed";
+
+// Links
+link: "text-blue-600 hover:text-blue-700 active:text-blue-800 transition-colors duration-200";
+```
+
+### 4. Transition Timing Standards
+
+- **200ms**: Simple state changes (colors, opacity, border-colors)
+- **300ms**: Complex animations (scale, transforms, shadows, multiple properties)
+
+```typescript
+// Simple
+"transition-colors duration-200";
+
+// Complex
+"transition-all duration-300";
+```
+
+### 5. Dark Mode Coverage
+
+Every style includes dark: variants:
+
+```typescript
+// Text, backgrounds, borders, shadows
+"bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-gray-200 dark:border-gray-700";
+
+// Focus rings need offset adjustments
+"focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-800";
+```
+
+### 6. Style Organization
+
+```
+app/styles/
+├── components.ts    # Navigation, cards, forms, footer, contact page
+├── layout.ts        # Page layouts, headers, containers
+└── sections.ts      # Hero, features, services, CTA, pricing
+```
+
+**When to add styles:**
+
+- **components.ts**: Reusable UI components (navigation, cards, forms)
+- **layout.ts**: Page structure and layout wrappers
+- **sections.ts**: Specific page sections (hero, pricing, CTA)
+- **Inline (route level)**: Page-unique styles (e.g., `_index.tsx` badge animation)
+
+**Pattern to follow:**
+
+```typescript
+// In app/styles/components.ts
+export const myComponent = {
+    wrapper: "... focus-visible:... motion-reduce:... dark:...",
+    button: "... hover:... active:... disabled:... transition-colors duration-200",
+    // Always include: focus states, motion-reduce, dark mode, proper transitions
+} as const;
+```
+
+### 7. Accessibility Checklist
+
+When adding/modifying styles, ensure:
+
+- ✅ `focus-visible` states on all interactive elements
+- ✅ `motion-reduce` variants for animations/transforms
+- ✅ `dark:` variants for all colors
+- ✅ Consistent transition durations (200ms or 300ms)
+- ✅ `active:` states for buttons/links
+- ✅ `disabled:` states with opacity + cursor
+- ✅ Ring offsets match background context
+- ✅ Hover states don't rely on color alone
+
 ## Key Files to Reference
 
 - `vite.config.ts`: React Router v7 configuration with Vite (simple setup - no Cloudflare Vite plugin needed)
 - `react-router.config.ts`: React Router specific configuration with SSR enabled
 - `app/routes.ts`: File-based routing configuration using `@react-router/fs-routes`
 - `app/root.tsx`: Global layout with Header/Footer structure
-- `app/styles/`: Centralized Tailwind class organization (navigation, cards, form, footer)
+- `app/styles/`: Centralized Tailwind class organization with accessibility best practices
+    - `components.ts`: Navigation, cards, forms, footer styles (all with focus-visible, motion-reduce, dark mode)
+    - `layout.ts`: Layout containers and page structures
+    - `sections.ts`: Hero, features, services, CTA, pricing sections
 - `functions/[[path]].ts`: Cloudflare Pages function entry point using `createPagesFunctionHandler`
 - `public/_headers`: Security headers (CSP, HSTS, CORS) and caching configuration
 - `load-context.ts`: TypeScript interface extensions for Cloudflare environment

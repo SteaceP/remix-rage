@@ -100,20 +100,32 @@ export default function Contact() {
 
     return (
         <div className={styles.wrapper}>
+            {/* Background decoration */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute top-1/4 left-0 w-96 h-96 bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-3xl" />
+                <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-3xl" />
+            </div>
+
             <div className={styles.container}>
                 <div className={styles.formCard}>
                     <div className={styles.formInner}>
-                        <h1 className={styles.title}>Contact Me</h1>
+                        <h1 className={styles.title}>Get In Touch</h1>
+                        <p className={styles.subtitle}>
+                            Have a project in mind or need technical support? Let&apos;s chat about how I can help bring
+                            your ideas to life.
+                        </p>
 
                         {actionData?.error && (
                             <div className={styles.errorAlert}>
-                                <p className={styles.errorText}>{actionData.error}</p>
+                                <p className={styles.errorText}>⚠️ {actionData.error}</p>
                             </div>
                         )}
 
                         {actionData?.success && (
                             <div className={styles.successAlert}>
-                                <p className={styles.successText}>Message sent successfully!</p>
+                                <p className={styles.successText}>
+                                    ✓ Message sent successfully! I&apos;ll get back to you soon.
+                                </p>
                             </div>
                         )}
 

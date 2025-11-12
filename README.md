@@ -143,7 +143,16 @@ pnpm run deploy
 
 ## 🎨 Style Guidelines
 
+### Centralized Style Architecture
+
+All styles are organized in `app/styles/` for consistency and maintainability:
+
+- **`components.ts`**: Navigation, cards, forms, footer, contact page styles
+- **`layout.ts`**: Layout containers, headers, sections
+- **`sections.ts`**: Hero, features, services, CTA, pricing components
+
 ### Using Centralized Styles
+
 ```tsx
 import { contactStyles as styles } from "~/styles/components";
 
@@ -154,15 +163,118 @@ export default function Component() {
 }
 ```
 
-### Dark Mode
-All styles include dark mode variants:
+### Style Best Practices
+
+#### 1. Accessibility Features
+
+All interactive elements include proper focus states:
+
 ```typescript
-wrapper: "bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+// ✅ Good: Full accessibility support
+button: "... focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ..."
+
+// Navigation links with keyboard support
+navLink: "... focus-visible:ring-2 focus-visible:ring-offset-2 ..."
+
+// Form inputs with visible focus
+input: "... focus:ring-4 focus:ring-blue-500/20 focus-visible:outline-none ..."
 ```
+
+**Implemented:**
+
+- ✅ `focus-visible` states on all interactive elements
+- ✅ `focus-within` for card keyboard navigation
+- ✅ Ring offsets for better contrast
+- ✅ Disabled states with proper cursors
+- ✅ WCAG 2.1 AA compliant
+
+#### 2. Motion Preferences
+
+Respects user's motion preferences with `prefers-reduced-motion`:
+
+```typescript
+// ✅ Good: Motion-safe animations
+card: "... hover:scale-105 motion-reduce:transition-none motion-reduce:hover:scale-100"
+button: "... transition-all duration-300 motion-reduce:transition-none"
+```
+
+**Applied to:**
+
+- Hover scale effects
+- Vertical translations
+- All transform animations
+- Smooth scrolling behaviors
+
+#### 3. Interactive States
+
+Consistent pattern across all interactive elements:
+
+```typescript
+// Button states: default → hover → active → disabled
+button: "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed"
+
+// Link states with proper transitions
+link: "transition-colors duration-200 hover:text-blue-600"
+```
+
+**Includes:**
+
+- ✅ Hover states (lighter/darker colors)
+- ✅ Active states (pressed appearance)
+- ✅ Focus-visible states (keyboard navigation)
+- ✅ Disabled states (visual + functional)
+
+#### 4. Transition Timing
+
+Standardized durations for consistency:
+
+```typescript
+// Simple changes (colors, opacity): 200ms
+"transition-colors duration-200"
+
+// Complex animations (scale, transforms, shadows): 300ms
+"transition-all duration-300"
+```
+
+#### 5. Dark Mode
+
+All styles include dark mode variants:
+
+```typescript
+// ✅ Good: Comprehensive dark mode support
+wrapper: "bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+border: "border-gray-200 dark:border-gray-700"
+shadow: "shadow-lg dark:shadow-gray-900/50"
+```
+
+**Coverage:**
+
+- ✅ All text colors
+- ✅ All background colors
+- ✅ All border colors
+- ✅ Shadow adaptations
+- ✅ Focus ring offsets
+
+### Style Organization
+
+```text
+app/styles/
+├── components.ts    # UI components (nav, cards, forms, footer)
+├── layout.ts        # Page layouts and containers
+└── sections.ts      # Page sections (hero, features, CTA)
+```
+
+**When to use each:**
+
+- **components.ts**: Reusable UI components used across multiple pages
+- **layout.ts**: Page structure and layout containers
+- **sections.ts**: Specific page sections and templates
+- **Inline styles**: Page-unique styles (e.g., `_index.tsx` hero badge)
 
 ## 📝 Route Patterns
 
 ### Standard Route with CSRF
+
 ```tsx
 import { type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
 import { createCsrfToken, validateCsrfToken } from "~/utils/csrf.server";
