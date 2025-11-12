@@ -15,14 +15,14 @@ This is a **React Router v7** application (migrated from Remix v2) deployed on *
 ## Critical Development Workflows
 
 ```bash
- # Local development
+# Local development
 pnpm run dev          # Starts on http://localhost:5173
 # or
 pnpm dev              # Shorthand
 
 # Build and deploy
 pnpm run build        # React Router build
-pnpm run deploy       # Wrangler deploy after build
+pnpm run deploy       # Wrangler deploy after build (direct to Workers)
 pnpm run preview      # Preview build locally
 
 # Type checking
@@ -32,6 +32,31 @@ pnpm run cf-typegen   # Generate Cloudflare Workers types
 # Note: cf-typegen runs automatically on postinstall
 # Note: Environment variables loaded from .env file in development
 ```
+
+## Chrome DevTools Integration
+
+This project includes **Chrome Automatic Workspace Folders** (M-135+) for enhanced debugging:
+
+- **Automatic workspace detection**: Chrome DevTools automatically connects to the project folder when accessing `http://localhost:5173`
+- **Live editing capability**: Edit and save files directly from Chrome DevTools to the filesystem
+- **Zero manual setup**: Works automatically without VS Code launch configuration
+- **Configuration location**: `public/.well-known/appspecific/com.chrome.devtools.json`
+- **Workspace UUID**: `b5982ef4-fde4-403a-9d95-9e2546ee6aff` (unique identifier for this project)
+
+**Requirements:**
+
+- Chrome M-136+ (enabled by default)
+- Chrome M-135+ with feature flags enabled:
+    - `chrome://flags#devtools-project-settings`
+    - `chrome://flags#devtools-automatic-workspace-folders`
+- **Alternative**: Launch Chrome with `--enable-features=DevToolsWellKnown,DevToolsAutomaticFileSystems`
+
+**Benefits for development:**
+
+- Breakpoints set in DevTools persist across page reloads
+- Source maps automatically resolve to workspace files
+- Changes made in DevTools Sources panel save directly to disk
+- No manual folder mapping required in DevTools Workspace tab
 
 ## Project-Specific Patterns
 
@@ -120,7 +145,8 @@ export async function action({ request, context }: ActionFunctionArgs) {
 - **Production**: Set in Cloudflare Pages dashboard
 - **Always check**: `if (!env?.VARIABLE_NAME) throw new Error("Not configured")`### Cloudflare Specifics
 
-- **Functions**: Single handler in `functions/[[path]].ts` routes all requests to React Router
+- **Workers**: Single handler in `workers/app.ts` using `createRequestHandler` from React Router
+- **Deployment**: Direct Cloudflare Workers deployment (not Pages) via `wrangler deploy`
 - **Headers**: Security headers configured in `public/_headers`
 - **Build output**: `build/client` for static assets, `build/server` for server code
 

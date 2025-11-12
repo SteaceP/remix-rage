@@ -80,6 +80,28 @@ pnpm run typecheck   # Run TypeScript validation
 pnpm run cf-typegen  # Generate Cloudflare Workers types
 ```
 
+### 🔧 Chrome DevTools Integration
+
+This project includes **Chrome Automatic Workspace Folders** (M-135+) for enhanced debugging:
+
+- **Automatic workspace detection**: Chrome DevTools automatically connects to your project folder
+- **Live editing**: Edit and save files directly from DevTools
+- **No manual setup**: Works automatically when you open `http://localhost:5173` in Chrome
+
+The configuration is located at `public/.well-known/appspecific/com.chrome.devtools.json` and includes:
+- Workspace root: `/home/steace/remix-rage`
+- Unique workspace UUID for automatic detection
+
+**Requirements:**
+- Chrome M-136+ (enabled by default) or Chrome M-135+ with flags enabled:
+  - `chrome://flags#devtools-project-settings`
+  - `chrome://flags#devtools-automatic-workspace-folders`
+
+**Alternative launch with flags:**
+```bash
+google-chrome --enable-features=DevToolsWellKnown,DevToolsAutomaticFileSystems
+```
+
 ## 📦 Project Structure
 
 ```
