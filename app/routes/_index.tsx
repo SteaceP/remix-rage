@@ -22,7 +22,8 @@ const styles = {
     heroContent: "max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 relative z-10",
     heroText: "flex-1 text-left space-y-6",
     heroTitle: "text-5xl md:text-6xl lg:text-7xl font-bold text-white dark:text-white leading-tight tracking-tight",
-    heroTitleSpan: "text-white drop-shadow-lg",
+    heroTitleSpan:
+        "bg-gradient-to-r from-yellow-200 via-pink-200 to-purple-200 dark:from-blue-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent drop-shadow-lg",
     heroSubtitle: "text-xl md:text-2xl text-white/90 dark:text-gray-300 max-w-2xl leading-relaxed",
     heroCTA: "flex flex-wrap gap-4 items-center",
     heroPrimaryButton:
@@ -60,18 +61,16 @@ const styles = {
     featureText: "text-gray-600 dark:text-gray-400 leading-relaxed",
 
     // Services Section
-    servicesSection:
-        "w-full py-20 px-4 bg-gradient-to-b from-gray-100 via-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-900 border-t-2 border-gray-200 dark:border-gray-800",
+    servicesSection: "w-full py-16 px-4",
     servicesContent: "max-w-7xl mx-auto",
-    sectionTitle: "text-4xl md:text-5xl font-bold text-center text-gray-900 dark:text-white mb-6",
+    sectionTitle: "text-3xl font-bold text-center text-gray-900 dark:text-white mb-12",
     sectionSubtitle: "text-xl text-center text-gray-600 dark:text-gray-400 mb-16 max-w-3xl mx-auto",
-    cardsContainer: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mx-auto",
-    card: "relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 transition-all duration-300 hover:-translate-y-3 hover:shadow-3xl flex flex-col h-full border-2 border-gray-200 dark:border-gray-700 hover:border-transparent group overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-br before:from-blue-500/10 before:via-purple-500/10 before:to-blue-500/10 before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300 before:rounded-2xl",
-    cardTitle:
-        "relative z-10 text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent group-hover:from-purple-600 group-hover:to-blue-600 dark:group-hover:from-purple-400 dark:group-hover:to-blue-400 transition-all duration-300 mb-4 drop-shadow-sm",
-    cardDescription: "relative z-10 text-gray-600 dark:text-gray-300 flex-grow leading-relaxed mb-6",
+    cardsContainer: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mx-auto",
+    card: "bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 transition-all duration-300 hover:shadow-xl hover:scale-105 flex flex-col h-full",
+    cardTitle: "text-xl font-semibold text-gray-900 dark:text-white mb-3",
+    cardDescription: "text-gray-600 dark:text-gray-300 flex-grow",
     cardButton:
-        "relative z-10 w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/30 hover:scale-105 mt-auto",
+        "w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors mt-6",
 
     // CTA Section
     ctaSection:

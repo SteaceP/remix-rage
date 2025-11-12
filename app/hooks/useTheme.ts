@@ -2,21 +2,20 @@ import { useEffect, useState } from "react";
 
 export type Theme = "light" | "dark";
 
+function getInitialTheme(): Theme {
+    if (typeof window === 'undefined') return 'light';
+    
+    // Check if dark class is already set by pre-hydration script
+    if (document.documentElement.classList.contains('dark')) {
+        return 'dark';
+    }
+    return 'light';
+}
+
 export function useTheme() {
-    const [theme, setTheme] = useState<Theme | undefined>(undefined);
-
-    // Initialize theme on mount (client-side only)
-    useEffect(() => {
-        const stored = localStorage.getItem("theme") as Theme | null;
-        if (stored) {
-            setTheme(stored);
-            return;
-        }
-        setTheme(window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    }, []);
+    const [theme, setTheme] = useState<Theme>(getInitialTheme);
 
     useEffect(() => {
-        if (!theme) return;
         const root = document.documentElement;
         // Toggle only the 'dark' class; absence implies light mode
         if (theme === 'dark') {
@@ -28,8 +27,8 @@ export function useTheme() {
     }, [theme]);
 
     const toggleTheme = () => {
-        setTheme((prev) => (prev === "light" ? "dark" : "light"));
+        setTheme((prev) => prev === "light" ? "dark" : "light");
     };
 
-    return { theme: theme || "light", toggleTheme };
+    return { theme, toggleTheme };
 }

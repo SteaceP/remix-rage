@@ -197,29 +197,17 @@ export default function Header() {
                             </Link>
 
                             {/* Desktop Navigation */}
-                            <nav className="hidden md:flex items-center gap-3">
-                                <Link
-                                    to="/"
-                                    className={`px-5 py-2.5 rounded-xl font-semibold text-sm lg:text-base transition-all duration-300 relative overflow-hidden group ${
-                                        isActive("/")
-                                            ? "bg-blue-600 dark:bg-blue-600 text-white shadow-lg shadow-blue-500/30"
-                                            : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:shadow-md hover:scale-105"
-                                    }`}
-                                >
-                                    <span className="relative z-10">Home</span>
-                                    <div className="absolute inset-0 bg-linear-to-r from-blue-600/0 via-blue-600/10 to-blue-600/0 translate-x-full group-hover:translate-x-0 transition-transform duration-700" />
-                                </Link>
-
+                            <nav className="hidden lg:flex items-center gap-2">
                                 <div className="relative" ref={solutionsRef}>
                                     <button
                                         onClick={toggleSolutions}
-                                        className={`px-5 py-2.5 rounded-xl font-semibold text-sm lg:text-base transition-all duration-300 flex items-center gap-2 relative overflow-hidden group ${
+                                        className={`px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center gap-2 relative overflow-hidden group ${
                                             solutions.some((s) => isActive(s.path))
-                                                ? "bg-purple-600 dark:bg-purple-600 text-white shadow-lg shadow-purple-500/30"
+                                                ? "bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-purple-500/30"
                                                 : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:shadow-md hover:scale-105"
                                         }`}
                                     >
-                                        <span className="relative z-10">Solutions</span>
+                                        <span className="relative z-10">Services</span>
                                         <FaChevronDown
                                             className={`w-3 h-3 transition-transform duration-300 relative z-10 ${
                                                 isSolutionsOpen ? "rotate-180" : ""
@@ -230,8 +218,8 @@ export default function Header() {
 
                                     {/* Dropdown Menu - Enhanced */}
                                     {isSolutionsOpen && (
-                                        <div className="absolute top-full right-0 mt-3 w-80 bg-white dark:bg-gray-800 backdrop-blur-xl rounded-2xl shadow-2xl border-2 border-gray-200 dark:border-gray-700 overflow-hidden animate-in fade-in slide-in-from-top-4 duration-300">
-                                            <div className="p-3 space-y-1">
+                                        <div className="absolute top-full right-0 mt-3 w-72 bg-white dark:bg-gray-800 backdrop-blur-xl rounded-2xl shadow-2xl border-2 border-gray-200 dark:border-gray-700 overflow-hidden animate-in fade-in slide-in-from-top-4 duration-300">
+                                            <div className="p-2 space-y-1">
                                                 {solutions.map((solution, index) => {
                                                     const Icon = solution.icon;
                                                     return (
@@ -239,26 +227,22 @@ export default function Header() {
                                                             key={solution.path}
                                                             to={solution.path}
                                                             onClick={handleLinkClick}
-                                                            className={`flex items-center gap-4 px-5 py-4 rounded-xl transition-all duration-300 relative overflow-hidden group ${
+                                                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 relative overflow-hidden group ${
                                                                 isActive(solution.path)
-                                                                    ? "bg-blue-600 dark:bg-blue-600 text-white shadow-lg"
-                                                                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:scale-105 hover:shadow-md"
+                                                                    ? "bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-md"
+                                                                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:scale-[1.02] hover:shadow-sm"
                                                             }`}
                                                             style={{
                                                                 animationDelay: `${index * 50}ms`,
                                                             }}
                                                         >
-                                                            <div
-                                                                className={`p-2.5 rounded-lg shrink-0 ${isActive(solution.path) ? "bg-white/20" : "bg-blue-100 dark:bg-blue-900/30"}`}
-                                                            >
-                                                                <Icon
-                                                                    className={`w-5 h-5 ${isActive(solution.path) ? "text-white" : "text-blue-600 dark:text-blue-400"}`}
-                                                                />
-                                                            </div>
-                                                            <span className="text-sm font-semibold relative z-10">
+                                                            <Icon
+                                                                className={`w-4 h-4 shrink-0 ${isActive(solution.path) ? "text-white" : "text-blue-600 dark:text-blue-400"}`}
+                                                            />
+                                                            <span className="text-sm font-medium relative z-10">
                                                                 {solution.label}
                                                             </span>
-                                                            <div className="absolute inset-0 bg-linear-to-r from-blue-600/0 via-blue-600/5 to-blue-600/0 translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
+                                                            <div className="absolute inset-0 bg-linear-to-r from-purple-600/0 via-purple-600/5 to-purple-600/0 translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
                                                         </Link>
                                                     );
                                                 })}
@@ -337,20 +321,8 @@ export default function Header() {
                         {isMenuOpen && (
                             <div className="md:hidden border-t-2 border-gray-200 dark:border-gray-700 py-4 animate-in fade-in slide-in-from-top-2 duration-200">
                                 <nav className="flex flex-col space-y-1">
-                                    <Link
-                                        to="/"
-                                        onClick={handleLinkClick}
-                                        className={`px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
-                                            isActive("/")
-                                                ? "bg-blue-600 dark:bg-blue-600 text-white shadow-md"
-                                                : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-                                        }`}
-                                    >
-                                        Home
-                                    </Link>
-
                                     <div className="px-4 py-2 text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
-                                        Solutions
+                                        Services
                                     </div>
 
                                     {solutions.map((solution) => {
