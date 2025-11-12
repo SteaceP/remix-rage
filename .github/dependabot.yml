@@ -53,8 +53,6 @@ updates:
               patterns:
                   - "tailwindcss"
                   - "@tailwindcss/*"
-                  - "autoprefixer"
-                  - "postcss"
           # Linting & code quality
           linting:
               patterns:

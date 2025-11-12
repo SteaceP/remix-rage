@@ -1,8 +1,8 @@
-import type { MetaFunction } from "react-router";
+import type { Route } from "./+types/_index";
 import { Link } from "react-router";
 import { FaCode, FaTools, FaStar, FaUserClock } from "react-icons/fa";
 
-export const meta: MetaFunction = () => {
+export function meta({}: Route.MetaArgs) {
     return [
         { title: "Code Rage - Professional Tech Services" },
         {
@@ -11,7 +11,7 @@ export const meta: MetaFunction = () => {
                 "Expert computer repair and web development services. Fast, reliable, and professional solutions for all your tech needs.",
         },
     ];
-};
+}
 
 const styles = {
     // Layout

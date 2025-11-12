@@ -1,76 +1,72 @@
 import { z } from "zod";
+import type { LoaderFunctionArgs } from "react-router";
 
 const emailSchema = z.object({
-  name: z.string()
-    .min(1, "Name is required")
-    .max(100, "Name too long")
-    .regex(/^[a-zA-Z\s\-']+$/, "Name contains invalid characters"),
-  email: z.string()
-    .email("Invalid email address")
-    .max(254, "Email too long"), // RFC 5321 max length
-  subject: z.string()
-    .min(1, "Subject is required")
-    .max(200, "Subject too long")
-    .trim(),
-  message: z.string()
-    .min(10, "Message must be at least 10 characters long")
-    .max(5000, "Message too long")
-    .trim(),
+    name: z
+        .string()
+        .min(1, "Name is required")
+        .max(100, "Name too long")
+        .regex(/^[a-zA-Z\s\-']+$/, "Name contains invalid characters"),
+    email: z.email("Invalid email address").max(254, "Email too long"), // RFC 5321 max length
+    subject: z.string().min(1, "Subject is required").max(200, "Subject too long").trim(),
+    message: z.string().min(10, "Message must be at least 10 characters long").max(5000, "Message too long").trim(),
 });
 
 type EmailData = z.infer<typeof emailSchema>;
 
 interface BrevoEmailResponse {
-  messageId?: string;
-  code?: string;
-  message?: string;
+    messageId?: string;
+    code?: string;
+    message?: string;
 }
 
 // HTML sanitization helper
 function escapeHtml(unsafe: string): string {
-  return unsafe
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
-export async function sendEmail(data: EmailData, env: { BREVO_API_KEY: string }) {
-  // Validate the data
-  const validated = emailSchema.parse(data);
+export async function sendEmail(data: EmailData, { context }: LoaderFunctionArgs) {
+    // Validate the data
+    const validated = emailSchema.parse(data);
 
-  const apiUrl = 'https://api.brevo.com/v3/smtp/email';
+    const apiUrl = "https://api.brevo.com/v3/smtp/email";
 
-  // Sanitize user input to prevent XSS in email
-  const safeName = escapeHtml(validated.name);
-  const safeEmail = escapeHtml(validated.email);
-  const safeSubject = escapeHtml(validated.subject);
-  const safeMessage = escapeHtml(validated.message).replace(/\n/g, '<br>');
+    // Sanitize user input to prevent XSS in email
+    const safeName = escapeHtml(validated.name);
+    const safeEmail = escapeHtml(validated.email);
+    const safeSubject = escapeHtml(validated.subject);
+    const safeMessage = escapeHtml(validated.message).replace(/\n/g, "<br>");
 
-  try {
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        'accept': 'application/json',
-        'api-key': env.BREVO_API_KEY,
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        sender: {
-          name: "Code Rage",
-          email: "contact@coderage.pro"
-        },
-        to: [{
-          email: "steace@coderage.pro",
-          name: "Code Rage Support"
-        }],
-        replyTo: {
-          email: validated.email,
-          name: validated.name
-        },
-        subject: `Contact Form: ${validated.subject}`,
-        htmlContent: `
+    try {
+        const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+                accept: "application/json",
+                "api-key": context.cloudflare?.env?.BREVO_API_KEY,
+                "content-type": "application/json",
+            },
+            body: JSON.stringify({
+                sender: {
+                    name: "Code Rage",
+                    email: "contact@coderage.pro",
+                },
+                to: [
+                    {
+                        email: "steace@coderage.pro",
+                        name: "Code Rage Support",
+                    },
+                ],
+                replyTo: {
+                    email: validated.email,
+                    name: validated.name,
+                },
+                subject: `Contact Form: ${validated.subject}`,
+                htmlContent: `
           <!DOCTYPE html>
           <html>
           <head>
@@ -92,24 +88,24 @@ export async function sendEmail(data: EmailData, env: { BREVO_API_KEY: string })
             </p>
           </body>
           </html>
-        `
-      })
-    });
+        `,
+            }),
+        });
 
-    const result: BrevoEmailResponse = await response.json();
+        const result: BrevoEmailResponse = await response.json();
 
-    if (!response.ok) {
-      // Don't expose internal error messages to client
-      console.error('Brevo API error:', result);
-      throw new Error('Failed to send email');
+        if (!response.ok) {
+            // Don't expose internal error messages to client
+            console.error("Brevo API error:", result);
+            throw new Error("Failed to send email");
+        }
+
+        return { success: true, messageId: result.messageId };
+    } catch (error) {
+        // Log detailed error server-side but don't expose to client
+        console.error("Email sending error:", error);
+        throw new Error("Failed to send email. Please try again later.");
     }
-
-    return { success: true, messageId: result.messageId };
-  } catch (error) {
-    // Log detailed error server-side but don't expose to client
-    console.error('Email sending error:', error);
-    throw new Error('Failed to send email. Please try again later.');
-  }
 }
 
 export { emailSchema };

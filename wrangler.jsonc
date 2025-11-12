@@ -6,9 +6,19 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "remix-rage",
 	"compatibility_date": "2025-04-04",
+	"main": "./workers/app.ts",
+	"route": "coderage.pro",
+	"env": {
+		"dev": {
+			"route": "dev.coderage.pro"
+		}
+	},
+	"vars": {
+		"DEV": "Hello from Cloudflare"
+	},
 	"observability": {
 		"enabled": true
-	}
+	},
 	/**
 	 * Smart Placement
 	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
@@ -26,7 +36,7 @@
 	 */
 	// "vars": { "MY_VARIABLE": "production_value" }
 	/**
-	 * Note: Use secrets to store sensitive data.
+	* Note: Use secrets to store sensitive data.
 	 * https://developers.cloudflare.com/workers/configuration/secrets/
 	 */
 	/**

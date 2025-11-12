@@ -9,8 +9,7 @@ import { contactStyles as styles } from "~/styles/components";
 export async function loader({ request, context }: LoaderFunctionArgs) {
     // Handle both dev and production environment access
     const env = context.cloudflare?.env || context.env;
-    // In development, fall back to import.meta.env
-    const csrfSecret = env?.CSRF_SECRET || import.meta.env.CSRF_SECRET;
+    const csrfSecret = env?.CSRF_SECRET;
 
     if (!csrfSecret) {
         throw new Error("CSRF_SECRET is not configured");
@@ -55,9 +54,8 @@ export async function action({ request, context }: ActionFunctionArgs) {
     try {
         // Handle both dev and production environment access
         const env = context.cloudflare?.env || context.env;
-        // In development, fall back to import.meta.env
-        const csrfSecret = env?.CSRF_SECRET || import.meta.env.CSRF_SECRET;
-        const brevoApiKey = env?.BREVO_API_KEY || import.meta.env.BREVO_API_KEY;
+        const csrfSecret = env?.CSRF_SECRET;
+        const brevoApiKey = env?.BREVO_API_KEY;
 
         if (!csrfSecret) {
             throw new Error("CSRF_SECRET is not configured");
