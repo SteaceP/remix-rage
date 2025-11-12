@@ -3,9 +3,11 @@
 html,
 body {
     background-color: white;
+    color-scheme: light;
+}
 
-    @media (prefers-color-scheme: dark) {
-        background-color: #030712;
-        color-scheme: dark;
-    }
+html.dark,
+html.dark body {
+    background-color: #030712;
+    color-scheme: dark;
 }

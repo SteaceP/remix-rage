@@ -7,9 +7,9 @@ export const layout = {
 };
 
 export const header = {
-    headerWrapper: "sticky top-0 z-50",
-    header: "w-full bg-white/95 dark:bg-gray-900/95 shadow-sm backdrop-blur-sm sticky top-0",
-    headerContainer: "transition-transform duration-300 ease-in-out",
+    headerWrapper: "sticky top-0 z-50 motion-reduce:transition-none",
+    header: "w-full bg-white dark:bg-gray-900/95 shadow-sm border-b border-gray-200 dark:border-gray-800 backdrop-blur-sm sticky top-0",
+    headerContainer: "transition-transform duration-300 ease-in-out motion-reduce:transition-none",
     container: "max-w-7xl mx-auto px-4 py-2 flex items-center justify-between",
     headerSection: "text-center mb-12",
     title: "text-4xl font-bold text-gray-900 dark:text-white mb-4",

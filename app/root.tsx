@@ -36,8 +36,14 @@ export default function App() {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <Meta />
                 <Links />
+                {/* Theme initialization script: only toggles 'dark' class (Tailwind treats absence as light). */}
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `(() => {try {const stored = localStorage.getItem('theme');const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches; if (stored === 'dark' || (!stored && prefersDark)) { document.documentElement.classList.add('dark'); }} catch(_) {}})();`,
+                    }}
+                />
             </head>
-            <body className="min-h-screen bg-white dark:bg-gray-900">
+            <body className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
                 <Header />
                 <Outlet />
                 <Footer />
