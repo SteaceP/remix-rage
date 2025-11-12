@@ -1,5 +1,5 @@
+import type { an } from "node_modules/react-router/dist/development/router-DIAPGK5f.mjs";
 import { z } from "zod";
-import type { LoaderFunctionArgs } from "react-router";
 
 const emailSchema = z.object({
     name: z
@@ -30,7 +30,7 @@ function escapeHtml(unsafe: string): string {
         .replace(/'/g, "&#039;");
 }
 
-export async function sendEmail(data: EmailData, { context }: LoaderFunctionArgs) {
+export async function sendEmail(data: EmailData, { context }: any) {
     // Validate the data
     const validated = emailSchema.parse(data);
 
@@ -47,7 +47,7 @@ export async function sendEmail(data: EmailData, { context }: LoaderFunctionArgs
             method: "POST",
             headers: {
                 accept: "application/json",
-                "api-key": context.cloudflare?.env?.BREVO_API_KEY,
+                "api-key": context.cloudflare.env.BREVO_API_KEY || "",
                 "content-type": "application/json",
             },
             body: JSON.stringify({
