@@ -6,8 +6,8 @@ import { type PlatformProxy } from "wrangler";
 // Need this empty interface so that typechecking passes
 // even if no `wrangler.toml` exists.
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface Env {
-    [x: string]: string;
+interface ProcessEnv {
+    [x: string]: string | undefined;
 }
 
 type Cloudflare = Omit<PlatformProxy<Env>, "dispose">;
@@ -17,7 +17,7 @@ declare module "react-router" {
         // Production: context.cloudflare.env
         cloudflare?: Cloudflare;
         // Development: context.env (uses process.env from .env file)
-        env?: Env & {
+        env?: ProcessEnv & {
             CSRF_SECRET?: string;
             BREVO_API_KEY?: string;
         };
