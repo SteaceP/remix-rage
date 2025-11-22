@@ -190,9 +190,9 @@ export default function Header() {
                             >
                                 <div className="absolute inset-0 bg-blue-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                 <img
-                                    src="/assets/logo/logo-dark.png"
+                                    src={theme === "dark" ? "/assets/logo/logo-dark.png" : "/assets/logo/logo-light.png"}
                                     alt="Code Rage"
-                                    className="h-12 md:h-14 w-auto transition-all duration-500 group-hover:scale-110 group-hover:drop-shadow-2xl relative z-10"
+                                    className="h-16 md:h-20 w-auto transition-all duration-500 group-hover:scale-110 group-hover:drop-shadow-2xl relative z-10"
                                 />
                             </Link>
 
