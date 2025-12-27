@@ -9,24 +9,29 @@ on:
 jobs:
     deploy:
         runs-on: ubuntu-latest
+        # Only deploy on push to master, not on PRs
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
 
         steps:
             - name: Checkout Code
-              uses: actions/checkout@v5
+              uses: actions/checkout@v4
 
             - name: Install pnpm
               uses: pnpm/action-setup@v4
               with:
-                  version: 10.21.0
+                  version: 10
 
             - name: Set up Node.js
-              uses: actions/setup-node@v6
+              uses: actions/setup-node@v4
               with:
                   node-version-file: ".node-version"
                   cache: "pnpm"
 
             - name: Install Dependencies
               run: pnpm install --frozen-lockfile
+
+            - name: Generate Cloudflare Types
+              run: pnpm run cf-typegen
 
             - name: Type Check
               run: pnpm run typecheck
@@ -36,20 +41,24 @@ jobs:
               env:
                   NODE_ENV: production
 
+            # Only deploy on push to master, skip on PRs
             - name: Deploy to Cloudflare Workers
+              if: github.event_name == 'push' && github.ref == 'refs/heads/master'
               id: deploy
               uses: cloudflare/wrangler-action@v3
               with:
                   apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
                   accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
                   command: deploy
-
-            - name: Print Wrangler Command Output
+                  secrets: |
+                      CSRF_SECRET
+                      BREVO_API_KEY
               env:
-                  CMD_OUTPUT: ${{ steps.deploy.outputs.command-output }}
-              run: echo $CMD_OUTPUT
+                  CSRF_SECRET: ${{ secrets.CSRF_SECRET }}
+                  BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
 
             - name: Print Deployment URL
-              env:
-                  DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
-              run: echo $DEPLOYMENT_URL
+              if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+              run: |
+                  echo "Command output: ${{ steps.deploy.outputs.command-output }}"
+                  echo "Deployment URL: ${{ steps.deploy.outputs.deployment-url }}"
