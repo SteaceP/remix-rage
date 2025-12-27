@@ -14,7 +14,8 @@
 		}
 	},
 	"vars": {
-		"DEV": "Hello from Cloudflare"
+		"FROM_EMAIL": "contact@coderage.pro",
+		"TO_EMAIL": "admin@coderage.pro"
 	},
 	"observability": {
 		"enabled": true
@@ -38,6 +39,15 @@
 	/**
 	* Note: Use secrets to store sensitive data.
 	 * https://developers.cloudflare.com/workers/configuration/secrets/
+	 *
+	 * Required secrets (set via CLI, not in this file):
+	 *   wrangler secret put SECRET_1
+	 *   wrangler secret put SECRET_2
+	 *   wrangler secret put SECRET_3
+	 *
+	 * Already configured:
+	 *   - CSRF_SECRET
+	 *   - BREVO_API_KEY
 	 */
 	/**
 	 * Static Assets

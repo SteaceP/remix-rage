@@ -1,6 +1,6 @@
 # Remix Rage
 
-A modern service business website built with **React Router v7** and deployed on **Cloudflare Pages**. Features a fully responsive design with dark mode support, progressive form enhancement, and comprehensive security measures.
+A modern service business website built with **React Router v7** and deployed on **Cloudflare Workers**. Features a fully responsive design with dark mode support, progressive form enhancement, and comprehensive security measures.
 
 ## 🚀 Tech Stack
 
@@ -9,7 +9,7 @@ A modern service business website built with **React Router v7** and deployed on
 - **Styling**: Tailwind CSS v4 with centralized style architecture
 - **Forms**: Progressive enhancement with CSRF protection
 - **Email**: Brevo API integration
-- **Deployment**: Cloudflare Pages with Functions
+- **Deployment**: Cloudflare Workers
 - **Type Safety**: TypeScript with Cloudflare Workers types
 
 ## 📋 Features
@@ -25,22 +25,26 @@ A modern service business website built with **React Router v7** and deployed on
 ## 🏗️ Architecture
 
 ### Routing
+
 - File-based routing via `@react-router/fs-routes`
 - Routes configured in `app/routes.ts`
 - Server functions (loaders/actions) for data fetching and mutations
 
 ### Styling
+
 - **Centralized styles**: Style objects in `app/styles/` directory
 - **Pattern**: Import styles, use `className={styles.property}`
 - **Categories**: `navigation`, `cards`, `form`, `footer`, `contactStyles`
 - **Custom animations**: `draw-arrow`, `marquee`, defined in `tailwind.config.ts`
 
 ### Forms & Security
+
 - **CSRF Protection**: Token generation and validation in `app/utils/csrf.server.ts`
 - **Validation**: Zod schemas for server-side form validation
 - **Email**: Brevo API with HTML templates in `app/utils/email.server.ts`
 
 ### Environment Variables
+
 - Access via `context.cloudflare.env.VARIABLE_NAME` in loaders/actions
 - Type-safe with extended `Env` interface in `load-context.ts`
 - Required: `CSRF_SECRET`, `BREVO_API_KEY`, `FROM_EMAIL`, `TO_EMAIL`
@@ -48,12 +52,14 @@ A modern service business website built with **React Router v7** and deployed on
 ## 🛠️ Development
 
 ### Prerequisites
+
 ```bash
 node >= 22.12.0
 pnpm >= 9.0.0
 ```
 
 ### Setup
+
 ```bash
 # Install dependencies
 pnpm install
@@ -75,62 +81,40 @@ The dev server will start at [http://localhost:5173](http://localhost:5173)
 pnpm run dev         # Start Vite dev server (or: pnpm dev)
 pnpm run build       # Build for production
 pnpm run preview     # Preview production build locally
-pnpm run deploy      # Deploy to Cloudflare Pages (after build)
+pnpm run deploy      # Deploy to Cloudflare Workers
 pnpm run typecheck   # Run TypeScript validation
 pnpm run cf-typegen  # Generate Cloudflare Workers types
 ```
 
-### 🔧 Chrome DevTools Integration
-
-This project includes **Chrome Automatic Workspace Folders** (M-135+) for enhanced debugging:
-
-- **Automatic workspace detection**: Chrome DevTools automatically connects to your project folder
-- **Live editing**: Edit and save files directly from DevTools
-- **No manual setup**: Works automatically when you open `http://localhost:5173` in Chrome
-
-The configuration is located at `public/.well-known/appspecific/com.chrome.devtools.json` and includes:
-- Workspace root: `/home/steace/remix-rage`
-- Unique workspace UUID for automatic detection
-
-**Requirements:**
-- Chrome M-136+ (enabled by default) or Chrome M-135+ with flags enabled:
-  - `chrome://flags#devtools-project-settings`
-  - `chrome://flags#devtools-automatic-workspace-folders`
-
-**Alternative launch with flags:**
-```bash
-google-chrome --enable-features=DevToolsWellKnown,DevToolsAutomaticFileSystems
-```
-
 ## 📦 Project Structure
 
-```
+```text
 app/
-├── routes/              # Page routes
-│   ├── _index.tsx       # Homepage
-│   ├── contact.tsx      # Contact form with CSRF
-│   └── *.tsx            # Service pages
-├── components/          # React components
-│   ├── Header.tsx       # Navigation with scroll detection
-│   ├── Footer.tsx       # Footer with links
-│   └── ContactForm.tsx  # Reusable contact form
-├── styles/              # Centralized Tailwind styles
-│   ├── components.ts    # Component-specific styles
-│   ├── layout.ts        # Layout styles
-│   └── sections.ts      # Section styles
-├── utils/               # Server utilities
-│   ├── csrf.server.ts   # CSRF token handling
-│   ├── email.server.ts  # Brevo email integration
-│   └── token.server.ts  # Token utilities
-├── hooks/               # Custom React hooks
-└── root.tsx             # Root layout
+├── routes/                        # Page routes
+│   ├── _index.tsx             # Homepage
+│   ├── contact.tsx            # Contact form with CSRF
+│   └── *.tsx                      # Service pages
+├── components/               # React components
+│   ├── Header.tsx             # Navigation with scroll detection
+│   ├── Footer.tsx              # Footer with links
+│   └── ContactForm.tsx   # Reusable contact form
+├── styles/                          # Centralized Tailwind styles
+│   ├── components.ts       # Component-specific styles
+│   ├── layout.ts                 # Layout styles
+│   └── sections.ts              # Section styles
+├── utils/                             # Server utilities
+│   ├── csrf.server.ts           # CSRF token handling
+│   ├── email.server.ts        # Brevo email integration
+│   └── token.server.ts        # Token utilities
+├── hooks/                          # Custom React hooks
+└── root.tsx                         # Root layout
 
-functions/
-└── [[path]].ts          # Cloudflare Pages function handler
+workers/
+└── app.ts                            # Cloudflare Workers entry point
 
 public/
-├── _headers             # Security headers configuration
-└── assets/              # Static assets (images, logos)
+├── _headers                       # Security headers configuration
+└── assets/                           # Static assets (images, logos)
 ```
 
 ## 🔒 Security
@@ -143,21 +127,21 @@ public/
 
 ## 🌐 Deployment
 
-### Cloudflare Pages
+### Cloudflare Workers
 
-1. **Connect Repository**: Link your GitHub/GitLab repository to Cloudflare Pages
-2. **Configure Build**:
-   - Build command: `pnpm run build`
-   - Build output directory: `build/client`
-   - Root directory: `/`
-3. **Environment Variables**: Set in Cloudflare dashboard:
-   - `CSRF_SECRET`
-   - `BREVO_API_KEY`
-   - `FROM_EMAIL`
-   - `TO_EMAIL`
-4. **Deploy**: Push to main branch or use `pnpm run deploy`
+1. **Configure Wrangler**: Update `wrangler.jsonc` with your route and settings
+2. **Environment Variables**: Set secrets via Wrangler CLI:
+   ```bash
+   wrangler secret put CSRF_SECRET
+   wrangler secret put BREVO_API_KEY
+   ```
+3. **Deploy**: Push to main branch (CI) or run manually:
+   ```bash
+   pnpm run deploy
+   ```
 
 ### Manual Deployment
+
 ```bash
 pnpm run build
 pnpm run deploy
@@ -332,7 +316,6 @@ export async function action({ request, context }: ActionFunctionArgs) {
 ## 📚 Resources
 
 - [React Router Documentation](https://reactrouter.com)
-- [Cloudflare Pages](https://developers.cloudflare.com/pages)
 - [Cloudflare Workers](https://developers.cloudflare.com/workers)
 - [Tailwind CSS](https://tailwindcss.com)
 - [Brevo API](https://developers.brevo.com)

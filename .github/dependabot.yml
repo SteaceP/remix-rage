@@ -1,5 +1,5 @@
 # Dependabot configuration for Remix Rage
-# React Router v7 application deployed on Cloudflare Pages
+# React Router v7 application deployed on Cloudflare Workers
 # https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
 
 version: 2
@@ -14,7 +14,7 @@ updates:
           timezone: "America/New_York"
       open-pull-requests-limit: 5
       versioning-strategy: increase
-      reviewers:
+      assignees:
           - "SteaceP"
       labels:
           - "dependencies"
