@@ -29,7 +29,11 @@ function escapeHtml(unsafe: string): string {
         .replace(/'/g, "&#039;");
 }
 
-export async function sendEmail(data: EmailData, { context }: any) {
+interface SendEmailOptions {
+    BREVO_API_KEY: string;
+}
+
+export async function sendEmail(data: EmailData, { BREVO_API_KEY }: SendEmailOptions) {
     // Validate the data
     const validated = emailSchema.parse(data);
 
@@ -46,7 +50,7 @@ export async function sendEmail(data: EmailData, { context }: any) {
             method: "POST",
             headers: {
                 accept: "application/json",
-                "api-key": context.cloudflare.env.BREVO_API_KEY || "",
+                "api-key": BREVO_API_KEY,
                 "content-type": "application/json",
             },
             body: JSON.stringify({
