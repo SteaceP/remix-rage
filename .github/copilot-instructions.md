@@ -84,10 +84,6 @@ export default function Page() { ... }
 5. **State** — use loaders/actions exclusively; no client-side state libraries
 6. **Rate limiter** — in-memory per-worker-instance; resets on cold starts and doesn't share across isolates
 
-## Known Technical Debt
-
-- `app/routes/_index.tsx` defines styles inline instead of importing from `app/styles/` — should be refactored to use centralized styles
-
 ## Style Requirements (WCAG 2.1 AA)
 
 All style objects must include:
