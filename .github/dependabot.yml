@@ -1,10 +1,11 @@
 # Dependabot configuration for Remix Rage
 # React Router v7 application deployed on Cloudflare Workers
 # https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+# Note: package-ecosystem "npm" works for pnpm - Dependabot detects pnpm-lock.yaml automatically
 
 version: 2
 updates:
-    # pnpm dependencies
+    # pnpm dependencies (Dependabot auto-detects pnpm from pnpm-lock.yaml)
     - package-ecosystem: "npm"
       directory: "/"
       schedule:
@@ -45,9 +46,9 @@ updates:
           cloudflare:
               patterns:
                   - "@cloudflare/*"
-                  - "wrangler"
-              exclude-patterns:
-                  - "wrangler" # Handled separately in ignore section
+              update-types:
+                  - "minor"
+                  - "patch"
           # Styling system - Tailwind CSS ecosystem
           styling:
               patterns:
@@ -67,6 +68,11 @@ updates:
                   - "vite"
                   - "vite-*"
                   - "typescript"
+          # Testing tools
+          testing:
+              patterns:
+                  - "vitest"
+                  - "@vitest/*"
           # Runtime utilities (production dependencies)
           runtime-utilities:
               patterns:
