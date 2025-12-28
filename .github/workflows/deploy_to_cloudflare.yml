@@ -47,7 +47,8 @@ jobs:
               with:
                   apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
                   accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-                  command: deploy
+                  # Use --env="" to explicitly target top-level environment (not dev)
+                  command: deploy --env=""
                   secrets: |
                       CSRF_SECRET
                       BREVO_API_KEY
