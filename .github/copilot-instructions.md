@@ -2,14 +2,14 @@
 
 ## Architecture
 
-**React Router v7** app on **Cloudflare Workers** (not Node.js - use Web APIs only).
+**React Router v7** on **Cloudflare Workers** — Web APIs only (no Node.js).
 
 | Layer | Tech | Key Files |
 |-------|------|-----------|
-| Runtime | Cloudflare Workers | [workers/app.ts](../workers/app.ts), [wrangler.jsonc](../wrangler.jsonc) |
-| Routing | File-based via `@react-router/fs-routes` | [app/routes.ts](../app/routes.ts) |
-| Styling | Tailwind CSS v4, centralized style objects | [app/styles/](../app/styles/) |
-| Forms | CSRF + Zod validation + rate limiting | [app/utils/](../app/utils/) |
+| Runtime | Cloudflare Workers | `workers/app.ts`, `wrangler.jsonc` |
+| Routing | File-based `@react-router/fs-routes` | `app/routes.ts`, `app/routes/*.tsx` |
+| Styling | Tailwind CSS v4 + centralized style objects | `app/styles/` |
+| Forms | CSRF + Zod + rate limiting | `app/utils/*.server.ts` |
 
 ## Commands
 
@@ -17,58 +17,59 @@
 pnpm dev              # Dev server at localhost:5173
 pnpm run build        # Production build
 pnpm run deploy       # Build + deploy to Cloudflare
-pnpm run typecheck    # TypeScript + Cloudflare types
+pnpm run typecheck    # TypeScript + Cloudflare types (runs cf-typegen first)
+pnpm run cf-typegen   # Regenerate worker-configuration.d.ts from wrangler.jsonc
+pnpm test             # Run tests once
+pnpm run test:watch   # Run tests in watch mode
+pnpm run test:coverage # Run tests with coverage report
 ```
 
 ## Critical Patterns
 
-### Environment Variables (dev vs prod)
+### 1. Environment Variables (dev vs prod)
 ```tsx
-// Always use this pattern in loaders/actions:
+// ALWAYS use this dual-access pattern in loaders/actions:
 const env = context.cloudflare?.env || context.env;
 const secret = env?.CSRF_SECRET;
 if (!secret) throw new Error("CSRF_SECRET not configured");
 ```
+- **Production**: `context.cloudflare.env.VAR` (Cloudflare secrets)
+- **Development**: `context.env.VAR` (from `.env` file via `load-context.ts`)
 
-### Centralized Styles (not inline Tailwind)
+### 2. Centralized Styles (never inline Tailwind in routes)
 ```tsx
+// Import from app/styles/, use object properties
 import { contactStyles as styles } from "~/styles/components";
 export default function Page() {
   return <div className={styles.wrapper}>...</div>;
 }
 ```
+**Style file organization:**
+- `components.ts` — navigation, cards, form, footer, contactStyles
+- `layout.ts` — layout, header
+- `sections.ts` — hero, features, services, cta, page, serviceCards, pricing
 
-Style objects must include: `focus-visible:`, `motion-reduce:`, `dark:` variants.
-
-### Form Security (see [contact.tsx](../app/routes/contact.tsx))
+### 3. Form Security Stack (see `app/routes/contact.tsx`)
 ```tsx
-// Loader: create CSRF token
+// Loader: generate CSRF token
 const { token, cookieHeader } = await createCsrfToken(request, env.CSRF_SECRET);
 return Response.json({ csrfToken: token }, { headers: { "Set-Cookie": cookieHeader } });
 
-// Action: validate before processing
+// Action: validate all layers
 const rateLimit = checkRateLimit(getRateLimitKey(request), 3, 60000);
 if (!rateLimit.allowed) return Response.json({ error: "Too many requests" }, { status: 429 });
 await validateCsrfToken(request, formData.get("csrfToken"), env.CSRF_SECRET);
+const validated = emailSchema.parse(data); // Zod validation
 ```
 
-**Security layers:**
-- **CSRF**: Secure HTTP-only cookies with `sameSite=strict`, Web Crypto for token generation
-- **Rate limiting**: In-memory per-IP tracking in [rate-limit.server.ts](../app/utils/rate-limit.server.ts)
-- **Validation**: Zod schemas with length limits + regex patterns (see `emailSchema`)
-- **XSS**: HTML escaping for user input in emails
-- **Headers**: CSP, HSTS, CORS in [public/_headers](../public/_headers)
-
-### Route Structure
+### 4. Route File Structure
 ```tsx
+import type { Route } from "./+types/_index";  // Auto-generated types
 import { type LoaderFunctionArgs, type ActionFunctionArgs } from "react-router";
-import type { MetaFunction } from "react-router";
 
-export const meta: MetaFunction = () => [
-  { title: "Page - Code Rage" },
-  { name: "description", content: "..." }
-];
-
+export function meta({}: Route.MetaArgs) {
+  return [{ title: "Page - Code Rage" }, { name: "description", content: "..." }];
+}
 export async function loader({ request, context }: LoaderFunctionArgs) { ... }
 export async function action({ request, context }: ActionFunctionArgs) { ... }
 export default function Page() { ... }
@@ -76,37 +77,49 @@ export default function Page() { ... }
 
 ## Gotchas
 
-1. **No Node.js APIs** - use `fetch()`, `crypto`, `Request`/`Response` (Web APIs)
-2. **Vite config uses `@cloudflare/vite-plugin`** - see [vite.config.ts](../vite.config.ts)
-3. **Type extensions** live in [load-context.ts](../load-context.ts)
-4. **Security headers** configured in [public/_headers](../public/_headers)
-5. **State management** - use loaders/actions, avoid client-side state libraries
+1. **No Node.js APIs** — use `fetch()`, Web Crypto API, `Request`/`Response`
+2. **Type generation** — run `pnpm run cf-typegen` after changing `wrangler.jsonc`
+3. **Secrets** — set via `wrangler secret put NAME`, never in `wrangler.jsonc`
+4. **Security headers** — configured in `public/_headers`, not in code
+5. **State** — use loaders/actions exclusively; no client-side state libraries
+6. **Rate limiter** — in-memory per-worker-instance; resets on cold starts and doesn't share across isolates
 
-## Style Guidelines
+## Known Technical Debt
 
-- **200ms** for simple transitions (colors), **300ms** for complex (scale, shadows)
-- All interactive elements need `focus-visible:ring-2` states
-- All animations need `motion-reduce:transition-none` fallbacks
-- Organize in: `components.ts` (UI), `layout.ts` (structure), `sections.ts` (page sections)
+- `app/routes/_index.tsx` defines styles inline instead of importing from `app/styles/` — should be refactored to use centralized styles
 
-### Accessibility Checklist (WCAG 2.1 AA)
+## Style Requirements (WCAG 2.1 AA)
 
-When adding/modifying styles, ensure:
-- ✅ `focus-visible` states on all interactive elements (not just `focus`)
-- ✅ `motion-reduce` variants for animations/transforms
-- ✅ `dark:` variants for all colors (text, backgrounds, borders)
-- ✅ Consistent transition durations (200ms simple, 300ms complex)
-- ✅ `active:` states for buttons/links (hover → active → disabled)
-- ✅ `disabled:opacity-50 disabled:cursor-not-allowed` for disabled states
-- ✅ Ring offsets match background: `focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-800`
-- ✅ Hover states don't rely on color alone
+All style objects must include:
+- `focus-visible:ring-2` on interactive elements (not just `focus`)
+- `motion-reduce:transition-none` for animations/transforms
+- `dark:` variants for all colors
+- `disabled:opacity-50 disabled:cursor-not-allowed` for disabled states
+- Transition durations: **200ms** (simple), **300ms** (scale/shadows)
 
 ## External Integrations
 
-| Service | Purpose | Config Location |
-|---------|---------|-----------------|
-| **Brevo API** | Contact form emails | `BREVO_API_KEY` env var, [email.server.ts](../app/utils/email.server.ts) |
-| **Google Fonts** | Inter font family | Preconnected in [root.tsx](../app/root.tsx) |
-| **Cloudflare Workers** | Edge runtime | [workers/app.ts](../workers/app.ts), [wrangler.jsonc](../wrangler.jsonc) |
+| Service | Env Var | Usage |
+|---------|---------|-------|
+| Brevo API | `BREVO_API_KEY` | Contact form emails (`app/utils/email.server.ts`) |
+| Cloudflare | `CSRF_SECRET` | CSRF token signing |
 
-**Required env vars:** `CSRF_SECRET`, `BREVO_API_KEY` (set in `.env` locally, Cloudflare dashboard for prod)
+**Local dev**: Create `.env` with `CSRF_SECRET` and `BREVO_API_KEY`
+**Production**: Set via Cloudflare dashboard or `wrangler secret put`
+
+## Testing
+
+Tests use **Vitest** with coverage via `@vitest/coverage-v8`. Test files live alongside source files with `.test.ts` suffix.
+
+```bash
+pnpm test             # Run once
+pnpm run test:watch   # Watch mode
+pnpm run test:coverage # With coverage
+```
+
+**Existing tests:** `app/utils/token.server.test.ts`, `app/utils/rate-limit.server.test.ts`
+
+When adding tests:
+- Mock `context.cloudflare.env` for loader/action tests
+- Use `vi.useFakeTimers()` for time-dependent tests (rate limiting)
+- Consider Playwright for e2e contact form flow
