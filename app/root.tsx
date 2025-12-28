@@ -1,6 +1,7 @@
 import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 import Header from "~/components/Header";
 import Footer from "~/components/Footer";
+import { ThemeProvider } from "~/context/ThemeContext";
 
 import type { Route } from "./+types/root";
 import "./tailwind.css";
@@ -27,10 +28,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Meta />
                 <Links />
             </head>
-            <body className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
-                <Header />
-                {children}
-                <Footer />
+            <body className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+                <ThemeProvider>
+                    <Header />
+                    {children}
+                    <Footer />
+                </ThemeProvider>
                 <ScrollRestoration />
                 <Scripts />
             </body>
