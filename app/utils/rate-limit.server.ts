@@ -8,21 +8,23 @@ interface RateLimitEntry {
 
 const rateLimitStore = new Map<string, RateLimitEntry>();
 
-// Clean up old entries periodically
-setInterval(() => {
+// Clean up old entries on each check (no setInterval - not allowed in Workers global scope)
+function cleanupExpiredEntries() {
   const now = Date.now();
   for (const [key, entry] of rateLimitStore.entries()) {
     if (entry.resetAt < now) {
       rateLimitStore.delete(key);
     }
   }
-}, 60000); // Clean every minute
+}
 
 export function checkRateLimit(
   identifier: string,
   maxRequests = 3,
   windowMs = 60000 // 1 minute
 ): { allowed: boolean; remaining: number; resetAt: number } {
+  // Clean up expired entries on each request
+  cleanupExpiredEntries();
   const now = Date.now();
   const entry = rateLimitStore.get(identifier);
 
