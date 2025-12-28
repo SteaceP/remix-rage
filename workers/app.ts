@@ -1,15 +1,21 @@
 import { createRequestHandler } from "react-router";
 
+let requestHandler: ReturnType<typeof createRequestHandler>;
 
-
-const requestHandler = createRequestHandler(
-  () => import("virtual:react-router/server-build"),
-  import.meta.env.MODE
-);
+function getRequestHandler() {
+  if (!requestHandler) {
+    requestHandler = createRequestHandler(
+      () => import("virtual:react-router/server-build"),
+      import.meta.env.MODE
+    );
+  }
+  return requestHandler;
+}
 
 export default {
   async fetch(request, env, ctx) {
-    return requestHandler(request, {
+    const handler = getRequestHandler();
+    return handler(request, {
       cloudflare: {
         env,
         ctx,
