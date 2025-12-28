@@ -176,8 +176,8 @@ export default function Header() {
                 <div
                     className={`w-full transition-all duration-500 relative ${
                         scrolled
-                            ? "bg-white/95 dark:bg-gray-900/95 shadow-lg backdrop-blur-xl border-b border-gray-200 dark:border-gray-800"
-                            : "bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800"
+                            ? "bg-white/80 dark:bg-gray-900/80 shadow-lg shadow-blue-900/5 backdrop-blur-2xl border-b border-white/50 dark:border-gray-800 support-backdrop-blur:bg-white/90"
+                            : "bg-white/20 dark:bg-gray-900/50 backdrop-blur-md border-b border-white/10 dark:border-white/5"
                     }`}
                 >
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -190,7 +190,7 @@ export default function Header() {
                             >
                                 <div className="absolute inset-0 bg-blue-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                 <img
-                                    src={theme === "dark" ? "/assets/logo/logo-dark.png" : "/assets/logo/logo-light.png"}
+                                    src="/assets/logo/logo-dark.png"
                                     alt="Code Rage"
                                     className="h-16 md:h-20 w-auto transition-all duration-500 group-hover:scale-110 group-hover:drop-shadow-2xl relative z-10"
                                 />
@@ -201,11 +201,8 @@ export default function Header() {
                                 <div className="relative" ref={solutionsRef}>
                                     <button
                                         onClick={toggleSolutions}
-                                        className={`px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center gap-2 relative overflow-hidden group ${
-                                            solutions.some((s) => isActive(s.path))
-                                                ? "bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-purple-500/30"
-                                                : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:shadow-md hover:scale-105"
-                                        }`}
+                                        className={`px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center gap-2 relative overflow-hidden group bg-blue-600 dark:bg-linear-to-r dark:from-blue-600 dark:to-purple-600 text-white shadow-lg shadow-blue-500/30`}
+
                                     >
                                         <span className="relative z-10">Services</span>
                                         <FaChevronDown
@@ -229,7 +226,7 @@ export default function Header() {
                                                             onClick={handleLinkClick}
                                                             className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 relative overflow-hidden group ${
                                                                 isActive(solution.path)
-                                                                    ? "bg-linear-to-r from-blue-600 to-purple-600 text-white shadow-md"
+                                                                    ? "bg-blue-600 dark:bg-linear-to-r dark:from-blue-600 dark:to-purple-600 text-white shadow-md"
                                                                     : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:scale-[1.02] hover:shadow-sm"
                                                             }`}
                                                             style={{
@@ -255,7 +252,7 @@ export default function Header() {
                                     to="/contact"
                                     onMouseEnter={() => setIsContactHovered(true)}
                                     onMouseLeave={() => setIsContactHovered(false)}
-                                    className="ml-3 px-8 py-3 bg-linear-to-r from-blue-600 via-purple-600 to-blue-600 bg-size-[200%_100%] text-white rounded-xl font-bold text-sm lg:text-base transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/30 hover:scale-110 hover:bg-position-[100%_0] relative overflow-hidden group"
+                                    className="ml-3 px-8 py-3 bg-blue-600 dark:bg-linear-to-r dark:from-blue-600 dark:via-purple-600 dark:to-blue-600 bg-size-[200%_100%] text-white rounded-xl font-bold text-sm lg:text-base transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/30 hover:scale-110 hover:bg-position-[100%_0] relative overflow-hidden group"
                                 >
                                     <span className="relative z-10 flex items-center gap-2">
                                         Contact
@@ -349,7 +346,7 @@ export default function Header() {
                                         onClick={handleLinkClick}
                                         className="mt-4 px-4 py-3 bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium text-center transition-all duration-200 hover:shadow-lg hover:from-blue-700 hover:to-purple-700"
                                     >
-                                        Contact Us
+                                        Contact Me
                                     </Link>
                                 </nav>
                             </div>
