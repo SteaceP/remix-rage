@@ -1,17 +1,14 @@
-name: Deploy to Cloudflare Workers
+name: Deploy to Cloudflare Workers (Dev)
 
 on:
     push:
-        branches:
+        branches-ignore:
             - master
-    pull_request:
 
 jobs:
-    deploy:
+    deploy-dev:
         runs-on: ubuntu-latest
-        environment: production
-        # Only deploy on push to master, not on PRs
-        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        environment: development
 
         steps:
             - name: Checkout Code
@@ -38,21 +35,16 @@ jobs:
             - name: Build
               run: pnpm run build
               env:
-                  NODE_ENV: production
+                  NODE_ENV: development
 
-            # Only deploy on push to master, skip on PRs
-            - name: Deploy to Cloudflare Workers
-              if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+            - name: Deploy to Cloudflare Workers (Dev)
               id: deploy
               uses: cloudflare/wrangler-action@v3
               with:
                   apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
                   accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
                   packageManager: pnpm
-                  # Upload secrets first with explicit env flag, then deploy
-                  preCommands: |
-                      echo "Uploading secrets..."
-                  command: deploy
+                  command: deploy --env dev
                   secrets: |
                       CSRF_SECRET
                       BREVO_API_KEY
@@ -61,7 +53,6 @@ jobs:
                   BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
 
             - name: Print Deployment URL
-              if: github.event_name == 'push' && github.ref == 'refs/heads/master'
               run: |
                   echo "Command output: ${{ steps.deploy.outputs.command-output }}"
                   echo "Deployment URL: ${{ steps.deploy.outputs.deployment-url }}"
