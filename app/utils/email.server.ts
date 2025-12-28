@@ -1,4 +1,3 @@
-import type { an } from "node_modules/react-router/dist/development/router-DIAPGK5f.mjs";
 import { z } from "zod";
 
 const emailSchema = z.object({
