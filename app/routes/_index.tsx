@@ -387,7 +387,7 @@ export default function Index() {
                                         to="/contact"
                                         className="text-xs font-mono font-semibold text-blue-600 dark:text-blue-400 hover:underline shrink-0"
                                     >
-                                        Book Call →
+                                        Direct Message →
                                     </Link>
                                 </div>
                             </div>
@@ -553,7 +553,7 @@ export default function Index() {
                                 to="/contact"
                                 className="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm md:text-base transition-colors shadow-sm"
                             >
-                                <span>Contact Me Today</span>
+                                <span>Contact Us Today</span>
                                 <FaArrowRight className="w-3.5 h-3.5" />
                             </Link>
                         </div>

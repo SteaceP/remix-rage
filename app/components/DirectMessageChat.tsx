@@ -338,14 +338,14 @@ export function DirectMessageChat({ initialPresence }: DirectMessageChatProps) {
                 <div className={dmStyles.headerLeft}>
                     <div className={dmStyles.avatar}>CR</div>
                     <div className="min-w-0">
-                        <div className={dmStyles.headerTitle}>Steace — Code Rage Direct Message</div>
+                        <div className={dmStyles.headerTitle}>Code Rage Direct Message</div>
                         <div className={dmStyles.headerStatus}>
                             <span className={presence.available ? contactStyles.dotAvailable : contactStyles.dotAway} />
                             <span>
                                 {presence.available
                                     ? presence.adminConnected
                                         ? "Online Now • Live Direct Chat"
-                                        : "Available • Push Alerts Active on Phone"
+                                        : "Direct Messaging Active"
                                     : `${presence.statusText || "Away"} • Leave a Direct Message`}
                             </span>
                             {wsConnected && (
@@ -405,10 +405,9 @@ export function DirectMessageChat({ initialPresence }: DirectMessageChatProps) {
             {/* Messages Stream */}
             <div className={dmStyles.messagesArea} aria-live="polite">
                 <div className={dmStyles.welcomeBox}>
-                    <p className="font-semibold text-slate-900 dark:text-white mb-1">Direct real-time line to Steace</p>
+                    <p className="font-semibold text-slate-900 dark:text-white mb-1">Direct Communication Channel</p>
                     <p>
-                        No email forms or ticket queues. Messages here ping my phone directly via Cloudflare Durable
-                        Objects so we can chat in real time.
+                        Send a message directly to get started on your project, diagnostic, or tech inquiry. We review and respond promptly.
                     </p>
                 </div>
 
@@ -418,7 +417,7 @@ export function DirectMessageChat({ initialPresence }: DirectMessageChatProps) {
                         <div key={msg.id} className={isVisitor ? dmStyles.msgRowVisitor : dmStyles.msgRowAdmin}>
                             <div className={isVisitor ? dmStyles.bubbleVisitor : dmStyles.bubbleAdmin}>{msg.text}</div>
                             <div className={dmStyles.msgMeta}>
-                                <span>{isVisitor ? "You" : "Steace"}</span>
+                                <span>{isVisitor ? "You" : "Code Rage"}</span>
                                 <span>•</span>
                                 <span>{formatTime(msg.createdAt)}</span>
                                 {isVisitor && (
@@ -445,7 +444,7 @@ export function DirectMessageChat({ initialPresence }: DirectMessageChatProps) {
                 {adminTyping && (
                     <div className={dmStyles.typingRow}>
                         <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping" />
-                        <span>Steace is typing a reply...</span>
+                        <span>Code Rage is typing a reply...</span>
                     </div>
                 )}
 
@@ -521,7 +520,7 @@ export function DirectMessageChat({ initialPresence }: DirectMessageChatProps) {
                         placeholder={
                             isStarted
                                 ? "Write a reply... (Enter to send, Shift+Enter for new line)"
-                                : "Hi Steace! Tell me about your project, device issue, or question..."
+                                : "Hi! Tell me about your project, device issue, or question..."
                         }
                         aria-label="Direct message"
                         required

@@ -126,7 +126,7 @@ export default function CrossPlatformApps() {
                             // TARGET PLATFORMS
                         </div>
                         <h2 className="text-2xl md:text-3xl font-display font-bold tracking-tight text-slate-900 dark:text-white">
-                            My Cross-Platform Solutions
+                            Our Cross-Platform Solutions
                         </h2>
                     </div>
 
@@ -175,7 +175,7 @@ export default function CrossPlatformApps() {
                             // TOOLING &amp; RUNTIMES
                         </div>
                         <h2 className="text-2xl md:text-3xl font-display font-bold tracking-tight text-slate-900 dark:text-white">
-                            Technologies &amp; Languages I Use
+                            Technologies &amp; Languages We Use
                         </h2>
                     </div>
 

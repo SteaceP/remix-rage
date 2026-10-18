@@ -14,7 +14,7 @@ export const meta: MetaFunction = () => {
         {
             name: "description",
             content:
-                "Message Steace directly in real time for custom website development, cross-platform apps, computer repair, or family tech support.",
+                "Message Code Rage directly in real time for custom website development, cross-platform apps, computer repair, or family tech support.",
         },
     ];
 };
@@ -71,8 +71,8 @@ export default function Contact() {
 
                         <h1 className={styles.title}>Direct Message</h1>
                         <p className={styles.subtitle}>
-                            Skip the email forms. Send a real-time message directly to my phone and let&apos;s talk
-                            about your software project, computer repair, or family tech support needs right here.
+                            Reach Code Rage directly in real time. Inquire about website development, custom
+                            software builds, computer repair diagnostics, or tech support services.
                         </p>
 
                         <div className={styles.featureList}>
@@ -81,10 +81,9 @@ export default function Contact() {
                                     <FaBolt className={styles.featureIconSize} />
                                 </div>
                                 <div>
-                                    <h2 className={styles.featureTitle}>Real-Time Cloudflare Durable Object Chat</h2>
+                                    <h2 className={styles.featureTitle}>Real-Time Direct Support</h2>
                                     <p className={styles.featureDesc}>
-                                        Messages ping my phone immediately via WebSockets &amp; Web Push—reply right
-                                        from this tab as we talk.
+                                        Fast response times with direct messaging—connect with us right from this page.
                                     </p>
                                 </div>
                             </div>
@@ -117,7 +116,7 @@ export default function Contact() {
 
                         <div className={styles.securityNote}>
                             <FaShieldAlt className={styles.securityIcon} />
-                            <span>Powered by Cloudflare Edge Durable Objects • Session saved in your browser</span>
+                            <span>Confidential &amp; secure • Session saved in your browser</span>
                         </div>
 
                         <div>

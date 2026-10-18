@@ -300,7 +300,7 @@ export class DirectMessageHub extends DurableObject<Env> {
             id: `msg_${crypto.randomUUID().replace(/-/g, "").slice(0, 16)}`,
             threadId: storedThread.id,
             sender: "admin",
-            senderName: "Steace • Code Rage",
+            senderName: "Code Rage",
             text,
             createdAt: now,
         };
