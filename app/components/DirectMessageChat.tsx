@@ -407,7 +407,8 @@ export function DirectMessageChat({ initialPresence }: DirectMessageChatProps) {
                 <div className={dmStyles.welcomeBox}>
                     <p className="font-semibold text-slate-900 dark:text-white mb-1">Direct Communication Channel</p>
                     <p>
-                        Send a message directly to get started on your project, diagnostic, or tech inquiry. We review and respond promptly.
+                        Send a message directly to get started on your project, diagnostic, or tech inquiry. We review
+                        and respond promptly.
                     </p>
                 </div>
 

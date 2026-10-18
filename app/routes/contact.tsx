@@ -71,8 +71,8 @@ export default function Contact() {
 
                         <h1 className={styles.title}>Direct Message</h1>
                         <p className={styles.subtitle}>
-                            Reach Code Rage directly in real time. Inquire about website development, custom
-                            software builds, computer repair diagnostics, or tech support services.
+                            Reach Code Rage directly in real time. Inquire about website development, custom software
+                            builds, computer repair diagnostics, or tech support services.
                         </p>
 
                         <div className={styles.featureList}>
