@@ -1,4 +1,5 @@
-import { createRequestHandler } from "react-router";
+import { createRequestHandler, RouterContextProvider } from "react-router";
+import { cloudflareContext } from "../app/context";
 import { getAdminSessionFromRequest, resolveSigningSecret } from "../app/utils/auth.server";
 import { DirectMessageHub } from "./chat.do";
 
@@ -34,13 +35,14 @@ export default {
         }
 
         const handler = getRequestHandler();
-        return handler(request, {
-            cloudflare: {
-                env,
-                ctx,
-                cf: request.cf as any,
-                caches: caches as any,
-            },
+        const routerContext = new RouterContextProvider();
+        routerContext.set(cloudflareContext, {
+            env,
+            ctx,
+            cf: request.cf as any,
+            caches: caches as any,
         });
+
+        return handler(request, routerContext);
     },
 } satisfies ExportedHandler<Env>;

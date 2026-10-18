@@ -5,6 +5,7 @@ import { DirectMessageChat } from "~/components/DirectMessageChat";
 import { contactStyles as styles } from "~/styles/components";
 import { getAdminSessionFromRequest, resolveSigningSecret } from "~/utils/auth.server";
 import { fetchHubJson } from "~/utils/dm-hub.server";
+import { getEnvFromContext } from "~/context";
 import type { AdminPresence } from "~/utils/dm-types";
 
 export const meta: MetaFunction = () => {
@@ -19,7 +20,7 @@ export const meta: MetaFunction = () => {
 };
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-    const env = (context.cloudflare?.env || context.env || {}) as Record<string, unknown>;
+    const env = getEnvFromContext(context) as Record<string, unknown>;
     const secret = resolveSigningSecret(env);
     const session = await getAdminSessionFromRequest(request, secret);
 

@@ -1,11 +1,8 @@
-import type { AppLoadContext } from "react-router";
+import { getEnvFromContext } from "~/context";
 
-export function getEnvFromContext(context: AppLoadContext): Record<string, any> {
-    const env = (context?.cloudflare?.env || context?.env || {}) as Record<string, any>;
-    return env;
-}
+export { getEnvFromContext };
 
-export function getHubStub(context: AppLoadContext): DurableObjectStub | null {
+export function getHubStub(context: unknown): DurableObjectStub | null {
     const env = getEnvFromContext(context);
     const namespace = env?.DIRECT_MESSAGE_HUB as DurableObjectNamespace | undefined;
     if (!namespace) {
@@ -15,7 +12,7 @@ export function getHubStub(context: AppLoadContext): DurableObjectStub | null {
     return namespace.get(id);
 }
 
-export async function fetchHubJson<T>(context: AppLoadContext, path: string, init?: RequestInit): Promise<T> {
+export async function fetchHubJson<T>(context: unknown, path: string, init?: RequestInit): Promise<T> {
     const stub = getHubStub(context);
     if (!stub) {
         throw new Error("DIRECT_MESSAGE_HUB Durable Object binding is not available");

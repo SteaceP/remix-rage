@@ -16,9 +16,10 @@ import {
     type PasskeyCredential,
 } from "~/utils/dm-types";
 import { checkRateLimit, getRateLimitKey } from "~/utils/rate-limit.server";
+import { getEnvFromContext } from "~/context";
 
 export async function loader({ request, context, params }: LoaderFunctionArgs) {
-    const env = (context.cloudflare?.env || context.env || {}) as Record<string, any>;
+    const env = getEnvFromContext(context) as Record<string, any>;
     const signingSecret = resolveSigningSecret(env);
     const actionName = params.action;
 
@@ -86,7 +87,7 @@ export async function action({ request, context, params }: ActionFunctionArgs) {
         return Response.json({ error: "Method not allowed" }, { status: 405 });
     }
 
-    const env = (context.cloudflare?.env || context.env || {}) as Record<string, any>;
+    const env = getEnvFromContext(context) as Record<string, any>;
     const signingSecret = resolveSigningSecret(env);
     const actionName = params.action;
     const rateKey = getRateLimitKey(request);
