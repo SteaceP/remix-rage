@@ -1,10 +1,22 @@
-import { type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
+import { type ActionFunctionArgs, type LoaderFunctionArgs, type MetaFunction } from "react-router";
 import { useLoaderData, useActionData } from "react-router";
+import { FaCheckCircle, FaExclamationTriangle, FaClock, FaShieldAlt, FaCode, FaTools } from "react-icons/fa";
 import { ContactForm } from "~/components/ContactForm";
 import { createCsrfToken, validateCsrfToken } from "~/utils/csrf.server";
 import { sendEmail, emailSchema } from "~/utils/email.server";
 import { checkRateLimit, getRateLimitKey } from "~/utils/rate-limit.server";
 import { contactStyles as styles } from "~/styles/components";
+
+export const meta: MetaFunction = () => {
+    return [
+        { title: "Contact — Code Rage" },
+        {
+            name: "description",
+            content:
+                "Get in touch with Steace Paquette for custom website development, cross-platform apps, computer repair, or family tech support.",
+        },
+    ];
+};
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
     // Handle both dev and production environment access
@@ -98,39 +110,102 @@ export default function Contact() {
 
     return (
         <div className={styles.wrapper}>
-            {/* Background decoration */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-1/4 left-0 w-96 h-96 bg-blue-500/10 dark:bg-blue-500/20 rounded-full blur-3xl" />
-                <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-3xl" />
-            </div>
+            <div className="absolute inset-0 bg-grid-pattern mask-radial-fade pointer-events-none" />
 
             <div className={styles.container}>
-                <div className={styles.formCard}>
-                    <div className={styles.formInner}>
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+                    {/* Left Column: Direct Context & Expectations */}
+                    <div className="lg:col-span-5 space-y-6">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200/60 dark:border-emerald-800/60 text-xs font-mono font-semibold text-emerald-700 dark:text-emerald-300">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                            <span>DIRECT INBOX // STEACE PAQUETTE</span>
+                        </div>
+
                         <h1 className={styles.title}>Get In Touch</h1>
-                        <p className={styles.subtitle}>
-                            Have a project in mind or need technical support? Let&apos;s chat about how I can help bring
-                            your ideas to life.
+                        <p className="text-slate-600 dark:text-slate-400 text-base md:text-lg leading-relaxed">
+                            Have a software project in mind, need a computer repaired, or looking for patient family
+                            tech support? Send a message and let&apos;s talk about how I can help.
                         </p>
 
-                        {actionData?.error && (
-                            <div className={styles.errorAlert}>
-                                <p className={styles.errorText}>⚠️ {actionData.error}</p>
+                        <div className="space-y-3.5 pt-2">
+                            <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 flex items-start gap-3.5">
+                                <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5">
+                                    <FaClock className="w-4 h-4" />
+                                </div>
+                                <div>
+                                    <h2 className="text-sm font-display font-bold text-slate-900 dark:text-white">
+                                        Fast Response Turnaround
+                                    </h2>
+                                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                                        Inquiries are typically answered the same business day with clear next steps.
+                                    </p>
+                                </div>
                             </div>
-                        )}
 
-                        {actionData?.success && (
-                            <div className={styles.successAlert}>
-                                <p className={styles.successText}>
-                                    ✓ Message sent successfully! I&apos;ll get back to you soon.
-                                </p>
+                            <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 flex items-start gap-3.5">
+                                <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5">
+                                    <FaCode className="w-4 h-4" />
+                                </div>
+                                <div>
+                                    <h2 className="text-sm font-display font-bold text-slate-900 dark:text-white">
+                                        Web &amp; Cross-Platform Builds
+                                    </h2>
+                                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                                        Free initial consultation and architecture scoping for new websites or apps.
+                                    </p>
+                                </div>
                             </div>
-                        )}
 
-                        <ContactForm csrfToken={csrfToken} />
+                            <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 flex items-start gap-3.5">
+                                <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5">
+                                    <FaTools className="w-4 h-4" />
+                                </div>
+                                <div>
+                                    <h2 className="text-sm font-display font-bold text-slate-900 dark:text-white">
+                                        $29 PC Diagnostics (Waived w/ Repair)
+                                    </h2>
+                                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                                        Honest hardware &amp; software evaluation before you commit to any repair work.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="inline-flex items-center gap-2 text-xs font-mono text-slate-500 dark:text-slate-400 pt-2">
+                            <FaShieldAlt className="text-emerald-500 shrink-0" />
+                            <span>Protected by cryptographic CSRF tokens &amp; rate limiting</span>
+                        </div>
+                    </div>
+
+                    {/* Right Column: Contact Form Card */}
+                    <div className="lg:col-span-7">
+                        <div className={styles.formCard}>
+                            <div className={styles.formInner}>
+                                {actionData?.error && (
+                                    <div className={styles.errorAlert} role="alert">
+                                        <p className={styles.errorText}>
+                                            <FaExclamationTriangle className="shrink-0" />
+                                            <span>{actionData.error}</span>
+                                        </p>
+                                    </div>
+                                )}
+
+                                {actionData?.success && (
+                                    <div className={styles.successAlert} role="status">
+                                        <p className={styles.successText}>
+                                            <FaCheckCircle className="shrink-0" />
+                                            <span>Message sent! I&apos;ll get back to you shortly.</span>
+                                        </p>
+                                    </div>
+                                )}
+
+                                <ContactForm csrfToken={csrfToken} />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     );
 }
+
