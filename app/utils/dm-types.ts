@@ -113,34 +113,18 @@ export type WsServerEvent =
 export const visitorStartSchema = z.object({
     threadId: z.string().min(8).max(80).optional(),
     visitorToken: z.string().min(16).max(128).optional(),
-    visitorName: z
-        .string()
-        .trim()
-        .min(1, "Please enter your name")
-        .max(80, "Name must be 80 characters or fewer"),
+    visitorName: z.string().trim().min(1, "Please enter your name").max(80, "Name must be 80 characters or fewer"),
     visitorContact: z
         .string()
         .trim()
         .max(160, "Contact info must be 160 characters or fewer")
         .optional()
         .or(z.literal("")),
-    topic: z
-        .string()
-        .trim()
-        .min(1, "Please select or enter a topic")
-        .max(120, "Topic must be 120 characters or fewer"),
-    text: z
-        .string()
-        .trim()
-        .min(1, "Message cannot be empty")
-        .max(4000, "Message must be 4000 characters or fewer"),
+    topic: z.string().trim().min(1, "Please select or enter a topic").max(120, "Topic must be 120 characters or fewer"),
+    text: z.string().trim().min(1, "Message cannot be empty").max(4000, "Message must be 4000 characters or fewer"),
 });
 
 export const chatMessageSchema = z.object({
     threadId: z.string().min(8).max(80),
-    text: z
-        .string()
-        .trim()
-        .min(1, "Message cannot be empty")
-        .max(4000, "Message must be 4000 characters or fewer"),
+    text: z.string().trim().min(1, "Message cannot be empty").max(4000, "Message must be 4000 characters or fewer"),
 });

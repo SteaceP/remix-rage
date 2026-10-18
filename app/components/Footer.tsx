@@ -11,15 +11,11 @@ export default function Footer() {
                     {/* Brand & Mission */}
                     <div className="lg:col-span-5 space-y-4">
                         <Link to="/" className="inline-block">
-                            <img
-                                src="/assets/logo/logo-dark.png"
-                                alt="Code Rage"
-                                className="h-9 w-auto dark:invert"
-                            />
+                            <img src="/assets/logo/logo-dark.png" alt="Code Rage" className="h-9 w-auto dark:invert" />
                         </Link>
                         <p className="text-sm text-slate-600 dark:text-slate-400 max-w-sm leading-relaxed">
-                            Precision software engineering, cross-platform application builds, and reliable hardware &amp;
-                            family tech support.
+                            Precision software engineering, cross-platform application builds, and reliable hardware
+                            &amp; family tech support.
                         </p>
                         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 text-xs font-mono text-slate-700 dark:text-slate-300">
                             <span className="w-2 h-2 rounded-full bg-emerald-500" />
@@ -129,4 +125,3 @@ export default function Footer() {
         </footer>
     );
 }
-

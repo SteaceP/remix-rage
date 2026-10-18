@@ -21,7 +21,11 @@ export default function CrossPlatformApps() {
             title: "Mobile Apps",
             description:
                 "Native-quality iOS and Android apps from a single codebase. Optimized for 60/120fps animations, offline storage, and native device APIs.",
-            points: ["App Store & Google Play deployment", "Push notifications & biometric auth", "Shared TypeScript/Dart business logic"],
+            points: [
+                "App Store & Google Play deployment",
+                "Push notifications & biometric auth",
+                "Shared TypeScript/Dart business logic",
+            ],
         },
         {
             icon: FaDesktop,
@@ -29,7 +33,11 @@ export default function CrossPlatformApps() {
             title: "Desktop Applications",
             description:
                 "Lightweight, secure desktop apps with full OS integration, file-system access, system tray support, and minimal memory footprint.",
-            points: ["Tauri (Rust) & Electron architectures", "Native installers & auto-updaters", "Hardware & local database integration"],
+            points: [
+                "Tauri (Rust) & Electron architectures",
+                "Native installers & auto-updaters",
+                "Hardware & local database integration",
+            ],
         },
         {
             icon: FaCode,
@@ -45,7 +53,11 @@ export default function CrossPlatformApps() {
             title: "Rapid Development",
             description:
                 "Fast development cycles with hot reload, strict static typing, and automated CI/CD builds for faster time to market.",
-            points: ["Single unified codebase to maintain", "Consistent UI design system", "Predictable release pipelines"],
+            points: [
+                "Single unified codebase to maintain",
+                "Consistent UI design system",
+                "Predictable release pipelines",
+            ],
         },
     ];
 
@@ -100,8 +112,8 @@ export default function CrossPlatformApps() {
                         One Codebase, Multiple Platforms
                     </h2>
                     <p className="text-base md:text-lg mt-4 text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed">
-                        Build powerful applications that run seamlessly across mobile, desktop, and web. Save engineering
-                        time and budget while maintaining native performance and user experience.
+                        Build powerful applications that run seamlessly across mobile, desktop, and web. Save
+                        engineering time and budget while maintaining native performance and user experience.
                     </p>
                 </div>
             </header>
@@ -240,4 +252,3 @@ export default function CrossPlatformApps() {
         </div>
     );
 }
-

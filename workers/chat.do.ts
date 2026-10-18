@@ -14,11 +14,7 @@ import {
     verifyPasskeyAssertion,
     verifyPasskeyRegistration,
 } from "../app/utils/webauthn.server";
-import {
-    generateVapidKeys,
-    sendWebPushNotification,
-    type StoredVapidKeys,
-} from "../app/utils/webpush.server";
+import { generateVapidKeys, sendWebPushNotification, type StoredVapidKeys } from "../app/utils/webpush.server";
 
 interface StoredThread extends ChatThread {
     visitorToken: string;
@@ -189,11 +185,7 @@ export class DirectMessageHub extends DurableObject<Env> {
         let storedThread: StoredThread | undefined;
         if (params.threadId) {
             const candidate = await this.ctx.storage.get<StoredThread>(`thread:${params.threadId}`);
-            if (
-                candidate &&
-                params.visitorToken &&
-                validateToken(candidate.visitorToken, params.visitorToken)
-            ) {
+            if (candidate && params.visitorToken && validateToken(candidate.visitorToken, params.visitorToken)) {
                 storedThread = candidate;
             }
         }
@@ -489,8 +481,7 @@ export class DirectMessageHub extends DurableObject<Env> {
             if (path.endsWith("/admin/availability") && request.method === "POST") {
                 const body = (await request.json()) as { available: boolean; statusText?: string };
                 const available = Boolean(body.available);
-                const statusText =
-                    body.statusText?.trim().slice(0, 40) || (available ? "Available" : "Away");
+                const statusText = body.statusText?.trim().slice(0, 40) || (available ? "Available" : "Away");
                 await this.ctx.storage.put("presence", {
                     available,
                     statusText,
@@ -546,10 +537,7 @@ export class DirectMessageHub extends DurableObject<Env> {
                 const body = (await request.json()) as { newPasscode: string };
                 const newPasscode = (body.newPasscode || "").trim();
                 if (newPasscode.length < 6) {
-                    return Response.json(
-                        { error: "Passcode must be at least 6 characters" },
-                        { status: 400 }
-                    );
+                    return Response.json({ error: "Passcode must be at least 6 characters" }, { status: 400 });
                 }
                 const newHash = await hashPasscode(newPasscode);
                 await this.ctx.storage.put("admin_passcode_hash", newHash);
@@ -559,8 +547,7 @@ export class DirectMessageHub extends DurableObject<Env> {
             if (path.endsWith("/admin/webauthn/challenge") && request.method === "POST") {
                 const body = (await request.json()) as { purpose: "register" | "login" };
                 const challenge = generateWebAuthnChallenge();
-                const challenges =
-                    (await this.ctx.storage.get<Record<string, StoredChallenge>>("challenges")) || {};
+                const challenges = (await this.ctx.storage.get<Record<string, StoredChallenge>>("challenges")) || {};
 
                 const now = Date.now();
                 // Prune expired challenges
@@ -597,18 +584,14 @@ export class DirectMessageHub extends DurableObject<Env> {
                     rpId: string;
                 };
 
-                const challenges =
-                    (await this.ctx.storage.get<Record<string, StoredChallenge>>("challenges")) || {};
+                const challenges = (await this.ctx.storage.get<Record<string, StoredChallenge>>("challenges")) || {};
                 const storedChallenge = challenges[body.challenge];
                 if (
                     !storedChallenge ||
                     storedChallenge.purpose !== "register" ||
                     storedChallenge.expiresAt < Date.now()
                 ) {
-                    return Response.json(
-                        { error: "Registration challenge expired or invalid" },
-                        { status: 400 }
-                    );
+                    return Response.json({ error: "Registration challenge expired or invalid" }, { status: 400 });
                 }
 
                 delete challenges[body.challenge];
@@ -648,18 +631,10 @@ export class DirectMessageHub extends DurableObject<Env> {
                     rpId: string;
                 };
 
-                const challenges =
-                    (await this.ctx.storage.get<Record<string, StoredChallenge>>("challenges")) || {};
+                const challenges = (await this.ctx.storage.get<Record<string, StoredChallenge>>("challenges")) || {};
                 const storedChallenge = challenges[body.challenge];
-                if (
-                    !storedChallenge ||
-                    storedChallenge.purpose !== "login" ||
-                    storedChallenge.expiresAt < Date.now()
-                ) {
-                    return Response.json(
-                        { error: "Login challenge expired or invalid" },
-                        { status: 400 }
-                    );
+                if (!storedChallenge || storedChallenge.purpose !== "login" || storedChallenge.expiresAt < Date.now()) {
+                    return Response.json({ error: "Login challenge expired or invalid" }, { status: 400 });
                 }
 
                 delete challenges[body.challenge];
@@ -754,10 +729,7 @@ export class DirectMessageHub extends DurableObject<Env> {
     }
 
     async webSocketMessage(ws: WebSocket, rawMessage: string | ArrayBuffer): Promise<void> {
-        const textData =
-            typeof rawMessage === "string"
-                ? rawMessage
-                : new TextDecoder().decode(rawMessage);
+        const textData = typeof rawMessage === "string" ? rawMessage : new TextDecoder().decode(rawMessage);
 
         let payload: Record<string, any>;
         try {
@@ -807,8 +779,7 @@ export class DirectMessageHub extends DurableObject<Env> {
             }
 
             if (payload.type === "typing") {
-                const threadId =
-                    attachment.role === "admin" ? String(payload.threadId || "") : attachment.threadId;
+                const threadId = attachment.role === "admin" ? String(payload.threadId || "") : attachment.threadId;
                 if (!threadId) return;
                 const event: WsServerEvent = {
                     type: "typing",
@@ -825,8 +796,7 @@ export class DirectMessageHub extends DurableObject<Env> {
             }
 
             if (payload.type === "mark_read") {
-                const threadId =
-                    attachment.role === "admin" ? String(payload.threadId || "") : attachment.threadId;
+                const threadId = attachment.role === "admin" ? String(payload.threadId || "") : attachment.threadId;
                 if (!threadId) return;
                 const storedThread = await this.ctx.storage.get<StoredThread>(`thread:${threadId}`);
                 if (!storedThread) return;
@@ -921,10 +891,7 @@ export class DirectMessageHub extends DurableObject<Env> {
                 }
 
                 if (payload.type === "delete_thread" && typeof payload.threadId === "string") {
-                    await this.ctx.storage.delete([
-                        `thread:${payload.threadId}`,
-                        `messages:${payload.threadId}`,
-                    ]);
+                    await this.ctx.storage.delete([`thread:${payload.threadId}`, `messages:${payload.threadId}`]);
                     this.broadcastToTag("role:admin", {
                         type: "thread_deleted",
                         threadId: payload.threadId,

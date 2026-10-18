@@ -19,4 +19,3 @@ export const header = {
     subheading: "text-lg md:text-xl mt-4 text-slate-700 dark:text-slate-300 font-medium",
     paragraph: "text-base md:text-lg mt-3 text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed",
 };
-

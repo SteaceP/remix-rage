@@ -58,19 +58,17 @@ self.addEventListener("notificationclick", (event) => {
     const targetUrl = (event.notification.data && event.notification.data.url) || "/inbox";
 
     event.waitUntil(
-        self.clients
-            .matchAll({ type: "window", includeUncontrolled: true })
-            .then((clientList) => {
-                for (const client of clientList) {
-                    if ("focus" in client) {
-                        client.navigate(targetUrl);
-                        return client.focus();
-                    }
+        self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
+            for (const client of clientList) {
+                if ("focus" in client) {
+                    client.navigate(targetUrl);
+                    return client.focus();
                 }
-                if (self.clients.openWindow) {
-                    return self.clients.openWindow(targetUrl);
-                }
-                return undefined;
-            })
+            }
+            if (self.clients.openWindow) {
+                return self.clients.openWindow(targetUrl);
+            }
+            return undefined;
+        })
     );
 });

@@ -95,25 +95,25 @@ This document outlines the security measures implemented in this application.
 ## Recommendations for Production
 
 1. **Enable Cloudflare Bot Protection**
-   - Protects against automated attacks
-   - Free tier available
+    - Protects against automated attacks
+    - Free tier available
 
 2. **Set up Cloudflare Rate Limiting Rules**
-   - More robust than in-memory rate limiting
-   - Persists across Workers
+    - More robust than in-memory rate limiting
+    - Persists across Workers
 
 3. **Monitor Logs**
-   - Set up Cloudflare Logs or external logging
-   - Monitor for suspicious activity
+    - Set up Cloudflare Logs or external logging
+    - Monitor for suspicious activity
 
 4. **Regular Security Audits**
-   - Update dependencies regularly (Dependabot configured)
-   - Review security headers annually
-   - Test CSRF protection
+    - Update dependencies regularly (Dependabot configured)
+    - Review security headers annually
+    - Test CSRF protection
 
 5. **Backup Strategy**
-   - Git repository is the source of truth
-   - Cloudflare Workers maintains deployment history
+    - Git repository is the source of truth
+    - Cloudflare Workers maintains deployment history
 
 ## Security Checklist
 

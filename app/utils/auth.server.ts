@@ -24,13 +24,10 @@ export function fromBase64Url(base64url: string): Uint8Array {
 
 async function getHmacKey(secret: string): Promise<CryptoKey> {
     const encoder = new TextEncoder();
-    return crypto.subtle.importKey(
-        "raw",
-        encoder.encode(secret),
-        { name: "HMAC", hash: "SHA-256" },
-        false,
-        ["sign", "verify"]
-    );
+    return crypto.subtle.importKey("raw", encoder.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, [
+        "sign",
+        "verify",
+    ]);
 }
 
 export interface AdminSessionPayload {
@@ -59,10 +56,7 @@ export async function createAdminSessionToken(
     return `${payloadB64}.${sigB64}`;
 }
 
-export async function verifyAdminSessionToken(
-    token: string,
-    secret: string
-): Promise<AdminSessionPayload | null> {
+export async function verifyAdminSessionToken(token: string, secret: string): Promise<AdminSessionPayload | null> {
     try {
         const parts = token.split(".");
         if (parts.length !== 2) return null;
@@ -132,13 +126,7 @@ export function createAdminCookieHeader(token: string, request: Request): string
 export function clearAdminCookieHeader(request: Request): string {
     const url = new URL(request.url);
     const isSecure = url.protocol === "https:";
-    const directives = [
-        `${ADMIN_COOKIE_NAME}=`,
-        "Path=/",
-        "HttpOnly",
-        "SameSite=Lax",
-        "Max-Age=0",
-    ];
+    const directives = [`${ADMIN_COOKIE_NAME}=`, "Path=/", "HttpOnly", "SameSite=Lax", "Max-Age=0"];
     if (isSecure) {
         directives.push("Secure");
     }
@@ -149,13 +137,7 @@ export async function hashPasscode(passcode: string): Promise<string> {
     const salt = new Uint8Array(16);
     crypto.getRandomValues(salt);
     const encoder = new TextEncoder();
-    const keyMaterial = await crypto.subtle.importKey(
-        "raw",
-        encoder.encode(passcode),
-        "PBKDF2",
-        false,
-        ["deriveBits"]
-    );
+    const keyMaterial = await crypto.subtle.importKey("raw", encoder.encode(passcode), "PBKDF2", false, ["deriveBits"]);
     const derivedBits = await crypto.subtle.deriveBits(
         {
             name: "PBKDF2",
@@ -175,13 +157,9 @@ export async function verifyPasscodeHash(passcode: string, storedHash: string): 
         if (!saltB64 || !hashB64) return false;
         const salt = fromBase64Url(saltB64);
         const encoder = new TextEncoder();
-        const keyMaterial = await crypto.subtle.importKey(
-            "raw",
-            encoder.encode(passcode),
-            "PBKDF2",
-            false,
-            ["deriveBits"]
-        );
+        const keyMaterial = await crypto.subtle.importKey("raw", encoder.encode(passcode), "PBKDF2", false, [
+            "deriveBits",
+        ]);
         const derivedBits = await crypto.subtle.deriveBits(
             {
                 name: "PBKDF2",

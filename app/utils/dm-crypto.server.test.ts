@@ -68,28 +68,19 @@ describe("Web Push VAPID & RFC 8291 Payload Encryption", () => {
         expect(fromBase64Url(vapid.publicKey).length).toBe(65);
 
         // Simulate a mobile browser PushSubscription ECDH keypair
-        const uaKeyPair = await crypto.subtle.generateKey(
-            { name: "ECDH", namedCurve: "P-256" },
-            true,
-            ["deriveBits"]
-        );
-        const uaRawPublic = new Uint8Array(
-            (await crypto.subtle.exportKey("raw", uaKeyPair.publicKey)) as ArrayBuffer
-        );
+        const uaKeyPair = await crypto.subtle.generateKey({ name: "ECDH", namedCurve: "P-256" }, true, ["deriveBits"]);
+        const uaRawPublic = new Uint8Array((await crypto.subtle.exportKey("raw", uaKeyPair.publicKey)) as ArrayBuffer);
         const authBytes = new Uint8Array(16);
         crypto.getRandomValues(authBytes);
 
-        const encrypted = await encryptWebPushPayload(
-            JSON.stringify({ title: "New DM", body: "Hello from visitor" }),
-            {
-                endpoint: "https://fcm.googleapis.com/fcm/send/example",
-                keys: {
-                    p256dh: toBase64Url(uaRawPublic),
-                    auth: toBase64Url(authBytes),
-                },
-                createdAt: Date.now(),
-            }
-        );
+        const encrypted = await encryptWebPushPayload(JSON.stringify({ title: "New DM", body: "Hello from visitor" }), {
+            endpoint: "https://fcm.googleapis.com/fcm/send/example",
+            keys: {
+                p256dh: toBase64Url(uaRawPublic),
+                auth: toBase64Url(authBytes),
+            },
+            createdAt: Date.now(),
+        });
 
         // Header is 86 bytes (16 salt + 4 rs + 1 idlen + 65 keyid) + ciphertext + 16 GCM tag
         expect(encrypted.length).toBeGreaterThan(102);

@@ -24,19 +24,16 @@ export default async function handleRequest(
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), ABORT_DELAY);
 
-    const body = await renderToReadableStream(
-        <ServerRouter context={reactRouterContext} url={request.url} />,
-        {
-            signal: controller.signal,
-            onError(error: unknown) {
-                if (!controller.signal.aborted) {
-                    // Log streaming rendering errors from inside the shell
-                    console.error(error);
-                }
-                responseStatusCode = 500;
-            },
-        }
-    );
+    const body = await renderToReadableStream(<ServerRouter context={reactRouterContext} url={request.url} />, {
+        signal: controller.signal,
+        onError(error: unknown) {
+            if (!controller.signal.aborted) {
+                // Log streaming rendering errors from inside the shell
+                console.error(error);
+            }
+            responseStatusCode = 500;
+        },
+    });
 
     body.allReady.then(() => clearTimeout(timeoutId));
 

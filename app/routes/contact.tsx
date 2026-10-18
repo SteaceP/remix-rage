@@ -59,16 +59,8 @@ export default function Contact() {
                 <div className={styles.grid}>
                     {/* Left Column: Real-Time Direct Message Context */}
                     <div className={styles.leftCol}>
-                        <div
-                            className={
-                                presence.available ? styles.badgeAvailable : styles.badgeAway
-                            }
-                        >
-                            <span
-                                className={
-                                    presence.available ? styles.dotAvailable : styles.dotAway
-                                }
-                            />
+                        <div className={presence.available ? styles.badgeAvailable : styles.badgeAway}>
+                            <span className={presence.available ? styles.dotAvailable : styles.dotAway} />
                             <span>
                                 {presence.available
                                     ? "LIVE DIRECT MESSAGE // ONLINE"
@@ -78,9 +70,8 @@ export default function Contact() {
 
                         <h1 className={styles.title}>Direct Message</h1>
                         <p className={styles.subtitle}>
-                            Skip the email forms. Send a real-time message directly to my phone and
-                            let&apos;s talk about your software project, computer repair, or family tech
-                            support needs right here.
+                            Skip the email forms. Send a real-time message directly to my phone and let&apos;s talk
+                            about your software project, computer repair, or family tech support needs right here.
                         </p>
 
                         <div className={styles.featureList}>
@@ -89,12 +80,10 @@ export default function Contact() {
                                     <FaBolt className={styles.featureIconSize} />
                                 </div>
                                 <div>
-                                    <h2 className={styles.featureTitle}>
-                                        Real-Time Cloudflare Durable Object Chat
-                                    </h2>
+                                    <h2 className={styles.featureTitle}>Real-Time Cloudflare Durable Object Chat</h2>
                                     <p className={styles.featureDesc}>
-                                        Messages ping my phone immediately via WebSockets &amp; Web Push—reply
-                                        right from this tab as we talk.
+                                        Messages ping my phone immediately via WebSockets &amp; Web Push—reply right
+                                        from this tab as we talk.
                                     </p>
                                 </div>
                             </div>
@@ -104,9 +93,7 @@ export default function Contact() {
                                     <FaCode className={styles.featureIconSize} />
                                 </div>
                                 <div>
-                                    <h2 className={styles.featureTitle}>
-                                        Web &amp; Cross-Platform Builds
-                                    </h2>
+                                    <h2 className={styles.featureTitle}>Web &amp; Cross-Platform Builds</h2>
                                     <p className={styles.featureDesc}>
                                         Free initial consultation and architecture scoping for new websites or
                                         multi-platform apps.
@@ -119,12 +106,9 @@ export default function Contact() {
                                     <FaTools className={styles.featureIconSize} />
                                 </div>
                                 <div>
-                                    <h2 className={styles.featureTitle}>
-                                        $29 PC Diagnostics (Waived w/ Repair)
-                                    </h2>
+                                    <h2 className={styles.featureTitle}>$29 PC Diagnostics (Waived w/ Repair)</h2>
                                     <p className={styles.featureDesc}>
-                                        Honest hardware &amp; software evaluation before you commit to any
-                                        repair work.
+                                        Honest hardware &amp; software evaluation before you commit to any repair work.
                                     </p>
                                 </div>
                             </div>
@@ -132,9 +116,7 @@ export default function Contact() {
 
                         <div className={styles.securityNote}>
                             <FaShieldAlt className={styles.securityIcon} />
-                            <span>
-                                Powered by Cloudflare Edge Durable Objects • Session saved in your browser
-                            </span>
+                            <span>Powered by Cloudflare Edge Durable Objects • Session saved in your browser</span>
                         </div>
 
                         <div>

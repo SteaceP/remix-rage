@@ -2,7 +2,8 @@ export const hero = {
     hero: "w-full px-4 sm:px-6 lg:px-8 py-20 md:py-28 bg-slate-50 dark:bg-slate-950 relative overflow-hidden border-b border-slate-200/80 dark:border-slate-800/80",
     heroContent: "max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12",
     heroText: "flex-1 text-left",
-    heroTitle: "text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight text-slate-900 dark:text-white mb-6 leading-[1.08]",
+    heroTitle:
+        "text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight text-slate-900 dark:text-white mb-6 leading-[1.08]",
     heroTitleSpan: "text-blue-600 dark:text-blue-400",
     heroSubtitle: "text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mb-8 leading-relaxed",
     heroImageContainer: "flex-1 relative max-w-sm",
@@ -35,10 +36,8 @@ export const homeHero = {
     badgePointer2: "hidden",
     badgePointer3: "hidden",
     bgDecoration: "absolute inset-0 overflow-hidden pointer-events-none",
-    bgCircle1:
-        "absolute -top-40 right-0 w-[36rem] h-[36rem] bg-blue-500/8 dark:bg-blue-500/12 rounded-full blur-3xl",
-    bgCircle2:
-        "absolute -bottom-40 left-0 w-[32rem] h-[32rem] bg-cyan-500/8 dark:bg-cyan-500/10 rounded-full blur-3xl",
+    bgCircle1: "absolute -top-40 right-0 w-[36rem] h-[36rem] bg-blue-500/8 dark:bg-blue-500/12 rounded-full blur-3xl",
+    bgCircle2: "absolute -bottom-40 left-0 w-[32rem] h-[32rem] bg-cyan-500/8 dark:bg-cyan-500/10 rounded-full blur-3xl",
 };
 
 export const homeFeatures = {
@@ -71,8 +70,7 @@ export const homeCta = {
         "w-full max-w-7xl mx-auto relative z-10 bg-slate-900 dark:bg-slate-900 text-white rounded-3xl p-8 sm:p-12 md:p-16 border border-slate-800 overflow-hidden isolate shadow-xl",
     title: "text-3xl md:text-4xl font-display font-bold tracking-tight text-white mb-4",
     text: "text-base md:text-lg text-slate-300 mb-8 leading-relaxed max-w-2xl",
-    button:
-        "inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-semibold text-sm md:text-base transition-colors shadow-sm",
+    button: "inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-semibold text-sm md:text-base transition-colors shadow-sm",
     bgDecoration: "absolute inset-0 overflow-hidden pointer-events-none -z-10",
     bgCircle1: "absolute -top-32 -right-32 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl",
     bgCircle2: "absolute -bottom-32 -left-32 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl",
@@ -115,8 +113,7 @@ export const cta = {
 
 export const page = {
     layout: "flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950",
-    header:
-        "w-full py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-950 border-b border-slate-200/80 dark:border-slate-800/80 relative overflow-hidden",
+    header: "w-full py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-950 border-b border-slate-200/80 dark:border-slate-800/80 relative overflow-hidden",
     heading:
         "text-4xl sm:text-5xl lg:text-6xl font-display font-bold tracking-tight text-slate-900 dark:text-white relative z-10 leading-[1.08]",
     headingSpan: "text-blue-600 dark:text-blue-400",
@@ -155,4 +152,3 @@ export const utilities = {
     imageSection: "relative w-full max-w-xl mx-auto",
     image: "w-full h-auto rounded-2xl border border-slate-200 dark:border-slate-800 shadow-md",
 };
-

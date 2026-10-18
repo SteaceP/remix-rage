@@ -58,8 +58,8 @@ export function derToP1363(der: Uint8Array): Uint8Array {
 export function p256RawPointToSpki(uncompressedPoint: Uint8Array): Uint8Array {
     // Standard ASN.1 SPKI header for P-256 uncompressed public key (26 bytes)
     const spkiPrefix = new Uint8Array([
-        0x30, 0x59, 0x30, 0x13, 0x06, 0x07, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x02, 0x01, 0x06, 0x08,
-        0x2a, 0x86, 0x48, 0xce, 0x3d, 0x03, 0x01, 0x07, 0x03, 0x42, 0x00,
+        0x30, 0x59, 0x30, 0x13, 0x06, 0x07, 0x2a, 0x86, 0x48, 0xce, 0x3d, 0x02, 0x01, 0x06, 0x08, 0x2a, 0x86, 0x48,
+        0xce, 0x3d, 0x03, 0x01, 0x07, 0x03, 0x42, 0x00,
     ]);
     const out = new Uint8Array(spkiPrefix.length + uncompressedPoint.length);
     out.set(spkiPrefix, 0);
@@ -86,9 +86,7 @@ export interface RegistrationVerifyInput {
     expectedRpId: string;
 }
 
-export async function verifyPasskeyRegistration(
-    input: RegistrationVerifyInput
-): Promise<PasskeyCredential> {
+export async function verifyPasskeyRegistration(input: RegistrationVerifyInput): Promise<PasskeyCredential> {
     const clientDataBytes = fromBase64Url(input.clientDataJSON);
     const clientData = JSON.parse(new TextDecoder().decode(clientDataBytes)) as {
         type: string;
@@ -175,9 +173,7 @@ export interface AssertionVerifyInput {
     credential: PasskeyCredential;
 }
 
-export async function verifyPasskeyAssertion(
-    input: AssertionVerifyInput
-): Promise<{ newCounter: number }> {
+export async function verifyPasskeyAssertion(input: AssertionVerifyInput): Promise<{ newCounter: number }> {
     const clientDataBytes = fromBase64Url(input.clientDataJSON);
     const clientData = JSON.parse(new TextDecoder().decode(clientDataBytes)) as {
         type: string;
@@ -222,9 +218,7 @@ export async function verifyPasskeyAssertion(
         throw new Error("Passkey signature counter replay detected");
     }
 
-    const clientDataHash = new Uint8Array(
-        await crypto.subtle.digest("SHA-256", clientDataBytes.buffer as ArrayBuffer)
-    );
+    const clientDataHash = new Uint8Array(await crypto.subtle.digest("SHA-256", clientDataBytes.buffer as ArrayBuffer));
     const signedData = concatBytes(authData, clientDataHash);
 
     const spkiBytes = fromBase64Url(input.credential.publicKeySpki);

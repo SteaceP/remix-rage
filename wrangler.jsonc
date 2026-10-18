@@ -6,56 +6,52 @@
     "$schema": "node_modules/wrangler/config-schema.json",
     "name": "remix-rage",
     "compatibility_date": "2025-04-04",
-    "compatibility_flags": [
-        "nodejs_compat"
-    ],
+    "compatibility_flags": ["nodejs_compat"],
     "main": "./workers/app.ts",
     "assets": {
-        "directory": "./build/client"
+        "directory": "./build/client",
     },
     "routes": [
         {
             "pattern": "coderage.pro/*",
-            "zone_name": "coderage.pro"
-        }
+            "zone_name": "coderage.pro",
+        },
     ],
     "durable_objects": {
         "bindings": [
             {
                 "name": "DIRECT_MESSAGE_HUB",
-                "class_name": "DirectMessageHub"
-            }
-        ]
+                "class_name": "DirectMessageHub",
+            },
+        ],
     },
     "migrations": [
         {
             "tag": "v1",
-            "new_sqlite_classes": [
-                "DirectMessageHub"
-            ]
-        }
+            "new_sqlite_classes": ["DirectMessageHub"],
+        },
     ],
     "env": {
         "dev": {
             "routes": [
                 {
                     "pattern": "dev.coderage.pro/*",
-                    "zone_name": "coderage.pro"
-                }
+                    "zone_name": "coderage.pro",
+                },
             ],
             "durable_objects": {
                 "bindings": [
                     {
                         "name": "DIRECT_MESSAGE_HUB",
-                        "class_name": "DirectMessageHub"
-                    }
-                ]
-            }
-        }
+                        "class_name": "DirectMessageHub",
+                    },
+                ],
+            },
+        },
     },
     "observability": {
-        "enabled": true
-    }
+        "enabled": true,
+    },
     /**
      * Note: Use secrets to store sensitive data.
      * https://developers.cloudflare.com/workers/configuration/secrets/

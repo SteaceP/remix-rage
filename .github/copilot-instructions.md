@@ -4,12 +4,12 @@
 
 **React Router v7** on **Cloudflare Workers** — Web APIs only (no Node.js).
 
-| Layer | Tech | Key Files |
-|-------|------|-----------|
-| Runtime | Cloudflare Workers | `workers/app.ts`, `wrangler.jsonc` |
-| Routing | File-based `@react-router/fs-routes` | `app/routes.ts`, `app/routes/*.tsx` |
-| Styling | Tailwind CSS v4 + centralized style objects | `app/styles/` |
-| Forms | CSRF + Zod + rate limiting | `app/utils/*.server.ts` |
+| Layer   | Tech                                        | Key Files                           |
+| ------- | ------------------------------------------- | ----------------------------------- |
+| Runtime | Cloudflare Workers                          | `workers/app.ts`, `wrangler.jsonc`  |
+| Routing | File-based `@react-router/fs-routes`        | `app/routes.ts`, `app/routes/*.tsx` |
+| Styling | Tailwind CSS v4 + centralized style objects | `app/styles/`                       |
+| Forms   | CSRF + Zod + rate limiting                  | `app/utils/*.server.ts`             |
 
 ## Commands
 
@@ -27,29 +27,35 @@ pnpm run test:coverage # Run tests with coverage report
 ## Critical Patterns
 
 ### 1. Environment Variables (dev vs prod)
+
 ```tsx
 // ALWAYS use this dual-access pattern in loaders/actions:
 const env = context.cloudflare?.env || context.env;
 const secret = env?.CSRF_SECRET;
 if (!secret) throw new Error("CSRF_SECRET not configured");
 ```
+
 - **Production**: `context.cloudflare.env.VAR` (Cloudflare secrets)
 - **Development**: `context.env.VAR` (from `.env` file via `load-context.ts`)
 
 ### 2. Centralized Styles (never inline Tailwind in routes)
+
 ```tsx
 // Import from app/styles/, use object properties
 import { contactStyles as styles } from "~/styles/components";
 export default function Page() {
-  return <div className={styles.wrapper}>...</div>;
+    return <div className={styles.wrapper}>...</div>;
 }
 ```
+
 **Style file organization:**
+
 - `components.ts` — navigation, cards, form, footer, contactStyles
 - `layout.ts` — layout, header
 - `sections.ts` — hero, features, services, cta, page, serviceCards, pricing
 
 ### 3. Form Security Stack (see `app/routes/contact.tsx`)
+
 ```tsx
 // Loader: generate CSRF token
 const { token, cookieHeader } = await createCsrfToken(request, env.CSRF_SECRET);
@@ -63,6 +69,7 @@ const validated = emailSchema.parse(data); // Zod validation
 ```
 
 ### 4. Route File Structure
+
 ```tsx
 import type { Route } from "./+types/_index";  // Auto-generated types
 import { type LoaderFunctionArgs, type ActionFunctionArgs } from "react-router";
@@ -87,6 +94,7 @@ export default function Page() { ... }
 ## Style Requirements (WCAG 2.1 AA)
 
 All style objects must include:
+
 - `focus-visible:ring-2` on interactive elements (not just `focus`)
 - `motion-reduce:transition-none` for animations/transforms
 - `dark:` variants for all colors
@@ -95,10 +103,10 @@ All style objects must include:
 
 ## External Integrations
 
-| Service | Env Var | Usage |
-|---------|---------|-------|
-| Brevo API | `BREVO_API_KEY` | Contact form emails (`app/utils/email.server.ts`) |
-| Cloudflare | `CSRF_SECRET` | CSRF token signing |
+| Service    | Env Var         | Usage                                             |
+| ---------- | --------------- | ------------------------------------------------- |
+| Brevo API  | `BREVO_API_KEY` | Contact form emails (`app/utils/email.server.ts`) |
+| Cloudflare | `CSRF_SECRET`   | CSRF token signing                                |
 
 **Local dev**: Create `.env` with `CSRF_SECRET` and `BREVO_API_KEY`
 **Production**: Set via Cloudflare dashboard or `wrangler secret put`
@@ -116,6 +124,7 @@ pnpm run test:coverage # With coverage
 **Existing tests:** `app/utils/token.server.test.ts`, `app/utils/rate-limit.server.test.ts`
 
 When adding tests:
+
 - Mock `context.cloudflare.env` for loader/action tests
 - Use `vi.useFakeTimers()` for time-dependent tests (rate limiting)
 - Consider Playwright for e2e contact form flow

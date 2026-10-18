@@ -1,14 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
-import {
-    FaBolt,
-    FaCheck,
-    FaCheckDouble,
-    FaExclamationTriangle,
-    FaPaperPlane,
-    FaPlus,
-    FaUser,
-} from "react-icons/fa";
+import { FaBolt, FaCheck, FaCheckDouble, FaExclamationTriangle, FaPaperPlane, FaPlus, FaUser } from "react-icons/fa";
 import { contactStyles, dmStyles } from "~/styles/components";
 import type { AdminPresence, ChatMessage, ChatThread, WsServerEvent } from "~/utils/dm-types";
 
@@ -32,7 +24,9 @@ interface StoredVisitorSession {
 
 function playIncomingChime() {
     try {
-        const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+        const AudioCtx =
+            window.AudioContext ||
+            (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
         if (!AudioCtx) return;
         const ctx = new AudioCtx();
         const osc = ctx.createOscillator();
@@ -154,9 +148,7 @@ export function DirectMessageChat({ initialPresence }: DirectMessageChatProps) {
                     } else if (data.type === "presence") {
                         setPresence(data.presence);
                         // Also notify the Header availability pill
-                        window.dispatchEvent(
-                            new CustomEvent("cr:presence", { detail: data.presence })
-                        );
+                        window.dispatchEvent(new CustomEvent("cr:presence", { detail: data.presence }));
                     } else if (data.type === "message") {
                         setThread(data.thread);
                         setMessages((prev) => {
@@ -183,9 +175,7 @@ export function DirectMessageChat({ initialPresence }: DirectMessageChatProps) {
                         if (data.reader === "admin") {
                             setMessages((prev) =>
                                 prev.map((m) =>
-                                    m.sender === "visitor" && !m.readAt
-                                        ? { ...m, readAt: data.readAt }
-                                        : m
+                                    m.sender === "visitor" && !m.readAt ? { ...m, readAt: data.readAt } : m
                                 )
                             );
                         }
@@ -348,17 +338,9 @@ export function DirectMessageChat({ initialPresence }: DirectMessageChatProps) {
                 <div className={dmStyles.headerLeft}>
                     <div className={dmStyles.avatar}>CR</div>
                     <div className="min-w-0">
-                        <div className={dmStyles.headerTitle}>
-                            Steace — Code Rage Direct Message
-                        </div>
+                        <div className={dmStyles.headerTitle}>Steace — Code Rage Direct Message</div>
                         <div className={dmStyles.headerStatus}>
-                            <span
-                                className={
-                                    presence.available
-                                        ? contactStyles.dotAvailable
-                                        : contactStyles.dotAway
-                                }
-                            />
+                            <span className={presence.available ? contactStyles.dotAvailable : contactStyles.dotAway} />
                             <span>
                                 {presence.available
                                     ? presence.adminConnected
@@ -411,11 +393,7 @@ export function DirectMessageChat({ initialPresence }: DirectMessageChatProps) {
                                 key={item}
                                 type="button"
                                 onClick={() => setTopic(item)}
-                                className={
-                                    selected
-                                        ? dmStyles.topicChipActive
-                                        : dmStyles.topicChipInactive
-                                }
+                                className={selected ? dmStyles.topicChipActive : dmStyles.topicChipInactive}
                             >
                                 {item}
                             </button>
@@ -427,29 +405,18 @@ export function DirectMessageChat({ initialPresence }: DirectMessageChatProps) {
             {/* Messages Stream */}
             <div className={dmStyles.messagesArea} aria-live="polite">
                 <div className={dmStyles.welcomeBox}>
-                    <p className="font-semibold text-slate-900 dark:text-white mb-1">
-                        Direct real-time line to Steace
-                    </p>
+                    <p className="font-semibold text-slate-900 dark:text-white mb-1">Direct real-time line to Steace</p>
                     <p>
-                        No email forms or ticket queues. Messages here ping my phone directly via Cloudflare
-                        Durable Objects so we can chat in real time.
+                        No email forms or ticket queues. Messages here ping my phone directly via Cloudflare Durable
+                        Objects so we can chat in real time.
                     </p>
                 </div>
 
                 {messages.map((msg) => {
                     const isVisitor = msg.sender === "visitor";
                     return (
-                        <div
-                            key={msg.id}
-                            className={isVisitor ? dmStyles.msgRowVisitor : dmStyles.msgRowAdmin}
-                        >
-                            <div
-                                className={
-                                    isVisitor ? dmStyles.bubbleVisitor : dmStyles.bubbleAdmin
-                                }
-                            >
-                                {msg.text}
-                            </div>
+                        <div key={msg.id} className={isVisitor ? dmStyles.msgRowVisitor : dmStyles.msgRowAdmin}>
+                            <div className={isVisitor ? dmStyles.bubbleVisitor : dmStyles.bubbleAdmin}>{msg.text}</div>
                             <div className={dmStyles.msgMeta}>
                                 <span>{isVisitor ? "You" : "Steace"}</span>
                                 <span>•</span>
@@ -560,11 +527,7 @@ export function DirectMessageChat({ initialPresence }: DirectMessageChatProps) {
                         required
                         className={dmStyles.composerInput}
                     />
-                    <button
-                        type="submit"
-                        disabled={sending || !text.trim()}
-                        className={dmStyles.sendBtn}
-                    >
+                    <button type="submit" disabled={sending || !text.trim()} className={dmStyles.sendBtn}>
                         <span>{sending ? "Sending..." : "Send"}</span>
                         <FaPaperPlane className="w-3.5 h-3.5" />
                     </button>

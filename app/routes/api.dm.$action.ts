@@ -30,9 +30,7 @@ export async function loader({ request, context, params }: LoaderFunctionArgs) {
 
         try {
             const query =
-                threadId && token
-                    ? `?threadId=${encodeURIComponent(threadId)}&token=${encodeURIComponent(token)}`
-                    : "";
+                threadId && token ? `?threadId=${encodeURIComponent(threadId)}&token=${encodeURIComponent(token)}` : "";
             const status = await fetchHubJson<{
                 presence: AdminPresence;
                 passkeysCount: number;
@@ -97,10 +95,7 @@ export async function action({ request, context, params }: ActionFunctionArgs) {
         if (actionName === "visitor-message") {
             const limit = checkRateLimit(`dm-msg:${rateKey}`, 20, 60000);
             if (!limit.allowed) {
-                return Response.json(
-                    { error: "Sending too fast. Please wait a moment." },
-                    { status: 429 }
-                );
+                return Response.json({ error: "Sending too fast. Please wait a moment." }, { status: 429 });
             }
 
             const body = await request.json();
@@ -122,10 +117,7 @@ export async function action({ request, context, params }: ActionFunctionArgs) {
         if (actionName === "passcode-login") {
             const limit = checkRateLimit(`dm-login:${rateKey}`, 6, 60000);
             if (!limit.allowed) {
-                return Response.json(
-                    { error: "Too many login attempts. Please wait a minute." },
-                    { status: 429 }
-                );
+                return Response.json({ error: "Too many login attempts. Please wait a minute." }, { status: 429 });
             }
 
             const body = (await request.json()) as { passcode?: string };
@@ -140,17 +132,12 @@ export async function action({ request, context, params }: ActionFunctionArgs) {
                 body: JSON.stringify({
                     passcode,
                     envAdminSecret:
-                        typeof env.ADMIN_SECRET === "string" && env.ADMIN_SECRET
-                            ? env.ADMIN_SECRET
-                            : undefined,
+                        typeof env.ADMIN_SECRET === "string" && env.ADMIN_SECRET ? env.ADMIN_SECRET : undefined,
                 }),
             });
 
             if (!verifyResult.ok) {
-                return Response.json(
-                    { error: verifyResult.error || "Invalid passcode" },
-                    { status: 401 }
-                );
+                return Response.json({ error: verifyResult.error || "Invalid passcode" }, { status: 401 });
             }
 
             const token = await createAdminSessionToken(signingSecret, "passcode");
@@ -258,18 +245,14 @@ export async function action({ request, context, params }: ActionFunctionArgs) {
             const body = (await request.json()) as Record<string, unknown>;
             const url = new URL(request.url);
 
-            const result = await fetchHubJson<{ ok: boolean; deviceName: string }>(
-                context,
-                "/admin/webauthn/login",
-                {
-                    method: "POST",
-                    body: JSON.stringify({
-                        ...body,
-                        origin: url.origin,
-                        rpId: url.hostname,
-                    }),
-                }
-            );
+            const result = await fetchHubJson<{ ok: boolean; deviceName: string }>(context, "/admin/webauthn/login", {
+                method: "POST",
+                body: JSON.stringify({
+                    ...body,
+                    origin: url.origin,
+                    rpId: url.hostname,
+                }),
+            });
 
             const token = await createAdminSessionToken(signingSecret, "passkey");
             return Response.json(result, {

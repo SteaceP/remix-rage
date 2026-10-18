@@ -8,10 +8,7 @@ let requestHandler: ReturnType<typeof createRequestHandler>;
 
 function getRequestHandler() {
     if (!requestHandler) {
-        requestHandler = createRequestHandler(
-            () => import("virtual:react-router/server-build"),
-            import.meta.env.MODE
-        );
+        requestHandler = createRequestHandler(() => import("virtual:react-router/server-build"), import.meta.env.MODE);
     }
     return requestHandler;
 }
@@ -21,10 +18,7 @@ export default {
         const url = new URL(request.url);
 
         // Handle real-time WebSocket upgrades directly via the DirectMessageHub Durable Object
-        if (
-            url.pathname === "/api/dm/ws" &&
-            request.headers.get("Upgrade")?.toLowerCase() === "websocket"
-        ) {
+        if (url.pathname === "/api/dm/ws" && request.headers.get("Upgrade")?.toLowerCase() === "websocket") {
             const role = url.searchParams.get("role") === "admin" ? "admin" : "visitor";
             if (role === "admin") {
                 const secret = resolveSigningSecret(env as unknown as Record<string, unknown>);

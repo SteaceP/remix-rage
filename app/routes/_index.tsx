@@ -144,8 +144,7 @@ export default function Index() {
                         </div>
 
                         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-bold tracking-tight text-slate-900 dark:text-white leading-[1.06]">
-                            Tech Solutions{" "}
-                            <span className="text-blue-600 dark:text-blue-400">Engineered to Work.</span>
+                            Tech Solutions <span className="text-blue-600 dark:text-blue-400">Engineered to Work.</span>
                         </h1>
 
                         <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed">
@@ -264,7 +263,8 @@ export default function Index() {
                                             <div>
                                                 <span className="text-blue-400">const</span> stack ={" "}
                                                 <span className="text-amber-300">
-                                                    [&quot;React&quot;, &quot;TypeScript&quot;, &quot;Tauri&quot;, &quot;Rust&quot;]
+                                                    [&quot;React&quot;, &quot;TypeScript&quot;, &quot;Tauri&quot;,
+                                                    &quot;Rust&quot;]
                                                 </span>
                                                 ;
                                             </div>
@@ -563,4 +563,3 @@ export default function Index() {
         </main>
     );
 }
-

@@ -2,8 +2,7 @@ export const navigation = {
     nav: "flex flex-wrap items-center gap-1.5",
     navLink:
         "px-3.5 py-2 text-sm rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/70 transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
-    activeNavLink:
-        "bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-xs",
+    activeNavLink: "bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-xs",
     logo: "text-xl font-display font-bold tracking-tight text-slate-900 dark:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
     dropdownLink:
         "block px-3.5 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors motion-reduce:transition-none rounded-xl",
@@ -64,8 +63,7 @@ export const contactStyles = {
     featureList: "space-y-3.5 pt-2",
     featureCard:
         "p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 flex items-start gap-3.5",
-    featureIconWrap:
-        "p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5",
+    featureIconWrap: "p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5",
     featureIconSize: "w-4 h-4",
     featureTitle: "text-sm font-display font-bold text-slate-900 dark:text-white",
     featureDesc: "text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed",
@@ -84,13 +82,11 @@ export const contactStyles = {
     button: "relative w-full flex justify-center items-center gap-2.5 py-3.5 px-6 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 active:bg-blue-700 shadow-sm shadow-blue-600/20 transition-all duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-600 dark:focus-visible:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer",
 
     // Alert styles
-    errorAlert:
-        "mb-4 p-3.5 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60",
+    errorAlert: "mb-4 p-3.5 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60",
     errorText: "text-red-700 dark:text-red-300 font-medium text-xs sm:text-sm flex items-center gap-2",
     successAlert:
         "mb-4 p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60",
-    successText:
-        "text-emerald-700 dark:text-emerald-300 font-medium flex items-center gap-2 text-xs sm:text-sm",
+    successText: "text-emerald-700 dark:text-emerald-300 font-medium flex items-center gap-2 text-xs sm:text-sm",
 } as const;
 
 export const dmStyles = {
@@ -137,12 +133,12 @@ export const inboxStyles = {
     shell: "grow flex flex-col bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-lg overflow-hidden min-h-[72vh]",
     topBar: "px-4 sm:px-6 py-3.5 bg-slate-50 dark:bg-slate-950 border-b border-slate-200/80 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3",
     bodyGrid: "grow grid grid-cols-1 lg:grid-cols-12 min-h-[60vh]",
-    sidebar: "lg:col-span-4 border-r border-slate-200/80 dark:border-slate-800 flex flex-col bg-slate-50/40 dark:bg-slate-950/30",
+    sidebar:
+        "lg:col-span-4 border-r border-slate-200/80 dark:border-slate-800 flex flex-col bg-slate-50/40 dark:bg-slate-950/30",
     chatPane: "lg:col-span-8 flex flex-col bg-white dark:bg-slate-900",
     threadItem:
         "w-full text-left p-4 border-b border-slate-200/60 dark:border-slate-800/70 hover:bg-slate-100/70 dark:hover:bg-slate-800/50 transition-colors motion-reduce:transition-none flex items-start justify-between gap-3 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500",
-    threadItemActive:
-        "bg-blue-50/80 dark:bg-blue-950/40 border-l-4 border-l-blue-600 dark:border-l-blue-400",
+    threadItemActive: "bg-blue-50/80 dark:bg-blue-950/40 border-l-4 border-l-blue-600 dark:border-l-blue-400",
     pillBtn:
         "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-semibold border transition-colors motion-reduce:transition-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
 } as const;

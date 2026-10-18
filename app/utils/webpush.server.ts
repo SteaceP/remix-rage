@@ -18,15 +18,9 @@ function concatUint8Arrays(...arrays: Uint8Array[]): Uint8Array {
 }
 
 export async function generateVapidKeys(): Promise<StoredVapidKeys> {
-    const keyPair = await crypto.subtle.generateKey(
-        { name: "ECDSA", namedCurve: "P-256" },
-        true,
-        ["sign", "verify"]
-    );
+    const keyPair = await crypto.subtle.generateKey({ name: "ECDSA", namedCurve: "P-256" }, true, ["sign", "verify"]);
     const privateJwk = (await crypto.subtle.exportKey("jwk", keyPair.privateKey)) as JsonWebKey;
-    const rawPublic = new Uint8Array(
-        (await crypto.subtle.exportKey("raw", keyPair.publicKey)) as ArrayBuffer
-    );
+    const rawPublic = new Uint8Array((await crypto.subtle.exportKey("raw", keyPair.publicKey)) as ArrayBuffer);
     return {
         publicKey: toBase64Url(rawPublic),
         privateJwk,
@@ -77,13 +71,7 @@ async function hkdfExtractAndExpand(
     info: Uint8Array,
     length: number
 ): Promise<Uint8Array> {
-    const keyMaterial = await crypto.subtle.importKey(
-        "raw",
-        ikm.buffer as ArrayBuffer,
-        "HKDF",
-        false,
-        ["deriveBits"]
-    );
+    const keyMaterial = await crypto.subtle.importKey("raw", ikm.buffer as ArrayBuffer, "HKDF", false, ["deriveBits"]);
     const bits = await crypto.subtle.deriveBits(
         {
             name: "HKDF",
@@ -107,15 +95,9 @@ export async function encryptWebPushPayload(
     const uaPublicBytes = fromBase64Url(subscription.keys.p256dh);
     const authSecret = fromBase64Url(subscription.keys.auth);
 
-    const asKeyPair = await crypto.subtle.generateKey(
-        { name: "ECDH", namedCurve: "P-256" },
-        true,
-        ["deriveBits"]
-    );
+    const asKeyPair = await crypto.subtle.generateKey({ name: "ECDH", namedCurve: "P-256" }, true, ["deriveBits"]);
 
-    const asPublicBytes = new Uint8Array(
-        (await crypto.subtle.exportKey("raw", asKeyPair.publicKey)) as ArrayBuffer
-    );
+    const asPublicBytes = new Uint8Array((await crypto.subtle.exportKey("raw", asKeyPair.publicKey)) as ArrayBuffer);
 
     const uaPublicKey = await crypto.subtle.importKey(
         "raw",
@@ -126,19 +108,11 @@ export async function encryptWebPushPayload(
     );
 
     const ecdhSecret = new Uint8Array(
-        await crypto.subtle.deriveBits(
-            { name: "ECDH", public: uaPublicKey },
-            asKeyPair.privateKey,
-            256
-        )
+        await crypto.subtle.deriveBits({ name: "ECDH", public: uaPublicKey }, asKeyPair.privateKey, 256)
     );
 
     const encoder = new TextEncoder();
-    const keyInfo = concatUint8Arrays(
-        encoder.encode("WebPush: info\0"),
-        uaPublicBytes,
-        asPublicBytes
-    );
+    const keyInfo = concatUint8Arrays(encoder.encode("WebPush: info\0"), uaPublicBytes, asPublicBytes);
     const ikm = await hkdfExtractAndExpand(authSecret, ecdhSecret, keyInfo, 32);
 
     const salt = new Uint8Array(16);
@@ -150,13 +124,9 @@ export async function encryptWebPushPayload(
     const cekBytes = await hkdfExtractAndExpand(salt, ikm, cekInfo, 16);
     const nonceBytes = await hkdfExtractAndExpand(salt, ikm, nonceInfo, 12);
 
-    const cekKey = await crypto.subtle.importKey(
-        "raw",
-        cekBytes.buffer as ArrayBuffer,
-        { name: "AES-GCM" },
-        false,
-        ["encrypt"]
-    );
+    const cekKey = await crypto.subtle.importKey("raw", cekBytes.buffer as ArrayBuffer, { name: "AES-GCM" }, false, [
+        "encrypt",
+    ]);
 
     const plaintextBytes = encoder.encode(payloadText);
     const paddedPlaintext = concatUint8Arrays(plaintextBytes, new Uint8Array([0x02]));

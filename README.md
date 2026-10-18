@@ -131,14 +131,14 @@ public/
 
 1. **Configure Wrangler**: Update `wrangler.jsonc` with your route and settings
 2. **Environment Variables**: Set secrets via Wrangler CLI:
-   ```bash
-   wrangler secret put CSRF_SECRET
-   wrangler secret put BREVO_API_KEY
-   ```
+    ```bash
+    wrangler secret put CSRF_SECRET
+    wrangler secret put BREVO_API_KEY
+    ```
 3. **Deploy**: Push to main branch (CI) or run manually:
-   ```bash
-   pnpm run deploy
-   ```
+    ```bash
+    pnpm run deploy
+    ```
 
 ### Manual Deployment
 
@@ -163,9 +163,11 @@ All styles are organized in `app/styles/` for consistency and maintainability:
 import { contactStyles as styles } from "~/styles/components";
 
 export default function Component() {
-  return <div className={styles.wrapper}>
-    <h1 className={styles.title}>Title</h1>
-  </div>;
+    return (
+        <div className={styles.wrapper}>
+            <h1 className={styles.title}>Title</h1>
+        </div>
+    );
 }
 ```
 
@@ -177,13 +179,13 @@ All interactive elements include proper focus states:
 
 ```typescript
 // ✅ Good: Full accessibility support
-button: "... focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ..."
+button: "... focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ...";
 
 // Navigation links with keyboard support
-navLink: "... focus-visible:ring-2 focus-visible:ring-offset-2 ..."
+navLink: "... focus-visible:ring-2 focus-visible:ring-offset-2 ...";
 
 // Form inputs with visible focus
-input: "... focus:ring-4 focus:ring-blue-500/20 focus-visible:outline-none ..."
+input: "... focus:ring-4 focus:ring-blue-500/20 focus-visible:outline-none ...";
 ```
 
 **Implemented:**
@@ -200,8 +202,8 @@ Respects user's motion preferences with `prefers-reduced-motion`:
 
 ```typescript
 // ✅ Good: Motion-safe animations
-card: "... hover:scale-105 motion-reduce:transition-none motion-reduce:hover:scale-100"
-button: "... transition-all duration-300 motion-reduce:transition-none"
+card: "... hover:scale-105 motion-reduce:transition-none motion-reduce:hover:scale-100";
+button: "... transition-all duration-300 motion-reduce:transition-none";
 ```
 
 **Applied to:**
@@ -217,10 +219,10 @@ Consistent pattern across all interactive elements:
 
 ```typescript
 // Button states: default → hover → active → disabled
-button: "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed"
+button: "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed";
 
 // Link states with proper transitions
-link: "transition-colors duration-200 hover:text-blue-600"
+link: "transition-colors duration-200 hover:text-blue-600";
 ```
 
 **Includes:**
@@ -236,10 +238,10 @@ Standardized durations for consistency:
 
 ```typescript
 // Simple changes (colors, opacity): 200ms
-"transition-colors duration-200"
+"transition-colors duration-200";
 
 // Complex animations (scale, transforms, shadows): 300ms
-"transition-all duration-300"
+"transition-all duration-300";
 ```
 
 #### 5. Dark Mode
@@ -248,9 +250,9 @@ All styles include dark mode variants:
 
 ```typescript
 // ✅ Good: Comprehensive dark mode support
-wrapper: "bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-border: "border-gray-200 dark:border-gray-700"
-shadow: "shadow-lg dark:shadow-gray-900/50"
+wrapper: "bg-white dark:bg-gray-800 text-gray-900 dark:text-white";
+border: "border-gray-200 dark:border-gray-700";
+shadow: "shadow-lg dark:shadow-gray-900/50";
 ```
 
 **Coverage:**
@@ -286,23 +288,19 @@ import { type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
 import { createCsrfToken, validateCsrfToken } from "~/utils/csrf.server";
 
 export async function loader({ request, context }: LoaderFunctionArgs) {
-  const { token, cookieHeader } = await createCsrfToken(
-    request, 
-    context.cloudflare.env.CSRF_SECRET
-  );
-  return Response.json({ csrfToken: token }, {
-    headers: { "Set-Cookie": cookieHeader }
-  });
+    const { token, cookieHeader } = await createCsrfToken(request, context.cloudflare.env.CSRF_SECRET);
+    return Response.json(
+        { csrfToken: token },
+        {
+            headers: { "Set-Cookie": cookieHeader },
+        }
+    );
 }
 
 export async function action({ request, context }: ActionFunctionArgs) {
-  const formData = await request.formData();
-  await validateCsrfToken(
-    request, 
-    formData.get("csrfToken"), 
-    context.cloudflare.env.CSRF_SECRET
-  );
-  // Process form...
+    const formData = await request.formData();
+    await validateCsrfToken(request, formData.get("csrfToken"), context.cloudflare.env.CSRF_SECRET);
+    // Process form...
 }
 ```
 

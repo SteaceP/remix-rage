@@ -22,13 +22,7 @@ import {
     FaVolumeUp,
 } from "react-icons/fa";
 import { contactStyles, dmStyles, inboxStyles } from "~/styles/components";
-import type {
-    AdminPresence,
-    ChatMessage,
-    ChatThread,
-    PasskeyCredential,
-    WsServerEvent,
-} from "~/utils/dm-types";
+import type { AdminPresence, ChatMessage, ChatThread, PasskeyCredential, WsServerEvent } from "~/utils/dm-types";
 
 type PublicPasskey = Omit<PasskeyCredential, "publicKeySpki">;
 
@@ -61,9 +55,7 @@ function toBase64UrlClient(buffer: ArrayBuffer | Uint8Array): string {
 }
 
 function fromBase64UrlClient(base64url: string): Uint8Array {
-    const padded =
-        base64url.replace(/-/g, "+").replace(/_/g, "/") +
-        "===".slice((base64url.length + 3) % 4);
+    const padded = base64url.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((base64url.length + 3) % 4);
     const binary = atob(padded);
     const bytes = new Uint8Array(binary.length);
     for (let i = 0; i < binary.length; i++) {
@@ -86,10 +78,7 @@ function playAdminAlertSound() {
             osc.type = "triangle";
             osc.frequency.setValueAtTime(freq, ctx.currentTime + startOffset);
             gain.gain.setValueAtTime(0.14, ctx.currentTime + startOffset);
-            gain.gain.exponentialRampToValueAtTime(
-                0.001,
-                ctx.currentTime + startOffset + duration
-            );
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + startOffset + duration);
             osc.connect(gain);
             gain.connect(ctx.destination);
             osc.start(ctx.currentTime + startOffset);
@@ -180,8 +169,7 @@ export function AdminInbox({
     // Check PWA standalone state & register service worker
     useEffect(() => {
         const standalone =
-            window.matchMedia("(display-mode: standalone)").matches ||
-            Boolean((window.navigator as any).standalone);
+            window.matchMedia("(display-mode: standalone)").matches || Boolean((window.navigator as any).standalone);
         setIsStandalone(standalone);
 
         const handleBeforeInstall = (e: Event) => {
@@ -264,17 +252,14 @@ export function AdminInbox({
                         setVapidPublicKey(data.vapidPublicKey);
                         setPasskeys(data.passkeys);
                         setPushCount(data.pushCount);
-                        const targetId =
-                            selectedThreadIdRef.current || data.threads[0]?.id || null;
+                        const targetId = selectedThreadIdRef.current || data.threads[0]?.id || null;
                         if (targetId) {
                             setSelectedThreadId(targetId);
                             ws.send(JSON.stringify({ type: "get_thread", threadId: targetId }));
                         }
                     } else if (data.type === "presence") {
                         setPresence(data.presence);
-                        window.dispatchEvent(
-                            new CustomEvent("cr:presence", { detail: data.presence })
-                        );
+                        window.dispatchEvent(new CustomEvent("cr:presence", { detail: data.presence }));
                     } else if (data.type === "thread_messages") {
                         setThreads((prev) => {
                             const exists = prev.some((t) => t.id === data.thread.id);
@@ -341,18 +326,14 @@ export function AdminInbox({
                     } else if (data.type === "read") {
                         setThreads((prev) =>
                             prev.map((t) =>
-                                t.id === data.threadId && data.reader === "admin"
-                                    ? { ...t, unreadByAdmin: 0 }
-                                    : t
+                                t.id === data.threadId && data.reader === "admin" ? { ...t, unreadByAdmin: 0 } : t
                             )
                         );
                         if (data.reader === "visitor") {
                             setMessagesByThread((prev) => ({
                                 ...prev,
                                 [data.threadId]: (prev[data.threadId] || []).map((m) =>
-                                    m.sender === "admin" && !m.readAt
-                                        ? { ...m, readAt: data.readAt }
-                                        : m
+                                    m.sender === "admin" && !m.readAt ? { ...m, readAt: data.readAt } : m
                                 ),
                             }));
                         }
@@ -464,9 +445,7 @@ export function AdminInbox({
                 throw new Error(chalData.error || "Failed to start Passkey login");
             }
 
-            const allowCredentials: PublicKeyCredentialDescriptor[] = (
-                chalData.allowCredentialIds || []
-            ).map((id) => ({
+            const allowCredentials: PublicKeyCredentialDescriptor[] = (chalData.allowCredentialIds || []).map((id) => ({
                 type: "public-key",
                 id: fromBase64UrlClient(id).buffer as ArrayBuffer,
             }));
@@ -574,12 +553,8 @@ export function AdminInbox({
             if (!spkiBuffer) {
                 throw new Error("Browser did not return SPKI public key for Passkey");
             }
-            const algorithm = attestation.getPublicKeyAlgorithm
-                ? attestation.getPublicKeyAlgorithm()
-                : -7;
-            const authDataBuffer = attestation.getAuthenticatorData
-                ? attestation.getAuthenticatorData()
-                : undefined;
+            const algorithm = attestation.getPublicKeyAlgorithm ? attestation.getPublicKeyAlgorithm() : -7;
+            const authDataBuffer = attestation.getAuthenticatorData ? attestation.getAuthenticatorData() : undefined;
 
             const regRes = await fetch("/api/dm/webauthn-register", {
                 method: "POST",
@@ -589,9 +564,7 @@ export function AdminInbox({
                     clientDataJSON: toBase64UrlClient(attestation.clientDataJSON),
                     publicKeySpki: toBase64UrlClient(spkiBuffer),
                     algorithm,
-                    authenticatorData: authDataBuffer
-                        ? toBase64UrlClient(authDataBuffer)
-                        : undefined,
+                    authenticatorData: authDataBuffer ? toBase64UrlClient(authDataBuffer) : undefined,
                     deviceName: deviceNameInput.trim() || "Mobile Passkey",
                     challenge: chalData.challenge,
                 }),
@@ -758,9 +731,7 @@ export function AdminInbox({
                 body: JSON.stringify({}),
             });
             const data = (await res.json()) as { delivered?: number; total?: number };
-            setStatusMessage(
-                `Sent test notification (${data.delivered ?? 0}/${data.total ?? 0} devices).`
-            );
+            setStatusMessage(`Sent test notification (${data.delivered ?? 0}/${data.total ?? 0} devices).`);
         } catch {
             setAuthError("Failed to send test push notification");
         }
@@ -845,8 +816,7 @@ export function AdminInbox({
     // RENDER: UNAUTHENTICATED LOGIN SCREEN (Passkey FaceID/TouchID + Passcode)
     // ---------------------------------------------------------------------------
     if (!authenticated) {
-        const isFirstSetup =
-            initialPasskeysCount === 0 && !hasStoredPasscode && !hasEnvPasscode;
+        const isFirstSetup = initialPasskeysCount === 0 && !hasStoredPasscode && !hasEnvPasscode;
 
         return (
             <div className={inboxStyles.loginCard}>
@@ -890,9 +860,7 @@ export function AdminInbox({
                         >
                             <FaFingerprint className="w-4 h-4" />
                             <span>
-                                {authBusy
-                                    ? "Verifying Biometrics..."
-                                    : "Sign In with Passkey (FaceID / TouchID)"}
+                                {authBusy ? "Verifying Biometrics..." : "Sign In with Passkey (FaceID / TouchID)"}
                             </span>
                         </button>
                     ) : (
@@ -905,9 +873,7 @@ export function AdminInbox({
                             >
                                 <FaFingerprint className="w-4 h-4" />
                                 <span>
-                                    {authBusy
-                                        ? "Setting up Passkey..."
-                                        : "Setup Phone Passkey (FaceID / TouchID)"}
+                                    {authBusy ? "Setting up Passkey..." : "Setup Phone Passkey (FaceID / TouchID)"}
                                 </span>
                             </button>
                         )
@@ -936,9 +902,7 @@ export function AdminInbox({
                             value={passcode}
                             onChange={(e) => setPasscode(e.target.value)}
                             placeholder={
-                                isFirstSetup
-                                    ? "Choose a strong passcode..."
-                                    : "Enter ADMIN_SECRET or passcode..."
+                                isFirstSetup ? "Choose a strong passcode..." : "Enter ADMIN_SECRET or passcode..."
                             }
                             className={contactStyles.input}
                         />
@@ -949,9 +913,7 @@ export function AdminInbox({
                         className="w-full py-3 px-5 rounded-xl bg-slate-900 hover:bg-blue-600 dark:bg-slate-800 dark:hover:bg-blue-600 text-white font-semibold text-sm inline-flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:opacity-50"
                     >
                         <FaKey className="w-3.5 h-3.5" />
-                        <span>
-                            {isFirstSetup ? "Save Passcode & Open Inbox" : "Sign In with Passcode"}
-                        </span>
+                        <span>{isFirstSetup ? "Save Passcode & Open Inbox" : "Sign In with Passcode"}</span>
                     </button>
                 </form>
             </div>
@@ -1096,9 +1058,7 @@ export function AdminInbox({
                 <div className="px-4 py-2.5 bg-slate-100 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2 text-xs font-mono">
                     <span
                         className={
-                            authError
-                                ? "text-red-600 dark:text-red-400"
-                                : "text-emerald-700 dark:text-emerald-300"
+                            authError ? "text-red-600 dark:text-red-400" : "text-emerald-700 dark:text-emerald-300"
                         }
                     >
                         {authError || statusMessage}
@@ -1137,8 +1097,8 @@ export function AdminInbox({
                             )}
                         </div>
                         <p className="text-xs text-slate-600 dark:text-slate-400">
-                            Register FaceID / TouchID / Fingerprint on this phone so you can log in with a
-                            single biometric tap.
+                            Register FaceID / TouchID / Fingerprint on this phone so you can log in with a single
+                            biometric tap.
                         </p>
                         <div className="flex gap-2">
                             <input
@@ -1205,10 +1165,9 @@ export function AdminInbox({
                         </form>
                         <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                             <strong>Install on Phone:</strong> On iPhone Safari, tap{" "}
-                            <span className="font-mono">Share → Add to Home Screen</span>. On Android
-                            Chrome, tap <span className="font-mono">Install App</span>. Then tap{" "}
-                            <span className="font-mono">Enable Push</span> above to get lock-screen
-                            alerts.
+                            <span className="font-mono">Share → Add to Home Screen</span>. On Android Chrome, tap{" "}
+                            <span className="font-mono">Install App</span>. Then tap{" "}
+                            <span className="font-mono">Enable Push</span> above to get lock-screen alerts.
                         </p>
                     </div>
                 </div>
@@ -1218,9 +1177,7 @@ export function AdminInbox({
             <div className={inboxStyles.bodyGrid}>
                 {/* Left Pane: Thread List */}
                 <div
-                    className={`${inboxStyles.sidebar} ${
-                        mobileShowChat && selectedThread ? "hidden lg:flex" : "flex"
-                    }`}
+                    className={`${inboxStyles.sidebar} ${mobileShowChat && selectedThread ? "hidden lg:flex" : "flex"}`}
                 >
                     <div className="p-3 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-2">
                         <div className="flex rounded-lg bg-slate-200/70 dark:bg-slate-900 p-0.5 border border-slate-200 dark:border-slate-800 w-full">
@@ -1286,9 +1243,7 @@ export function AdminInbox({
                                                             : "bg-slate-300 dark:bg-slate-700"
                                                     }`}
                                                     title={
-                                                        t.visitorOnline
-                                                            ? "Visitor is online now"
-                                                            : "Visitor offline"
+                                                        t.visitorOnline ? "Visitor is online now" : "Visitor offline"
                                                     }
                                                 />
                                                 <span className="text-sm font-display font-bold text-slate-900 dark:text-white truncate">
@@ -1366,9 +1321,7 @@ export function AdminInbox({
                                                         : "bg-slate-100 dark:bg-slate-800 text-slate-500"
                                                 }`}
                                             >
-                                                {selectedThread.visitorOnline
-                                                    ? "Visitor Live"
-                                                    : "Offline"}
+                                                {selectedThread.visitorOnline ? "Visitor Live" : "Offline"}
                                             </span>
                                         </div>
                                         <div className="text-xs font-mono text-slate-500 dark:text-slate-400 truncate">
@@ -1387,11 +1340,7 @@ export function AdminInbox({
                                         className="px-3 py-1.5 rounded-xl text-xs font-mono bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 inline-flex items-center gap-1.5 cursor-pointer"
                                     >
                                         <FaArchive className="w-3 h-3" />
-                                        <span>
-                                            {selectedThread.status === "archived"
-                                                ? "Reopen"
-                                                : "Archive"}
-                                        </span>
+                                        <span>{selectedThread.status === "archived" ? "Reopen" : "Archive"}</span>
                                     </button>
                                     <button
                                         type="button"
@@ -1411,25 +1360,13 @@ export function AdminInbox({
                                     return (
                                         <div
                                             key={m.id}
-                                            className={
-                                                isAdminMsg
-                                                    ? dmStyles.msgRowVisitor
-                                                    : dmStyles.msgRowAdmin
-                                            }
+                                            className={isAdminMsg ? dmStyles.msgRowVisitor : dmStyles.msgRowAdmin}
                                         >
-                                            <div
-                                                className={
-                                                    isAdminMsg
-                                                        ? dmStyles.bubbleVisitor
-                                                        : dmStyles.bubbleAdmin
-                                                }
-                                            >
+                                            <div className={isAdminMsg ? dmStyles.bubbleVisitor : dmStyles.bubbleAdmin}>
                                                 {m.text}
                                             </div>
                                             <div className={dmStyles.msgMeta}>
-                                                <span>
-                                                    {isAdminMsg ? "You (Steace)" : m.senderName}
-                                                </span>
+                                                <span>{isAdminMsg ? "You (Steace)" : m.senderName}</span>
                                                 <span>•</span>
                                                 <span>{formatShortTime(m.createdAt)}</span>
                                                 {isAdminMsg && (
@@ -1471,19 +1408,13 @@ export function AdminInbox({
                                     ))}
                                 </div>
 
-                                <form
-                                    onSubmit={(e) => void handleSendReply(e)}
-                                    className={dmStyles.composerRow}
-                                >
+                                <form onSubmit={(e) => void handleSendReply(e)} className={dmStyles.composerRow}>
                                     <textarea
                                         rows={2}
                                         value={replyText}
                                         onChange={(e) => {
                                             setReplyText(e.target.value);
-                                            if (
-                                                wsRef.current?.readyState === WebSocket.OPEN &&
-                                                selectedThread
-                                            ) {
+                                            if (wsRef.current?.readyState === WebSocket.OPEN && selectedThread) {
                                                 wsRef.current.send(
                                                     JSON.stringify({
                                                         type: "typing",

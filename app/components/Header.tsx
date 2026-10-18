@@ -153,9 +153,7 @@ export default function Header() {
                         >
                             <span
                                 className={`w-1.5 h-1.5 rounded-full ${
-                                    presence.available
-                                        ? "bg-emerald-500 animate-pulse"
-                                        : "bg-amber-500"
+                                    presence.available ? "bg-emerald-500 animate-pulse" : "bg-amber-500"
                                 }`}
                             />
                             <span>
@@ -266,12 +264,16 @@ export default function Header() {
                             <div className="relative w-4 h-4 flex items-center justify-center">
                                 <FaSun
                                     className={`w-4 h-4 text-amber-500 transition-all duration-200 ${
-                                        theme === "light" ? "rotate-0 scale-100 opacity-100" : "rotate-90 scale-0 opacity-0"
+                                        theme === "light"
+                                            ? "rotate-0 scale-100 opacity-100"
+                                            : "rotate-90 scale-0 opacity-0"
                                     }`}
                                 />
                                 <FaMoon
                                     className={`absolute w-4 h-4 text-blue-400 transition-all duration-200 ${
-                                        theme === "dark" ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-0 opacity-0"
+                                        theme === "dark"
+                                            ? "rotate-0 scale-100 opacity-100"
+                                            : "-rotate-90 scale-0 opacity-0"
                                     }`}
                                 />
                             </div>
