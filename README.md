@@ -1,12 +1,12 @@
 # Code Rage (remix-rage)
 
-A modern technology services website and direct messaging platform built with **React Router v7** and deployed globally on **Cloudflare Workers** with **Cloudflare Durable Objects**.
+A modern technology services website and direct messaging platform built with **React Router v8** and deployed globally on **Cloudflare Workers** with **Cloudflare Durable Objects**.
 
 Features an architectural dark/light mode aesthetic, real-time WebSocket communication, administrative inbox with WebAuthn/passkey authentication and Web Push notifications, comprehensive edge security, and full TypeScript type safety.
 
 ## 🚀 Tech Stack
 
-- **Framework**: [React Router v7](https://reactrouter.com) (SSR on Cloudflare Workers)
+- **Framework**: [React Router v8](https://reactrouter.com) (SSR on Cloudflare Workers)
 - **Runtime**: Cloudflare Workers (`nodejs_compat` enabled, Web Standards APIs)
 - **Real-Time & State**: Cloudflare Durable Objects (`DirectMessageHub` with SQLite storage)
 - **Styling**: [Tailwind CSS v4](https://tailwindcss.com) via `@tailwindcss/vite` with centralized style architecture
