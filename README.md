@@ -32,7 +32,7 @@ Features an architectural dark/light mode aesthetic, real-time WebSocket communi
     - Accessible focus states and motion-safe animations (`prefers-reduced-motion`)
 - **Security & Performance**:
     - CSP headers, HSTS, CORS configuration via `public/_headers`
-    - CSRF token utilities and server-side request verification
+    - Direct session signing and secure WebSocket protocol validation
     - Edge caching and minimal cold starts on Cloudflare Workers
 
 ## 🏗️ Architecture
@@ -63,7 +63,6 @@ Features an architectural dark/light mode aesthetic, real-time WebSocket communi
 
 - Production variables are bound via Cloudflare context (`context.cloudflare.env` or `load-context.ts`)
 - Configured secrets:
-    - `CSRF_SECRET`: Secret used for signing CSRF tokens
     - `ADMIN_SECRET`: Secret used for authenticating admin sessions and WebAuthn challenges
 
 ## 🛠️ Development
@@ -116,7 +115,7 @@ app/
 ├── context/                  # Client contexts (e.g. ThemeContext)
 ├── routes/                   # File-based routes (homepage, services, contact, inbox, API)
 ├── styles/                   # Centralized Tailwind style definitions
-├── utils/                    # Utilities (auth, CSRF, WebAuthn, Web Push, crypto, rate limiting)
+├── utils/                    # Utilities (auth, WebAuthn, Web Push, crypto, rate limiting)
 ├── root.tsx                  # Root HTML layout and providers
 └── tailwind.css              # Tailwind CSS v4 entrypoint
 
@@ -134,7 +133,6 @@ public/
 ## 🔒 Security
 
 - **Content Security Policy (CSP)**: Strict headers configured in `public/_headers`
-- **CSRF Protection**: Token generation and validation helpers in `app/utils/csrf.server.ts`
 - **Operator Authentication**: Passkey / WebAuthn biometric security and HMAC-signed session cookies
 - **Rate Limiting**: In-memory and DO-level rate limiting on messaging endpoints
 - **Input Sanitization**: Structured validation on all inbound WebSocket and API payloads
@@ -146,7 +144,6 @@ public/
 1. **Configure Wrangler**: Verify route patterns and Durable Object migrations in `wrangler.jsonc`
 2. **Set Secrets via CLI**:
     ```bash
-    wrangler secret put CSRF_SECRET
     wrangler secret put ADMIN_SECRET
     ```
 3. **Deploy**:

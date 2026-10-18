@@ -57,7 +57,6 @@
      * https://developers.cloudflare.com/workers/configuration/secrets/
      *
      * Required secrets (set via CLI, not in this file):
-     *   wrangler secret put CSRF_SECRET
      *   wrangler secret put ADMIN_SECRET
      */
 }

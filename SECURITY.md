@@ -4,30 +4,28 @@ This document outlines the security measures implemented in this application.
 
 ## Authentication & Authorization
 
-### CSRF Protection
+### Session & Operator Authentication
 
-- All forms use CSRF tokens with secure, HTTP-only cookies
-- Tokens are 32 bytes of cryptographically secure random data
-- Tokens expire after 1 hour
-- Constant-time comparison prevents timing attacks
-- SameSite=strict cookie attribute prevents CSRF
+- Constant-time comparison prevents timing attacks on token verification
+- HMAC-signed session cookies for operator administration
+- Passkey (WebAuthn) biometric authentication supported for passwordless admin login
+- SameSite=strict, Secure, HttpOnly cookie attributes prevent cross-site request attacks
 
 ## Input Validation
 
-### Contact Form
+### Direct Messaging & API Endpoints
 
 - All inputs validated with Zod schemas
-- Name: 1-100 characters, alphanumeric + spaces/hyphens/apostrophes only
-- Email: RFC 5321 compliant, max 254 characters
-- Subject: 1-200 characters, trimmed
-- Message: 10-5000 characters, trimmed
-- HTML escaping prevents XSS in emails
+- Visitor name: trimmed string up to 100 characters
+- Message body: trimmed text up to 2000 characters
+- Contact info: optional phone/email string up to 160 characters
+- Structured JSON and WebSocket frame validation prevents injection attacks
 
-### Rate Limiting of Contact Form
+### API & WebSocket Rate Limiting
 
-- 3 submissions per minute per IP address
-- Returns 429 status with Retry-After header
-- Uses Cloudflare CF-Connecting-IP header
+- IP-based rate limiting on visitor messaging and passcode login attempts
+- Returns 429 status when limit is exceeded
+- Cloudflare CF-Connecting-IP / X-Forwarded-For header identification
 
 ## Security Headers
 
@@ -68,21 +66,21 @@ This document outlines the security measures implemented in this application.
 - Never committed to git (.env in .gitignore)
 - Example file provided (.env.example)
 
-### Email Security
+### Message & Persistent Data Protection
 
-- HTML escaping prevents XSS
-- Sender/recipient addresses hardcoded (no user control)
-- Reply-To address validated via Zod
-- API keys never exposed to client
+- Direct messaging threads stored in SQLite within isolated Cloudflare Durable Objects
+- Visitor session tokens securely stored in browser localStorage
+- Operator credentials and WebAuthn challenges validated server-side
+- Push notification payloads transmitted via encrypted Web Push (VAPID)
 
 ## Runtime Security
 
-### Cloudflare Workers
+### Cloudflare Workers & Durable Objects
 
 - No Node.js APIs - only Web Standard APIs
 - Isolated execution environment
 - No file system access
-- No persistent memory between requests
+- Encrypted state storage
 
 ## Logging & Monitoring
 
@@ -109,7 +107,6 @@ This document outlines the security measures implemented in this application.
 4. **Regular Security Audits**
     - Update dependencies regularly (Dependabot configured)
     - Review security headers annually
-    - Test CSRF protection
 
 5. **Backup Strategy**
     - Git repository is the source of truth
@@ -117,12 +114,10 @@ This document outlines the security measures implemented in this application.
 
 ## Security Checklist
 
-- [x] CSRF protection on all forms
 - [x] Input validation with strict schemas
-- [x] HTML escaping to prevent XSS
-- [x] Rate limiting on contact form
-- [x] Secure HTTP headers
-- [x] HTTPS-only cookies
+- [x] Rate limiting on messaging endpoints
+- [x] Secure HTTP & WebSocket headers
+- [x] HTTPS-only session cookies
 - [x] Environment variables for secrets
 - [x] No sensitive data in logs
 - [x] Dependabot for dependency updates

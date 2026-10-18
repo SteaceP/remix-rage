@@ -62,18 +62,18 @@ describe("getRateLimitKey", () => {
         const request = new Request("https://example.com", {
             headers: { "CF-Connecting-IP": "1.2.3.4" },
         });
-        expect(getRateLimitKey(request)).toBe("contact-form:1.2.3.4");
+        expect(getRateLimitKey(request)).toBe("ip:1.2.3.4");
     });
 
     it("falls back to X-Forwarded-For header", () => {
         const request = new Request("https://example.com", {
             headers: { "X-Forwarded-For": "5.6.7.8, 9.10.11.12" },
         });
-        expect(getRateLimitKey(request)).toBe("contact-form:5.6.7.8");
+        expect(getRateLimitKey(request)).toBe("ip:5.6.7.8");
     });
 
     it("returns unknown when no IP headers present", () => {
         const request = new Request("https://example.com");
-        expect(getRateLimitKey(request)).toBe("contact-form:unknown");
+        expect(getRateLimitKey(request)).toBe("ip:unknown");
     });
 });

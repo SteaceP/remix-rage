@@ -132,8 +132,8 @@ export default function Index() {
             >
                 {/* Architectural Grid & Subtle Glow */}
                 <div className="absolute inset-0 bg-grid-pattern mask-radial-fade pointer-events-none" />
-                <div className="absolute -top-40 right-1/4 w-[34rem] h-[34rem] bg-blue-500/8 dark:bg-blue-500/12 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute -bottom-40 left-1/4 w-[28rem] h-[28rem] bg-cyan-500/8 dark:bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -top-40 right-1/4 w-136 h-136 bg-blue-500/8 dark:bg-blue-500/12 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -bottom-40 left-1/4 w-md h-112 bg-cyan-500/8 dark:bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
                 <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center relative z-10">
                     {/* Left Column: Editorial Pitch */}

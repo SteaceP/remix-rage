@@ -390,8 +390,8 @@ export function AdminInbox({
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }, [activeMessages.length, selectedThreadId]);
 
-    async function handlePasscodeLogin(e: React.FormEvent) {
-        e.preventDefault();
+    async function handlePasscodeLogin(e?: React.SyntheticEvent) {
+        if (e) e.preventDefault();
         setAuthError(null);
         setAuthBusy(true);
         try {
@@ -608,8 +608,8 @@ export function AdminInbox({
         }
     }
 
-    async function handleUpdatePasscode(e: React.FormEvent) {
-        e.preventDefault();
+    async function handleUpdatePasscode(e?: React.SyntheticEvent) {
+        if (e) e.preventDefault();
         setStatusMessage(null);
         setAuthError(null);
         try {
@@ -737,7 +737,7 @@ export function AdminInbox({
         }
     }
 
-    async function handleSendReply(e?: React.FormEvent, overrideText?: string) {
+    async function handleSendReply(e?: React.SyntheticEvent, overrideText?: string) {
         if (e) e.preventDefault();
         const messageText = (overrideText ?? replyText).trim();
         if (!selectedThreadId || !messageText) return;
@@ -888,8 +888,8 @@ export function AdminInbox({
                     <div className="grow border-t border-slate-200 dark:border-slate-800" />
                 </div>
 
-                {/* Passcode Form */}
-                <form onSubmit={handlePasscodeLogin} className="space-y-4">
+                {/* Passcode Unlock */}
+                <div className="space-y-4">
                     <div>
                         <label htmlFor="admin-passcode" className={contactStyles.label}>
                             {isFirstSetup ? "Create Admin Passcode" : "Admin Passcode"}
@@ -901,6 +901,12 @@ export function AdminInbox({
                             autoComplete="current-password"
                             value={passcode}
                             onChange={(e) => setPasscode(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" && passcode.trim() && !authBusy) {
+                                    e.preventDefault();
+                                    void handlePasscodeLogin(e);
+                                }
+                            }}
                             placeholder={
                                 isFirstSetup ? "Choose a strong passcode..." : "Enter ADMIN_SECRET or passcode..."
                             }
@@ -908,14 +914,15 @@ export function AdminInbox({
                         />
                     </div>
                     <button
-                        type="submit"
+                        type="button"
+                        onClick={() => void handlePasscodeLogin()}
                         disabled={authBusy || !passcode.trim()}
                         className="w-full py-3 px-5 rounded-xl bg-slate-900 hover:bg-blue-600 dark:bg-slate-800 dark:hover:bg-blue-600 text-white font-semibold text-sm inline-flex items-center justify-center gap-2 transition-colors cursor-pointer disabled:opacity-50"
                     >
                         <FaKey className="w-3.5 h-3.5" />
                         <span>{isFirstSetup ? "Save Passcode & Open Inbox" : "Sign In with Passcode"}</span>
                     </button>
-                </form>
+                </div>
             </div>
         );
     }
@@ -1147,22 +1154,29 @@ export function AdminInbox({
                             <FaShieldAlt className="text-emerald-500" />
                             <span>Fallback Passcode &amp; Mobile PWA Setup</span>
                         </h2>
-                        <form onSubmit={handleUpdatePasscode} className="flex gap-2">
+                        <div className="flex gap-2">
                             <input
                                 type="password"
                                 value={newPasscodeInput}
                                 onChange={(e) => setNewPasscodeInput(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" && newPasscodeInput.trim().length >= 6) {
+                                        e.preventDefault();
+                                        void handleUpdatePasscode(e);
+                                    }
+                                }}
                                 placeholder="New fallback passcode (min 6 chars)"
                                 className={contactStyles.input}
                             />
                             <button
-                                type="submit"
+                                type="button"
+                                onClick={() => void handleUpdatePasscode()}
                                 disabled={newPasscodeInput.trim().length < 6}
                                 className="px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-slate-800 text-white text-xs font-mono font-semibold shrink-0 cursor-pointer disabled:opacity-50"
                             >
                                 Save
                             </button>
-                        </form>
+                        </div>
                         <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                             <strong>Install on Phone:</strong> On iPhone Safari, tap{" "}
                             <span className="font-mono">Share → Add to Home Screen</span>. On Android Chrome, tap{" "}
@@ -1408,7 +1422,7 @@ export function AdminInbox({
                                     ))}
                                 </div>
 
-                                <form onSubmit={(e) => void handleSendReply(e)} className={dmStyles.composerRow}>
+                                <div className={dmStyles.composerRow}>
                                     <textarea
                                         rows={2}
                                         value={replyText}
@@ -1436,14 +1450,15 @@ export function AdminInbox({
                                         className={dmStyles.composerInput}
                                     />
                                     <button
-                                        type="submit"
+                                        type="button"
+                                        onClick={() => void handleSendReply()}
                                         disabled={sendingReply || !replyText.trim()}
                                         className={dmStyles.sendBtn}
                                     >
                                         <span>Send</span>
                                         <FaPaperPlane className="w-3.5 h-3.5" />
                                     </button>
-                                </form>
+                                </div>
                             </div>
                         </>
                     )}

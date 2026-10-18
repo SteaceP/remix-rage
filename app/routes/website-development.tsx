@@ -48,7 +48,7 @@ export default function WebsiteDevelopment() {
         {
             icon: FaLock,
             title: "Secure & Maintainable",
-            text: "Strict CSP headers, CSRF protection, rate limiting, and clean modular code architecture.",
+            text: "Strict CSP headers, origin verification, rate limiting, and clean modular code architecture.",
         },
         {
             icon: FaServer,
@@ -136,7 +136,7 @@ export default function WebsiteDevelopment() {
                                 </li>
                                 <li className="flex items-center gap-2.5">
                                     <FaCheckCircle className="text-emerald-500 shrink-0" />
-                                    <span>Contact forms, booking flows &amp; API integrations</span>
+                                    <span>Real-time chat, booking flows &amp; API integrations</span>
                                 </li>
                                 <li className="flex items-center gap-2.5">
                                     <FaCheckCircle className="text-emerald-500 shrink-0" />
@@ -162,7 +162,7 @@ export default function WebsiteDevelopment() {
                             <ul className="space-y-2.5 pt-5 border-t border-slate-100 dark:border-slate-800 text-sm text-slate-700 dark:text-slate-300">
                                 <li className="flex items-center gap-2.5">
                                     <FaCheckCircle className="text-emerald-500 shrink-0" />
-                                    <span>Broken layout, form &amp; mobile responsiveness fixes</span>
+                                    <span>Broken layout, UI &amp; mobile responsiveness fixes</span>
                                 </li>
                                 <li className="flex items-center gap-2.5">
                                     <FaCheckCircle className="text-emerald-500 shrink-0" />

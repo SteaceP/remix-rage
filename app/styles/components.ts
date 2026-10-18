@@ -22,18 +22,6 @@ export const cards = {
     cardsContainer: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mx-auto",
 };
 
-export const form = {
-    form: "w-full max-w-2xl mx-auto bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-8",
-    formGroup: "mb-5 text-left",
-    label: "block text-xs font-mono font-semibold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-wider",
-    input: "w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-950/60 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 dark:focus:border-blue-400 transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 placeholder:text-slate-400 dark:placeholder:text-slate-500",
-    textarea:
-        "w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-950/60 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 dark:focus:border-blue-400 transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 min-h-[140px] resize-y placeholder:text-slate-400 dark:placeholder:text-slate-500",
-    error: "text-xs text-red-600 dark:text-red-400 mt-1.5 font-medium",
-    button: "w-full bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold py-3.5 px-6 rounded-xl transition-colors motion-reduce:transition-none flex items-center justify-center gap-2 text-sm shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-600 disabled:opacity-50 disabled:cursor-not-allowed",
-    success: "text-emerald-600 dark:text-emerald-400 text-center mt-4 font-medium text-sm",
-};
-
 export const footer = {
     footer: "mt-auto border-t border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-950",
     socialLinks: "flex space-x-3",
@@ -55,9 +43,6 @@ export const contactStyles = {
         "inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-950/60 border border-amber-200/60 dark:border-amber-800/60 text-xs font-mono font-semibold text-amber-700 dark:text-amber-300",
     dotAvailable: "w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse motion-reduce:animate-none",
     dotAway: "w-1.5 h-1.5 rounded-full bg-amber-500",
-    formCard:
-        "bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200/90 dark:border-slate-800 overflow-hidden relative",
-    formInner: "p-6 sm:p-8 md:p-10 relative z-10",
     title: "text-3xl md:text-4xl font-display font-bold tracking-tight text-slate-900 dark:text-white mb-3",
     subtitle: "text-slate-600 dark:text-slate-400 text-base md:text-lg leading-relaxed",
     featureList: "space-y-3.5 pt-2",
@@ -72,21 +57,14 @@ export const contactStyles = {
     adminShortcutLink:
         "inline-flex items-center gap-2 text-xs font-mono font-semibold text-blue-600 dark:text-blue-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-md",
 
-    // Form specific styles
-    form: "space-y-5",
-    formGroup: "space-y-1.5",
+    // UI Input & Button styles
     label: "block text-xs font-mono font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider",
     input: "block w-full px-4 py-3 rounded-xl bg-slate-50/70 dark:bg-slate-950/70 border border-slate-300/90 dark:border-slate-700/90 text-slate-900 dark:text-white text-sm focus:bg-white dark:focus:bg-slate-950 focus:border-blue-600 dark:focus:border-blue-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 transition-all motion-reduce:transition-none placeholder:text-slate-400 dark:placeholder:text-slate-500 disabled:opacity-50 disabled:cursor-not-allowed",
-    textarea:
-        "block w-full px-4 py-3 rounded-xl bg-slate-50/70 dark:bg-slate-950/70 border border-slate-300/90 dark:border-slate-700/90 text-slate-900 dark:text-white text-sm focus:bg-white dark:focus:bg-slate-950 focus:border-blue-600 dark:focus:border-blue-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 transition-all motion-reduce:transition-none min-h-[110px] resize-y placeholder:text-slate-400 dark:placeholder:text-slate-500 disabled:opacity-50 disabled:cursor-not-allowed",
     button: "relative w-full flex justify-center items-center gap-2.5 py-3.5 px-6 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 active:bg-blue-700 shadow-sm shadow-blue-600/20 transition-all duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-600 dark:focus-visible:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer",
 
     // Alert styles
     errorAlert: "mb-4 p-3.5 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60",
     errorText: "text-red-700 dark:text-red-300 font-medium text-xs sm:text-sm flex items-center gap-2",
-    successAlert:
-        "mb-4 p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60",
-    successText: "text-emerald-700 dark:text-emerald-300 font-medium flex items-center gap-2 text-xs sm:text-sm",
 } as const;
 
 export const dmStyles = {

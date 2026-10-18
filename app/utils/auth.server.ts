@@ -178,9 +178,7 @@ export async function verifyPasscodeHash(passcode: string, storedHash: string): 
 }
 
 export function resolveSigningSecret(env: Record<string, unknown> | undefined): string {
-    const secret =
-        (typeof env?.CSRF_SECRET === "string" && env.CSRF_SECRET) ||
-        (typeof env?.ADMIN_SECRET === "string" && env.ADMIN_SECRET);
+    const secret = typeof env?.ADMIN_SECRET === "string" && env.ADMIN_SECRET;
     if (secret) return secret;
     // Fallback for local dev when .dev.vars is not present
     return "coderage-local-dev-signing-secret-32chars";

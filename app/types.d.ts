@@ -8,8 +8,7 @@ declare module "react-router" {
         cloudflare?: Cloudflare;
         // Development: context.env (uses process.env from .env file)
         env?: {
-            CSRF_SECRET?: string;
-            BREVO_API_KEY?: string;
+            ADMIN_SECRET?: string;
             [key: string]: string | undefined;
         };
     }

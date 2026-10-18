@@ -231,8 +231,8 @@ export function DirectMessageChat({ initialPresence }: DirectMessageChatProps) {
         }
     }
 
-    async function handleSend(e: React.FormEvent) {
-        e.preventDefault();
+    async function handleSend(e?: React.SyntheticEvent) {
+        if (e) e.preventDefault();
         setError(null);
 
         const trimmedText = text.trim();
@@ -453,7 +453,7 @@ export function DirectMessageChat({ initialPresence }: DirectMessageChatProps) {
             </div>
 
             {/* Composer */}
-            <form onSubmit={handleSend} className={dmStyles.composer}>
+            <div className={dmStyles.composer}>
                 {error && (
                     <div className={contactStyles.errorAlert} role="alert">
                         <p className={contactStyles.errorText}>
@@ -475,6 +475,12 @@ export function DirectMessageChat({ initialPresence }: DirectMessageChatProps) {
                                 required
                                 value={visitorName}
                                 onChange={(e) => setVisitorName(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        e.preventDefault();
+                                        void handleSend(e);
+                                    }
+                                }}
                                 placeholder="e.g. Alex Rivera"
                                 className={contactStyles.input}
                             />
@@ -488,6 +494,12 @@ export function DirectMessageChat({ initialPresence }: DirectMessageChatProps) {
                                 type="text"
                                 value={visitorContact}
                                 onChange={(e) => setVisitorContact(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        e.preventDefault();
+                                        void handleSend(e);
+                                    }
+                                }}
                                 placeholder="In case you step away"
                                 className={contactStyles.input}
                             />
@@ -527,12 +539,17 @@ export function DirectMessageChat({ initialPresence }: DirectMessageChatProps) {
                         required
                         className={dmStyles.composerInput}
                     />
-                    <button type="submit" disabled={sending || !text.trim()} className={dmStyles.sendBtn}>
+                    <button
+                        type="button"
+                        onClick={() => void handleSend()}
+                        disabled={sending || !text.trim()}
+                        className={dmStyles.sendBtn}
+                    >
                         <span>{sending ? "Sending..." : "Send"}</span>
                         <FaPaperPlane className="w-3.5 h-3.5" />
                     </button>
                 </div>
-            </form>
+            </div>
         </div>
     );
 }

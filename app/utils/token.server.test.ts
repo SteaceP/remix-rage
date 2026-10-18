@@ -30,7 +30,7 @@ describe("validateToken", () => {
         expect(validateToken("", "sometoken")).toBe(false);
     });
 
-    it("returns false for empty form token", () => {
+    it("returns false for empty incoming token", () => {
         expect(validateToken("sometoken", "")).toBe(false);
     });
 

@@ -1,4 +1,4 @@
-// Simple in-memory rate limiter for contact form
+// Simple in-memory rate limiter
 // For production, consider using Cloudflare Rate Limiting or KV storage
 
 interface RateLimitEntry {
@@ -51,5 +51,5 @@ export function getRateLimitKey(request: Request): string {
     // Cloudflare provides this in CF-Connecting-IP header
     const ip =
         request.headers.get("CF-Connecting-IP") || request.headers.get("X-Forwarded-For")?.split(",")[0] || "unknown";
-    return `contact-form:${ip}`;
+    return `ip:${ip}`;
 }
