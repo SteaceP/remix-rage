@@ -277,7 +277,7 @@ export default function Index() {
                                             </div>
                                         </div>
 
-                                        <div className="grid grid-cols-2 gap-3">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                             <Link
                                                 to="/website-development"
                                                 className="p-3.5 rounded-xl bg-white dark:bg-slate-950/80 border border-slate-200/80 dark:border-slate-800 hover:border-blue-500/50 transition-colors group"
@@ -339,7 +339,7 @@ export default function Index() {
                                             </div>
                                         </div>
 
-                                        <div className="grid grid-cols-2 gap-3">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                             <Link
                                                 to="/computer-repair"
                                                 className="p-3.5 rounded-xl bg-white dark:bg-slate-950/80 border border-slate-200/80 dark:border-slate-800 hover:border-blue-500/50 transition-colors group"
@@ -424,7 +424,7 @@ export default function Index() {
                                 >
                                     <div>
                                         {/* Top Meta Row */}
-                                        <div className="flex items-center justify-between gap-4 mb-6">
+                                        <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
                                             <div className="inline-flex items-center gap-2.5">
                                                 <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400 border border-blue-200/60 dark:border-blue-800/60">
                                                     <Icon className="w-5 h-5" />
@@ -461,7 +461,7 @@ export default function Index() {
                                     </div>
 
                                     {/* Card Footer Actions */}
-                                    <div className="flex items-center justify-between gap-4 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                                    <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-100 dark:border-slate-800/80">
                                         <Link
                                             to={service.path}
                                             className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform"

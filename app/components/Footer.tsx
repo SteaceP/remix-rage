@@ -117,9 +117,6 @@ export default function Footer() {
                 {/* Bottom Bar */}
                 <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
                     <p>© {currentYear} Code Rage. All rights reserved.</p>
-                    <p className="font-mono text-[11px] text-slate-400 dark:text-slate-500">
-                        Built with React Router v7 • TypeScript • Cloudflare Edge
-                    </p>
                 </div>
             </div>
         </footer>

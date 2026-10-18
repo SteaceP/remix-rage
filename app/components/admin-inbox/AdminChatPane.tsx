@@ -34,7 +34,7 @@ export function AdminChatPane({
     onSendReply,
 }: AdminChatPaneProps) {
     return (
-        <div className={`${inboxStyles.chatPane} ${!mobileShowChat && selectedThread ? "hidden lg:flex" : "flex"}`}>
+        <div className={`${inboxStyles.chatPane} ${mobileShowChat && selectedThread ? "flex" : "hidden lg:flex"}`}>
             {!selectedThread ? (
                 <div className="grow flex flex-col items-center justify-center p-8 text-center space-y-3">
                     <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400">

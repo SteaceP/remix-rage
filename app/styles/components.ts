@@ -73,7 +73,7 @@ export const dmStyles = {
     headerLeft: "flex items-center gap-3 min-w-0",
     avatar: "w-10 h-10 rounded-xl bg-blue-600 text-white font-display font-bold text-sm flex items-center justify-center shrink-0 shadow-xs",
     headerTitle: "text-sm font-display font-bold text-slate-900 dark:text-white truncate",
-    headerStatus: "flex items-center gap-1.5 text-xs font-mono text-slate-500 dark:text-slate-400",
+    headerStatus: "flex items-center gap-1.5 text-xs font-mono text-slate-500 dark:text-slate-400 truncate min-w-0",
     headerActions: "flex items-center gap-2 shrink-0",
     resetBtn:
         "px-2.5 py-1.5 rounded-lg text-xs font-mono text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 cursor-pointer",
@@ -112,8 +112,8 @@ export const inboxStyles = {
     topBar: "px-4 sm:px-6 py-3.5 bg-slate-50 dark:bg-slate-950 border-b border-slate-200/80 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3",
     bodyGrid: "grow grid grid-cols-1 lg:grid-cols-12 min-h-[60vh]",
     sidebar:
-        "lg:col-span-4 border-r border-slate-200/80 dark:border-slate-800 flex flex-col bg-slate-50/40 dark:bg-slate-950/30",
-    chatPane: "lg:col-span-8 flex flex-col bg-white dark:bg-slate-900",
+        "lg:col-span-4 border-r-0 lg:border-r border-slate-200/80 dark:border-slate-800 flex flex-col bg-slate-50/40 dark:bg-slate-950/30",
+    chatPane: "lg:col-span-8 flex flex-col bg-white dark:bg-slate-900 min-h-0",
     threadItem:
         "w-full text-left p-4 border-b border-slate-200/60 dark:border-slate-800/70 hover:bg-slate-100/70 dark:hover:bg-slate-800/50 transition-colors motion-reduce:transition-none flex items-start justify-between gap-3 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500",
     threadItemActive: "bg-blue-50/80 dark:bg-blue-950/40 border-l-4 border-l-blue-600 dark:border-l-blue-400",
