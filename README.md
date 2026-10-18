@@ -61,7 +61,7 @@ Features an architectural dark/light mode aesthetic, real-time WebSocket communi
 
 ### Environment & Secrets
 
-- Production variables are bound via Cloudflare context (`context.cloudflare.env` or `load-context.ts`)
+- Production variables are bound via Cloudflare context (`context.cloudflare.env` or `app/context.ts`)
 - Configured secrets:
     - `ADMIN_SECRET`: Secret used for authenticating admin sessions and WebAuthn challenges
 
