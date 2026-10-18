@@ -21,7 +21,7 @@ export function meta({}: Route.MetaArgs) {
         {
             name: "description",
             content:
-                "Custom website development, cross-platform apps, professional computer repair, and patient family tech support by Steace Paquette.",
+                "Custom website development, cross-platform apps, professional computer repair, and patient family tech support.",
         },
     ];
 }
@@ -107,7 +107,7 @@ export default function Index() {
             icon: FaTools,
             code: "EXP // 02",
             title: "Direct Expert Service",
-            text: "Work directly with Steace from initial diagnosis or architecture spec through final delivery.",
+            text: "Work directly with a dedicated lead engineer from initial diagnosis or architecture spec through final delivery.",
         },
         {
             icon: FaCode,
@@ -371,20 +371,15 @@ export default function Index() {
                                 {/* Operator Profile Strip */}
                                 <div className="pt-4 border-t border-slate-200/80 dark:border-slate-800 flex items-center justify-between gap-4">
                                     <div className="flex items-center gap-3">
-                                        <img
-                                            src="/assets/images/tech-hero.jpg"
-                                            alt="Steace Paquette - Professional Tech Services"
-                                            className="w-12 h-12 rounded-xl object-cover border border-slate-200 dark:border-slate-700 shrink-0"
-                                        />
+                                        <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/70 border border-blue-200/60 dark:border-blue-800/60 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
+                                            <FaTools className="w-4 h-4" />
+                                        </div>
                                         <div>
-                                            <div className="text-sm font-display font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                                                <span>Steace Paquette</span>
-                                                <span className="text-xs font-mono font-normal px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 border border-blue-200/60 dark:border-blue-800/60">
-                                                    👋 That&apos;s me!
-                                                </span>
+                                            <div className="text-sm font-display font-bold text-slate-900 dark:text-white">
+                                                Code Rage Engineering
                                             </div>
                                             <p className="text-xs text-slate-500 dark:text-slate-400">
-                                                Software Engineer &amp; Hardware Specialist
+                                                Software Engineering &amp; Hardware Support
                                             </p>
                                         </div>
                                     </div>

@@ -13,7 +13,7 @@ export const meta: MetaFunction = () => {
         {
             name: "description",
             content:
-                "Get in touch with Steace Paquette for custom website development, cross-platform apps, computer repair, or family tech support.",
+                "Get in touch with Code Rage for custom website development, cross-platform apps, computer repair, or family tech support.",
         },
     ];
 };
@@ -118,7 +118,7 @@ export default function Contact() {
                     <div className="lg:col-span-5 space-y-6">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200/60 dark:border-emerald-800/60 text-xs font-mono font-semibold text-emerald-700 dark:text-emerald-300">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                            <span>DIRECT INBOX // STEACE PAQUETTE</span>
+                            <span>DIRECT INBOX // QUICK RESPONSE</span>
                         </div>
 
                         <h1 className={styles.title}>Get In Touch</h1>

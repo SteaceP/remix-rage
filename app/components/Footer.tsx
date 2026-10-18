@@ -19,7 +19,7 @@ export default function Footer() {
                         </Link>
                         <p className="text-sm text-slate-600 dark:text-slate-400 max-w-sm leading-relaxed">
                             Precision software engineering, cross-platform application builds, and reliable hardware &amp;
-                            family tech support by Steace Paquette.
+                            family tech support.
                         </p>
                         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 text-xs font-mono text-slate-700 dark:text-slate-300">
                             <span className="w-2 h-2 rounded-full bg-emerald-500" />
@@ -82,7 +82,7 @@ export default function Footer() {
                                 to="/contact"
                                 className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-blue-600 dark:bg-white dark:hover:bg-blue-500 text-white dark:text-slate-950 dark:hover:text-white text-xs font-semibold transition-colors"
                             >
-                                Contact Steace
+                                Contact Code Rage
                                 <FaArrowUpRightFromSquare className="w-3 h-3" />
                             </Link>
                             <div className="flex items-center gap-2">
@@ -120,7 +120,7 @@ export default function Footer() {
 
                 {/* Bottom Bar */}
                 <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
-                    <p>© {currentYear} Code Rage (Steace Paquette). All rights reserved.</p>
+                    <p>© {currentYear} Code Rage. All rights reserved.</p>
                     <p className="font-mono text-[11px] text-slate-400 dark:text-slate-500">
                         Built with React Router v7 • TypeScript • Cloudflare Edge
                     </p>
