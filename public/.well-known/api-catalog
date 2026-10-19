@@ -1,0 +1,22 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://coderage.pro/.well-known/api-catalog",
+      "item": [
+        {
+          "href": "https://coderage.pro/api/dm",
+          "title": "Direct Message API"
+        }
+      ]
+    },
+    {
+      "anchor": "https://coderage.pro/api/dm",
+      "service-doc": [
+        {
+          "href": "https://coderage.pro/contact",
+          "type": "text/html"
+        }
+      ]
+    }
+  ]
+}

@@ -46,6 +46,41 @@ export default {
             return stub.fetch(request);
         }
 
+        // Serve RFC 9727 API Catalog for agent discovery
+        if (url.pathname === "/.well-known/api-catalog") {
+            const catalog = {
+                linkset: [
+                    {
+                        anchor: `${url.origin}/.well-known/api-catalog`,
+                        item: [
+                            {
+                                href: `${url.origin}/api/dm`,
+                                title: "Direct Message API",
+                            },
+                        ],
+                    },
+                    {
+                        anchor: `${url.origin}/api/dm`,
+                        "service-doc": [
+                            {
+                                href: `${url.origin}/contact`,
+                                type: "text/html",
+                            },
+                        ],
+                    },
+                ],
+            };
+            return new Response(JSON.stringify(catalog, null, 2), {
+                status: 200,
+                headers: {
+                    "Content-Type":
+                        'application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"; charset=utf-8',
+                    "Cache-Control": "public, max-age=86400, must-revalidate",
+                    "Access-Control-Allow-Origin": "*",
+                },
+            });
+        }
+
         const handler = getRequestHandler();
         const routerContext = new RouterContextProvider();
         routerContext.set(cloudflareContext, {
@@ -55,6 +90,19 @@ export default {
             caches: caches as any,
         });
 
-        return handler(request, routerContext);
+        const response = await handler(request, routerContext);
+
+        // Add RFC 8288 / RFC 9727 Link header on homepage response for agent discovery
+        if (url.pathname === "/" || url.pathname === "") {
+            const headers = new Headers(response.headers);
+            headers.set("Link", '</.well-known/api-catalog>; rel="api-catalog", </contact>; rel="service-doc"');
+            return new Response(response.body, {
+                status: response.status,
+                statusText: response.statusText,
+                headers,
+            });
+        }
+
+        return response;
     },
 } satisfies ExportedHandler<Env>;

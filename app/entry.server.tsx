@@ -55,6 +55,10 @@ export default async function handleRequest(
         "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()"
     );
     responseHeaders.set("Cross-Origin-Opener-Policy", "same-origin");
+    const url = new URL(request.url);
+    if (url.pathname === "/" || url.pathname === "") {
+        responseHeaders.set("Link", '</.well-known/api-catalog>; rel="api-catalog", </contact>; rel="service-doc"');
+    }
 
     return new Response(body, {
         headers: responseHeaders,

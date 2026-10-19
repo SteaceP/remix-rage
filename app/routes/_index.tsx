@@ -15,6 +15,12 @@ import {
     FaShieldAlt,
 } from "react-icons/fa";
 
+export function headers() {
+    return {
+        Link: '</.well-known/api-catalog>; rel="api-catalog", </contact>; rel="service-doc"',
+    };
+}
+
 export function meta({}: Route.MetaArgs) {
     return [
         { title: "Code Rage — Software Engineering & Tech Support Services" },

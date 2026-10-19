@@ -72,6 +72,7 @@ import { contactStyles as styles } from "~/styles/components";
 2. **Type Generation**: Run `pnpm run cf-typegen` anytime `wrangler.jsonc` changes.
 3. **Secrets**: Managed via `wrangler secret put`, NOT in `wrangler.jsonc`.
 4. **State**: Server-side only (loaders/actions). No global client state libraries (Redux/Zustand) unless explicitly requested.
+5. **Git Commits**: NEVER execute `git commit` unless explicitly instructed to do so by the user.
 
 ## Directory Structure
 
