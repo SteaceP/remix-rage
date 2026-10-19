@@ -52,6 +52,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
                 vapidPublicKey: string;
                 passkeys: PublicPasskey[];
                 pushCount: number;
+                hasStoredPasscode?: boolean;
             }>(context, "/admin/bootstrap");
 
             return Response.json({
@@ -62,7 +63,8 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
                 passkeys: bootstrap.passkeys,
                 pushCount: bootstrap.pushCount,
                 passkeysCount: bootstrap.passkeys.length,
-                hasStoredPasscode: true,
+                hasStoredPasscode:
+                    typeof bootstrap.hasStoredPasscode === "boolean" ? bootstrap.hasStoredPasscode : false,
                 hasEnvPasscode: Boolean(env.ADMIN_SECRET),
             } satisfies InboxLoaderData);
         } catch {

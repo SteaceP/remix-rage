@@ -15,21 +15,18 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-function getInitialTheme(): Theme {
-    if (typeof window === "undefined") return "light";
-
-    // Check local storage first
-    const saved = localStorage.getItem("theme");
-    if (saved === "dark" || saved === "light") return saved;
-
-    // Fallback to system preference (optional, but good UX)
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
-
-    return "light";
-}
-
 export function ThemeProvider({ children }: { children: ReactNode }) {
-    const [theme, setTheme] = useState<Theme>(getInitialTheme);
+    const [theme, setTheme] = useState<Theme>("light");
+
+    useEffect(() => {
+        // Sync theme after mount to ensure client matches SSR markup during initial hydration
+        const saved = localStorage.getItem("theme");
+        if (saved === "dark" || saved === "light") {
+            setTheme(saved);
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            setTheme("dark");
+        }
+    }, []);
 
     useEffect(() => {
         const root = document.documentElement;

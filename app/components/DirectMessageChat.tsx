@@ -40,6 +40,12 @@ function playIncomingChime() {
         gain.connect(ctx.destination);
         osc.start();
         osc.stop(ctx.currentTime + 0.28);
+        osc.onended = () => {
+            void ctx.close().catch(() => {});
+        };
+        setTimeout(() => {
+            void ctx.close().catch(() => {});
+        }, 500);
     } catch {
         // Ignore audio autoplay restrictions
     }

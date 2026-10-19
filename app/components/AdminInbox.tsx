@@ -65,6 +65,9 @@ export function AdminInbox({
         soundEnabled,
         initialPresence,
         initialThreads,
+        onError: (err) => {
+            auth.setAuthError(err);
+        },
         onSyncMeta: (data) => {
             setVapidPublicKey(data.vapidPublicKey);
             auth.setPasskeys(data.passkeys);
@@ -140,12 +143,13 @@ export function AdminInbox({
 
     // Render: Unauthenticated Login Screen
     if (!auth.authenticated) {
-        const isFirstSetup = initialPasskeysCount === 0 && !hasStoredPasscode && !hasEnvPasscode;
+        const currentPasskeysCount = Math.max(initialPasskeysCount, auth.passkeys.length);
+        const isFirstSetup = currentPasskeysCount === 0 && !hasStoredPasscode && !hasEnvPasscode;
 
         return (
             <AdminLoginCard
                 isFirstSetup={isFirstSetup}
-                initialPasskeysCount={initialPasskeysCount}
+                initialPasskeysCount={currentPasskeysCount}
                 authError={auth.authError}
                 authBusy={auth.authBusy}
                 passcode={auth.passcode}

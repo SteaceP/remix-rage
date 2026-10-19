@@ -9,6 +9,7 @@ export interface UseAdminInboxSocketOptions {
     soundEnabled: boolean;
     initialPresence: AdminPresence;
     initialThreads: ChatThread[];
+    onError?: (error: string) => void;
     onSyncMeta?: (data: { vapidPublicKey: string; passkeys: PublicPasskey[]; pushCount: number }) => void;
     onAutoSelectThread?: (threadId: string | null) => void;
 }
@@ -19,6 +20,7 @@ export function useAdminInboxSocket({
     soundEnabled,
     initialPresence,
     initialThreads,
+    onError,
     onSyncMeta,
     onAutoSelectThread,
 }: UseAdminInboxSocketOptions) {
@@ -162,6 +164,8 @@ export function useAdminInboxSocket({
                                 ),
                             }));
                         }
+                    } else if (data.type === "error") {
+                        onError?.(data.error);
                     }
                 } catch {
                     // Ignore malformed frame

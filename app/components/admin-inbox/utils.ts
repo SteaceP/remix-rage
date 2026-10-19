@@ -47,6 +47,9 @@ export function playAdminAlertSound(): void {
 
         playNote(659.25, 0, 0.14); // E5
         playNote(987.77, 0.12, 0.24); // B5
+        setTimeout(() => {
+            void ctx.close().catch(() => {});
+        }, 600);
     } catch {
         // Ignore audio restrictions
     }

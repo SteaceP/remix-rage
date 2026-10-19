@@ -15,24 +15,30 @@ export function derToP1363(der: Uint8Array): Uint8Array {
     if (der.length === 64 && der[0] !== 0x30) {
         return der;
     }
-    if (der[0] !== 0x30) {
+    if (der.length < 8 || der[0] !== 0x30) {
         throw new Error("Invalid DER signature header");
     }
     let offset = 2;
     if (der[1] & 0x80) {
         offset = 2 + (der[1] & 0x7f);
     }
-    if (der[offset] !== 0x02) {
+    if (offset >= der.length || der[offset] !== 0x02) {
         throw new Error("Invalid DER R marker");
     }
     const rLen = der[offset + 1];
+    if (rLen <= 0 || offset + 2 + rLen > der.length) {
+        throw new Error("Invalid DER R coordinate length");
+    }
     let r = der.slice(offset + 2, offset + 2 + rLen);
     offset = offset + 2 + rLen;
 
-    if (der[offset] !== 0x02) {
+    if (offset >= der.length || der[offset] !== 0x02) {
         throw new Error("Invalid DER S marker");
     }
     const sLen = der[offset + 1];
+    if (sLen <= 0 || offset + 2 + sLen > der.length) {
+        throw new Error("Invalid DER S coordinate length");
+    }
     let s = der.slice(offset + 2, offset + 2 + sLen);
 
     // Strip leading zero padding if 33 bytes
@@ -104,28 +110,29 @@ export async function verifyPasskeyRegistration(input: RegistrationVerifyInput):
         throw new Error("Registration origin mismatch");
     }
 
-    let counter = 0;
-    if (input.authenticatorData) {
-        const authData = fromBase64Url(input.authenticatorData);
-        if (authData.length < 37) {
-            throw new Error("Invalid authenticatorData length");
-        }
-        const expectedRpIdHash = new Uint8Array(
-            await crypto.subtle.digest("SHA-256", new TextEncoder().encode(input.expectedRpId))
-        );
-        const actualRpIdHash = authData.slice(0, 32);
-        for (let i = 0; i < 32; i++) {
-            if (expectedRpIdHash[i] !== actualRpIdHash[i]) {
-                throw new Error("RP ID hash mismatch during registration");
-            }
-        }
-        const flags = authData[32];
-        if ((flags & 0x01) === 0) {
-            throw new Error("User presence flag not set");
-        }
-        const view = new DataView(authData.buffer, authData.byteOffset + 33, 4);
-        counter = view.getUint32(0, false);
+    if (!input.authenticatorData) {
+        throw new Error("authenticatorData is required for registration verification");
     }
+
+    const authData = fromBase64Url(input.authenticatorData);
+    if (authData.length < 37) {
+        throw new Error("Invalid authenticatorData length");
+    }
+    const expectedRpIdHash = new Uint8Array(
+        await crypto.subtle.digest("SHA-256", new TextEncoder().encode(input.expectedRpId))
+    );
+    const actualRpIdHash = authData.slice(0, 32);
+    for (let i = 0; i < 32; i++) {
+        if (expectedRpIdHash[i] !== actualRpIdHash[i]) {
+            throw new Error("RP ID hash mismatch during registration");
+        }
+    }
+    const flags = authData[32];
+    if ((flags & 0x01) === 0) {
+        throw new Error("User presence flag not set");
+    }
+    const view = new DataView(authData.buffer, authData.byteOffset + 33, 4);
+    const counter = view.getUint32(0, false);
 
     const algorithm = input.algorithm ?? -7;
     const spkiBytes = fromBase64Url(input.publicKeySpki);

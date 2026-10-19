@@ -42,6 +42,20 @@ export default async function handleRequest(
     }
 
     responseHeaders.set("Content-Type", "text/html");
+    responseHeaders.set(
+        "Content-Security-Policy",
+        "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; connect-src 'self' wss: ws:; font-src 'self' https://fonts.gstatic.com; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
+    );
+    responseHeaders.set("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload");
+    responseHeaders.set("X-Frame-Options", "DENY");
+    responseHeaders.set("X-Content-Type-Options", "nosniff");
+    responseHeaders.set("Referrer-Policy", "strict-origin-when-cross-origin");
+    responseHeaders.set(
+        "Permissions-Policy",
+        "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()"
+    );
+    responseHeaders.set("Cross-Origin-Opener-Policy", "same-origin");
+
     return new Response(body, {
         headers: responseHeaders,
         status: responseStatusCode,

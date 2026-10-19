@@ -16,8 +16,8 @@ This document outlines the security measures implemented in this application.
 ### Direct Messaging & API Endpoints
 
 - All inputs validated with Zod schemas
-- Visitor name: trimmed string up to 100 characters
-- Message body: trimmed text up to 2000 characters
+- Visitor name: trimmed string up to 80 characters
+- Message body: trimmed text up to 4000 characters
 - Contact info: optional phone/email string up to 160 characters
 - Structured JSON and WebSocket frame validation prevents injection attacks
 

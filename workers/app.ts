@@ -20,6 +20,18 @@ export default {
 
         // Handle real-time WebSocket upgrades directly via the DirectMessageHub Durable Object
         if (url.pathname === "/api/dm/ws" && request.headers.get("Upgrade")?.toLowerCase() === "websocket") {
+            const origin = request.headers.get("Origin");
+            if (origin) {
+                try {
+                    const originUrl = new URL(origin);
+                    if (originUrl.host !== url.host) {
+                        return new Response("Forbidden", { status: 403 });
+                    }
+                } catch {
+                    return new Response("Invalid Origin", { status: 403 });
+                }
+            }
+
             const role = url.searchParams.get("role") === "admin" ? "admin" : "visitor";
             if (role === "admin") {
                 const secret = resolveSigningSecret(env as unknown as Record<string, unknown>);

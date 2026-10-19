@@ -167,9 +167,7 @@ export default function Header() {
                                         : "Available"
                                     : presence.statusText || "Away"}
                             </span>
-                            <span className="sm:hidden">
-                                {presence.available ? "Live" : "Away"}
-                            </span>
+                            <span className="sm:hidden">{presence.available ? "Live" : "Away"}</span>
                         </Link>
                     </div>
 

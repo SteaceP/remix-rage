@@ -162,6 +162,9 @@ export async function sendWebPushNotification(
     vapidKeys: StoredVapidKeys
 ): Promise<{ ok: boolean; status: number; gone: boolean }> {
     try {
+        if (!subscription?.endpoint || !subscription.keys?.p256dh || !subscription.keys?.auth) {
+            return { ok: false, status: 400, gone: true };
+        }
         const jwt = await createVapidJwt(subscription.endpoint, vapidKeys);
         const encryptedBody = await encryptWebPushPayload(JSON.stringify(payload), subscription);
 

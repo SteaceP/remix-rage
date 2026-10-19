@@ -87,6 +87,19 @@ export async function action({ request, context, params }: ActionFunctionArgs) {
         return Response.json({ error: "Method not allowed" }, { status: 405 });
     }
 
+    const origin = request.headers.get("Origin");
+    if (origin) {
+        try {
+            const originUrl = new URL(origin);
+            const requestUrl = new URL(request.url);
+            if (originUrl.host !== requestUrl.host) {
+                return Response.json({ error: "Invalid request origin" }, { status: 403 });
+            }
+        } catch {
+            return Response.json({ error: "Malformed origin header" }, { status: 403 });
+        }
+    }
+
     const env = getEnvFromContext(context) as Record<string, any>;
     const signingSecret = resolveSigningSecret(env);
     const actionName = params.action;
@@ -134,6 +147,7 @@ export async function action({ request, context, params }: ActionFunctionArgs) {
                     passcode,
                     envAdminSecret:
                         typeof env.ADMIN_SECRET === "string" && env.ADMIN_SECRET ? env.ADMIN_SECRET : undefined,
+                    isDev: Boolean(import.meta.env.DEV),
                 }),
             });
 
@@ -178,7 +192,12 @@ export async function action({ request, context, params }: ActionFunctionArgs) {
                         passkeysCount: number;
                         hasStoredPasscode: boolean;
                     }>(context, "/status");
-                    if (status.passkeysCount > 0 || status.hasStoredPasscode || env.ADMIN_SECRET) {
+                    if (
+                        status.passkeysCount > 0 ||
+                        status.hasStoredPasscode ||
+                        env.ADMIN_SECRET ||
+                        !import.meta.env.DEV
+                    ) {
                         return Response.json(
                             { error: "Log in with your passcode first to register a new Passkey" },
                             { status: 401 }
@@ -209,7 +228,7 @@ export async function action({ request, context, params }: ActionFunctionArgs) {
                     passkeysCount: number;
                     hasStoredPasscode: boolean;
                 }>(context, "/status");
-                if (status.passkeysCount > 0 || status.hasStoredPasscode || env.ADMIN_SECRET) {
+                if (status.passkeysCount > 0 || status.hasStoredPasscode || env.ADMIN_SECRET || !import.meta.env.DEV) {
                     return Response.json({ error: "Unauthorized" }, { status: 401 });
                 }
             }

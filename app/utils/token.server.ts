@@ -11,19 +11,17 @@ export function validateToken(storedToken: string, incomingToken: string): boole
         return false;
     }
 
-    // Use constant-time comparison to prevent timing attacks
-    if (storedToken.length !== incomingToken.length) {
-        return false;
-    }
-
-    // Constant-time comparison using crypto.subtle.timingSafeEqual (Web Crypto API)
+    // Use constant-time comparison that does not leak length via early exit
     const encoder = new TextEncoder();
     const storedBytes = encoder.encode(storedToken);
     const incomingBytes = encoder.encode(incomingToken);
 
-    let result = 0;
-    for (let i = 0; i < storedBytes.length; i++) {
-        result |= storedBytes[i] ^ incomingBytes[i];
+    const lenA = storedBytes.length;
+    const lenB = incomingBytes.length;
+    let result = lenA ^ lenB;
+
+    for (let i = 0; i < lenA; i++) {
+        result |= storedBytes[i] ^ incomingBytes[i % (lenB || 1)];
     }
 
     return result === 0;

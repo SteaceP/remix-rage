@@ -114,7 +114,7 @@ export function createAdminCookieHeader(token: string, request: Request): string
         `${ADMIN_COOKIE_NAME}=${encodeURIComponent(token)}`,
         "Path=/",
         "HttpOnly",
-        "SameSite=Lax",
+        "SameSite=Strict",
         `Max-Age=${SESSION_TTL_SECONDS}`,
     ];
     if (isSecure) {
@@ -126,7 +126,7 @@ export function createAdminCookieHeader(token: string, request: Request): string
 export function clearAdminCookieHeader(request: Request): string {
     const url = new URL(request.url);
     const isSecure = url.protocol === "https:";
-    const directives = [`${ADMIN_COOKIE_NAME}=`, "Path=/", "HttpOnly", "SameSite=Lax", "Max-Age=0"];
+    const directives = [`${ADMIN_COOKIE_NAME}=`, "Path=/", "HttpOnly", "SameSite=Strict", "Max-Age=0"];
     if (isSecure) {
         directives.push("Secure");
     }
@@ -177,9 +177,24 @@ export async function verifyPasscodeHash(passcode: string, storedHash: string): 
     }
 }
 
+let isolateRandomSecret: string | null = null;
+
 export function resolveSigningSecret(env: Record<string, unknown> | undefined): string {
     const secret = typeof env?.ADMIN_SECRET === "string" && env.ADMIN_SECRET;
     if (secret) return secret;
-    // Fallback for local dev when .dev.vars is not present
-    return "coderage-local-dev-signing-secret-32chars";
+    if (import.meta.env.DEV) {
+        // Fallback for local dev when .dev.vars is not present
+        return "coderage-local-dev-signing-secret-32chars";
+    }
+    // In production without ADMIN_SECRET, generate a random secret per-isolate
+    // so that external attackers cannot forge tokens using a known static secret.
+    if (!isolateRandomSecret) {
+        const bytes = new Uint8Array(32);
+        crypto.getRandomValues(bytes);
+        isolateRandomSecret = toBase64Url(bytes);
+        console.warn(
+            "WARNING: ADMIN_SECRET is not configured in environment. Using ephemeral per-isolate signing secret."
+        );
+    }
+    return isolateRandomSecret;
 }

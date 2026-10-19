@@ -24,6 +24,8 @@ interface WsAttachment {
     role: "visitor" | "admin";
     threadId?: string;
     visitorToken?: string;
+    msgCount?: number;
+    windowStart?: number;
 }
 
 interface StoredChallenge {
@@ -72,7 +74,16 @@ export class DirectMessageHub extends DurableObject<Env> {
     }
 
     private isVisitorOnline(threadId: string): boolean {
-        return this.ctx.getWebSockets(`thread:${threadId}`).length > 0;
+        if (this.ctx.getWebSockets(`thread:${threadId}`).length > 0) return true;
+        for (const ws of this.ctx.getWebSockets("role:visitor")) {
+            try {
+                const att = ws.deserializeAttachment() as WsAttachment | null;
+                if (att?.threadId === threadId) return true;
+            } catch {
+                // Ignore
+            }
+        }
+        return false;
     }
 
     private sanitizeThread(stored: StoredThread): ChatThread {
@@ -116,6 +127,30 @@ export class DirectMessageHub extends DurableObject<Env> {
         }
     }
 
+    private broadcastToThread(threadId: string, event: WsServerEvent) {
+        const payload = JSON.stringify(event);
+        const seen = new Set<WebSocket>();
+        for (const ws of this.ctx.getWebSockets(`thread:${threadId}`)) {
+            seen.add(ws);
+            try {
+                ws.send(payload);
+            } catch {
+                // Ignore closed socket
+            }
+        }
+        for (const ws of this.ctx.getWebSockets("role:visitor")) {
+            if (seen.has(ws)) continue;
+            try {
+                const att = ws.deserializeAttachment() as WsAttachment | null;
+                if (att?.threadId === threadId) {
+                    ws.send(payload);
+                }
+            } catch {
+                // Ignore closed socket
+            }
+        }
+    }
+
     private broadcastAll(event: WsServerEvent) {
         const payload = JSON.stringify(event);
         for (const ws of this.ctx.getWebSockets()) {
@@ -139,21 +174,26 @@ export class DirectMessageHub extends DurableObject<Env> {
         let changed = false;
 
         for (const sub of subs) {
-            const res = await sendWebPushNotification(
-                sub,
-                {
-                    title: `${thread.visitorName} • ${thread.topic}`,
-                    body: message.text.slice(0, 180),
-                    url: `/inbox?thread=${encodeURIComponent(thread.id)}`,
-                    threadId: thread.id,
-                    unreadCount: totalUnread,
-                    ts: message.createdAt,
-                },
-                vapidKeys
-            );
-            if (res.gone) {
-                changed = true;
-            } else {
+            try {
+                const res = await sendWebPushNotification(
+                    sub,
+                    {
+                        title: `${thread.visitorName} • ${thread.topic}`,
+                        body: message.text.slice(0, 180),
+                        url: `/inbox?thread=${encodeURIComponent(thread.id)}`,
+                        threadId: thread.id,
+                        unreadCount: totalUnread,
+                        ts: message.createdAt,
+                    },
+                    vapidKeys
+                );
+                if (res.gone) {
+                    changed = true;
+                } else {
+                    validSubs.push(sub);
+                }
+            } catch (err) {
+                console.error("Web Push delivery failed for endpoint:", err);
                 validSubs.push(sub);
             }
         }
@@ -191,11 +231,11 @@ export class DirectMessageHub extends DurableObject<Env> {
         }
 
         if (!storedThread) {
-            const newThreadId =
-                params.threadId && /^[a-zA-Z0-9_-]{8,64}$/.test(params.threadId)
-                    ? params.threadId
-                    : `dm_${crypto.randomUUID().replace(/-/g, "").slice(0, 20)}`;
-            const newVisitorToken = params.visitorToken || generateToken();
+            // Security: Always generate fresh, unguessable threadId and visitorToken on server.
+            // Never reuse client-supplied threadId (which could belong to an existing thread)
+            // or client-supplied visitorToken.
+            const newThreadId = `dm_${crypto.randomUUID().replace(/-/g, "").slice(0, 20)}`;
+            const newVisitorToken = generateToken();
             const visitorName = (params.visitorName || "Visitor").trim().slice(0, 80) || "Visitor";
             const visitorContact = params.visitorContact?.trim().slice(0, 160) || undefined;
             const topic = (params.topic || "General Inquiry").trim().slice(0, 120) || "General Inquiry";
@@ -240,8 +280,8 @@ export class DirectMessageHub extends DurableObject<Env> {
 
         const messages = await this.getMessages(storedThread.id);
         messages.push(message);
-        if (messages.length > 300) {
-            messages.splice(0, messages.length - 300);
+        if (messages.length > 80) {
+            messages.splice(0, messages.length - 80);
         }
 
         await this.ctx.storage.put({
@@ -257,7 +297,7 @@ export class DirectMessageHub extends DurableObject<Env> {
         };
 
         this.broadcastToTag("role:admin", event);
-        this.broadcastToTag(`thread:${storedThread.id}`, event);
+        this.broadcastToThread(storedThread.id, event);
 
         this.ctx.waitUntil(this.notifyAdminPush(publicThread, message));
 
@@ -305,8 +345,8 @@ export class DirectMessageHub extends DurableObject<Env> {
             createdAt: now,
         };
         messages.push(message);
-        if (messages.length > 300) {
-            messages.splice(0, messages.length - 300);
+        if (messages.length > 80) {
+            messages.splice(0, messages.length - 80);
         }
 
         await this.ctx.storage.put({
@@ -322,7 +362,7 @@ export class DirectMessageHub extends DurableObject<Env> {
         };
 
         this.broadcastToTag("role:admin", event);
-        this.broadcastToTag(`thread:${storedThread.id}`, event);
+        this.broadcastToThread(storedThread.id, event);
 
         return { thread: publicThread, message };
     }
@@ -443,12 +483,13 @@ export class DirectMessageHub extends DurableObject<Env> {
             }
 
             if (path.endsWith("/admin/bootstrap") && request.method === "GET") {
-                const [presence, threads, vapidKeys, passkeys, pushSubs] = await Promise.all([
+                const [presence, threads, vapidKeys, passkeys, pushSubs, passcodeHash] = await Promise.all([
                     this.getPresenceState(),
                     this.listThreads(),
                     this.getVapidKeys(),
                     this.getPasskeys(),
                     this.getPushSubscriptions(),
+                    this.ctx.storage.get<string>("admin_passcode_hash"),
                 ]);
                 return Response.json({
                     presence,
@@ -456,6 +497,7 @@ export class DirectMessageHub extends DurableObject<Env> {
                     vapidPublicKey: vapidKeys.publicKey,
                     passkeys: passkeys.map(({ publicKeySpki: _spki, ...rest }) => rest),
                     pushCount: pushSubs.length,
+                    hasStoredPasscode: Boolean(passcodeHash),
                 });
             }
 
@@ -496,6 +538,7 @@ export class DirectMessageHub extends DurableObject<Env> {
                 const body = (await request.json()) as {
                     passcode: string;
                     envAdminSecret?: string;
+                    isDev?: boolean;
                 };
                 const passcode = (body.passcode || "").trim();
                 if (!passcode || passcode.length < 4) {
@@ -522,9 +565,9 @@ export class DirectMessageHub extends DurableObject<Env> {
                     return Response.json({ ok: false, error: "Invalid admin passcode" }, { status: 401 });
                 }
 
-                // 3. First-time bootstrap: if neither envAdminSecret nor storedHash nor passkeys exist,
-                // save this passcode as the initial admin passcode in Durable Object storage.
-                if (!body.envAdminSecret && passkeys.length === 0) {
+                // 3. First-time bootstrap: allow only in development if envAdminSecret is not set,
+                // or if envAdminSecret matches. In production, unauthenticated bootstrap is prevented.
+                if (!body.envAdminSecret && passkeys.length === 0 && Boolean(body.isDev)) {
                     const newHash = await hashPasscode(passcode);
                     await this.ctx.storage.put("admin_passcode_hash", newHash);
                     return Response.json({ ok: true, bootstrapped: true });
@@ -554,6 +597,18 @@ export class DirectMessageHub extends DurableObject<Env> {
                 for (const [k, v] of Object.entries(challenges)) {
                     if (v.expiresAt < now) {
                         delete challenges[k];
+                    }
+                }
+
+                // Cap active challenges to 20 to prevent DO key limit overflow
+                const entries = Object.entries(challenges);
+                if (entries.length >= 20) {
+                    entries.sort((a, b) => b[1].expiresAt - a[1].expiresAt);
+                    const kept = entries.slice(0, 15);
+                    for (const k of Object.keys(challenges)) {
+                        if (!kept.some(([entryKey]) => entryKey === k)) {
+                            delete challenges[k];
+                        }
                     }
                 }
 
@@ -679,15 +734,37 @@ export class DirectMessageHub extends DurableObject<Env> {
                 const body = (await request.json()) as {
                     subscription: PushSubscriptionRecord;
                 };
-                if (!body.subscription?.endpoint || !body.subscription?.keys?.p256dh) {
-                    return Response.json({ error: "Invalid push subscription" }, { status: 400 });
+                const sub = body.subscription;
+                if (!sub?.endpoint || !sub.keys?.p256dh || !sub.keys?.auth) {
+                    return Response.json({ error: "Invalid push subscription structure" }, { status: 400 });
                 }
+                try {
+                    const u = new URL(sub.endpoint);
+                    if (u.protocol !== "https:") {
+                        return Response.json({ error: "Push endpoint must be HTTPS" }, { status: 400 });
+                    }
+                    const host = u.hostname.toLowerCase();
+                    const isAllowedService =
+                        host.endsWith(".googleapis.com") ||
+                        host.endsWith(".push.services.mozilla.com") ||
+                        host.endsWith(".push.apple.com") ||
+                        host.endsWith(".notify.windows.com");
+                    if (!isAllowedService) {
+                        return Response.json({ error: "Unsupported push service provider" }, { status: 400 });
+                    }
+                } catch {
+                    return Response.json({ error: "Invalid push endpoint URL" }, { status: 400 });
+                }
+
                 const subs = await this.getPushSubscriptions();
-                const filtered = subs.filter((s) => s.endpoint !== body.subscription.endpoint);
+                const filtered = subs.filter((s) => s.endpoint !== sub.endpoint);
                 filtered.push({
-                    ...body.subscription,
+                    ...sub,
                     createdAt: Date.now(),
                 });
+                if (filtered.length > 20) {
+                    filtered.splice(0, filtered.length - 20);
+                }
                 await this.ctx.storage.put("push_subs", filtered);
                 return Response.json({ ok: true, pushCount: filtered.length });
             }
@@ -755,6 +832,19 @@ export class DirectMessageHub extends DurableObject<Env> {
                         text: payload.text,
                     });
                 } else {
+                    const now = Date.now();
+                    if (!attachment.windowStart || now - attachment.windowStart > 60000) {
+                        attachment.windowStart = now;
+                        attachment.msgCount = 1;
+                    } else {
+                        attachment.msgCount = (attachment.msgCount || 0) + 1;
+                    }
+                    if (attachment.msgCount > 20) {
+                        this.sendEvent(ws, { type: "error", error: "Sending too fast. Please wait a moment." });
+                        ws.serializeAttachment(attachment);
+                        return;
+                    }
+
                     const result = await this.handleVisitorMessage({
                         threadId: attachment.threadId || payload.threadId,
                         visitorToken: attachment.visitorToken || payload.visitorToken,
@@ -788,7 +878,7 @@ export class DirectMessageHub extends DurableObject<Env> {
                     isTyping: Boolean(payload.isTyping),
                 };
                 if (attachment.role === "admin") {
-                    this.broadcastToTag(`thread:${threadId}`, event);
+                    this.broadcastToThread(threadId, event);
                 } else {
                     this.broadcastToTag("role:admin", event);
                 }
@@ -841,7 +931,7 @@ export class DirectMessageHub extends DurableObject<Env> {
                         readAt: now,
                     };
                     this.broadcastToTag("role:admin", readEvent);
-                    this.broadcastToTag(`thread:${threadId}`, readEvent);
+                    this.broadcastToThread(threadId, readEvent);
                 }
                 return;
             }
