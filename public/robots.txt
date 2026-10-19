@@ -1,0 +1,9 @@
+# robots.txt for https://coderage.pro
+# Conforming to RFC 9309: https://www.rfc-editor.org/rfc/rfc9309
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /inbox
+
+Sitemap: https://coderage.pro/sitemap.xml

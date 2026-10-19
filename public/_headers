@@ -62,6 +62,14 @@ Cache-Control: no-cache, no-store, must-revalidate
 Cache-Control: no-cache, no-store, must-revalidate
 Content-Type: application/manifest+json
 
+/robots.txt
+Cache-Control: public, max-age=86400, must-revalidate
+Content-Type: text/plain; charset=utf-8
+
+/sitemap.xml
+Cache-Control: public, max-age=86400, must-revalidate
+Content-Type: application/xml; charset=utf-8
+
 # API Routes - No Caching
 
 /api/\*
