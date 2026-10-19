@@ -6,4 +6,30 @@ Allow: /
 Disallow: /api/
 Disallow: /inbox
 
+# AI Crawlers & Agents
+User-agent: Amazonbot
+User-agent: Anthropic-AI
+User-agent: Applebot-Extended
+User-agent: Bytespider
+User-agent: CCBot
+User-agent: ChatGPT-User
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: Claude-Web
+User-agent: ClaudeBot
+User-agent: Cohere-AI
+User-agent: Diffbot
+User-agent: FacebookBot
+User-agent: Google-Extended
+User-agent: GPTBot
+User-agent: Meta-ExternalAgent
+User-agent: OAI-SearchBot
+User-agent: Omgilibot
+User-agent: Perplexity-User
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+Disallow: /inbox
+
 Sitemap: https://coderage.pro/sitemap.xml
+

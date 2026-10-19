@@ -93,5 +93,15 @@ Content-Type: font/woff2
 /.\*
 X-Robots-Tag: noindex, nofollow
 
+# Restrict AI and Search Indexing on Inbox
+/inbox
+Cache-Control: no-cache, no-store, must-revalidate
+X-Robots-Tag: noindex, nofollow, noai, noimageai
+
+/inbox/\*
+Cache-Control: no-cache, no-store, must-revalidate
+X-Robots-Tag: noindex, nofollow, noai, noimageai
+
 /.env
 Status-Code: 404
+

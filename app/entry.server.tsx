@@ -59,6 +59,9 @@ export default async function handleRequest(
     if (url.pathname === "/" || url.pathname === "") {
         responseHeaders.set("Link", '</.well-known/api-catalog>; rel="api-catalog", </contact>; rel="service-doc"');
     }
+    if (url.pathname === "/inbox" || url.pathname.startsWith("/inbox/")) {
+        responseHeaders.set("X-Robots-Tag", "noindex, nofollow, noai, noimageai");
+    }
 
     return new Response(body, {
         headers: responseHeaders,

@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs, MetaFunction } from "react-router";
+import type { HeadersFunction, LoaderFunctionArgs, MetaFunction } from "react-router";
 import { useLoaderData } from "react-router";
 import { AdminInbox } from "~/components/AdminInbox";
 import { inboxStyles as styles } from "~/styles/components";
@@ -14,8 +14,15 @@ export const meta: MetaFunction = () => {
             name: "description",
             content: "Code Rage mobile direct message inbox and availability console.",
         },
-        { name: "robots", content: "noindex, nofollow" },
+        { name: "robots", content: "noindex, nofollow, noai, noimageai" },
+        { name: "googlebot", content: "noindex, nofollow, noai, noimageai" },
     ];
+};
+
+export const headers: HeadersFunction = () => {
+    return {
+        "X-Robots-Tag": "noindex, nofollow, noai, noimageai",
+    };
 };
 
 type PublicPasskey = Omit<PasskeyCredential, "publicKeySpki">;

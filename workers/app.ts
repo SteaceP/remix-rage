@@ -81,6 +81,25 @@ export default {
             });
         }
 
+        // Prevent AI agents and crawlers from accessing /inbox
+        if (url.pathname === "/inbox" || url.pathname.startsWith("/inbox/")) {
+            const userAgent = request.headers.get("User-Agent") || "";
+            const isAiAgent =
+                /gptbot|chatgpt-user|oai-searchbot|claudebot|claude-web|claude-user|claude-searchbot|anthropic-ai|perplexitybot|perplexity-user|google-extended|applebot-extended|bytespider|ccbot|amazonbot|meta-externalagent|facebookbot|omgilibot|diffbot|cohere-ai/i.test(
+                    userAgent
+                );
+
+            if (isAiAgent) {
+                return new Response("AI crawlers and agents are forbidden from accessing /inbox.", {
+                    status: 403,
+                    headers: {
+                        "Content-Type": "text/plain; charset=utf-8",
+                        "X-Robots-Tag": "noindex, nofollow, noai, noimageai",
+                    },
+                });
+            }
+        }
+
         const handler = getRequestHandler();
         const routerContext = new RouterContextProvider();
         routerContext.set(cloudflareContext, {
