@@ -5,8 +5,10 @@
 {
     "$schema": "node_modules/wrangler/config-schema.json",
     "name": "remix-rage",
-    "compatibility_date": "2025-04-04",
-    "compatibility_flags": ["nodejs_compat"],
+    "compatibility_date": "2026-10-23",
+    "compatibility_flags": [
+        "nodejs_compat"
+    ],
     "main": "./workers/app.ts",
     "assets": {
         "directory": "./build/client",
@@ -28,7 +30,9 @@
     "migrations": [
         {
             "tag": "v1",
-            "new_sqlite_classes": ["DirectMessageHub"],
+            "new_sqlite_classes": [
+                "DirectMessageHub"
+            ],
         },
     ],
     "env": {
