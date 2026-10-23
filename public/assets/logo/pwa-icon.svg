@@ -1,17 +1,442 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0f172a" />
-      <stop offset="100%" stop-color="#020617" />
+    <!-- 1. Deep 3D Chassis & Ambient Gradients -->
+    <radialGradient id="bgCore" cx="50%" cy="46%" r="68%" fx="50%" fy="40%">
+      <stop offset="0%" stop-color="#172554" />
+      <stop offset="42%" stop-color="#090d1a" />
+      <stop offset="100%" stop-color="#02040a" />
+    </radialGradient>
+
+    <radialGradient id="rageUnderglow" cx="50%" cy="74%" r="54%">
+      <stop offset="0%" stop-color="#e11d48" stop-opacity="0.52" />
+      <stop offset="45%" stop-color="#ea580c" stop-opacity="0.24" />
+      <stop offset="100%" stop-color="#02040a" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="cyberTopGlow" cx="50%" cy="22%" r="50%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.4" />
+      <stop offset="55%" stop-color="#2563eb" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#02040a" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Outer Rim Dual-Tone Gradient -->
+    <linearGradient id="rimBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="35%" stop-color="#2563eb" />
+      <stop offset="68%" stop-color="#e11d48" />
+      <stop offset="100%" stop-color="#f97316" />
     </linearGradient>
-    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+
+    <!-- 2. 3D Code Bracket (< >) Facet Gradients -->
+    <linearGradient id="bladeTop" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0f9ff" />
+      <stop offset="28%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+
+    <linearGradient id="bladeBottom" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#3b82f6" />
-      <stop offset="100%" stop-color="#2563eb" />
+      <stop offset="45%" stop-color="#1d4ed8" />
+      <stop offset="100%" stop-color="#172554" />
     </linearGradient>
+
+    <!-- 3. Central Rage Cyber-Beast Head Gradients -->
+    <linearGradient id="headArmor" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="45%" stop-color="#0f172a" />
+      <stop offset="85%" stop-color="#090d16" />
+      <stop offset="100%" stop-color="#1f0916" />
+    </linearGradient>
+
+    <linearGradient id="headPlaneLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0" />
+    </linearGradient>
+
+    <linearGradient id="headPlaneRight" x1="100%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#f43f5e" stop-opacity="0.34" />
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0" />
+    </linearGradient>
+
+    <linearGradient id="headRim" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="45%" stop-color="#3b82f6" />
+      <stop offset="75%" stop-color="#f43f5e" />
+      <stop offset="100%" stop-color="#fb923c" />
+    </linearGradient>
+
+    <!-- 4. Fierce Rage Eyes & Mouth Gradients -->
+    <linearGradient id="rageEyeOuter" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="40%" stop-color="#f97316" />
+      <stop offset="100%" stop-color="#e11d48" />
+    </linearGradient>
+
+    <linearGradient id="throatPlasma" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#4c0519" />
+      <stop offset="48%" stop-color="#be123c" />
+      <stop offset="85%" stop-color="#f97316" />
+      <stop offset="100%" stop-color="#fde047" />
+    </linearGradient>
+
+    <linearGradient id="upperFang" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="35%" stop-color="#f8fafc" />
+      <stop offset="100%" stop-color="#ffffff" />
+    </linearGradient>
+
+    <linearGradient id="lowerFang" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="35%" stop-color="#f8fafc" />
+      <stop offset="100%" stop-color="#ffffff" />
+    </linearGradient>
+
+    <!-- 5. High-Voltage Lightning Slash (/) Gradients -->
+    <linearGradient id="boltFill" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="25%" stop-color="#fde047" />
+      <stop offset="65%" stop-color="#f97316" />
+      <stop offset="100%" stop-color="#e11d48" />
+    </linearGradient>
+
+    <!-- 6. Live Status Emerald Beacon -->
+    <radialGradient id="emeraldOrb" cx="35%" cy="32%" r="65%">
+      <stop offset="0%" stop-color="#d1fae5" />
+      <stop offset="38%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#065f46" />
+    </radialGradient>
+
+    <!-- 7. Filters & Clips -->
+    <filter id="heavyShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#000000" flood-opacity="0.82" />
+    </filter>
+
+    <filter id="eyeGlow" x="-35%" y="-35%" width="170%" height="170%">
+      <feDropShadow dx="0" dy="0" stdDeviation="7" flood-color="#f43f5e" flood-opacity="0.95" />
+      <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#fde047" flood-opacity="0.7" />
+    </filter>
+
+    <filter id="boltGlow" x="-35%" y="-35%" width="170%" height="170%">
+      <feDropShadow dx="0" dy="3" stdDeviation="8" flood-color="#e11d48" flood-opacity="0.9" />
+      <feDropShadow dx="0" dy="0" stdDeviation="3.5" flood-color="#fde047" flood-opacity="0.8" />
+    </filter>
+
+    <filter id="cyanGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#06b6d4" flood-opacity="0.7" />
+    </filter>
+
+    <clipPath id="squircleClip">
+      <rect width="512" height="512" rx="112" />
+    </clipPath>
+
+    <!-- Snarling Mouth Clip Path so Fangs Never Spill Outside -->
+    <clipPath id="mouthClip">
+      <path d="M 172 298 Q 214 316 256 316 Q 298 316 340 298 L 324 360 Q 290 384 256 384 Q 222 384 188 360 Z" />
+    </clipPath>
   </defs>
-  <rect width="512" height="512" rx="112" fill="url(#bg)" />
-  <rect x="36" y="36" width="440" height="440" rx="88" fill="none" stroke="#1e293b" stroke-width="8" />
-  <circle cx="404" cy="108" r="24" fill="#10b981" />
-  <text x="256" y="305" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="180" fill="#ffffff" letter-spacing="-6">CR</text>
-  <rect x="136" y="364" width="240" height="16" rx="8" fill="url(#accent)" />
+
+  <g clip-path="url(#squircleClip)">
+    <!-- LAYER 1: Deep Space/Obsidian Background & Dual Energy Cores -->
+    <rect width="512" height="512" rx="112" fill="url(#bgCore)" />
+    <rect width="512" height="512" fill="url(#cyberTopGlow)" />
+    <rect width="512" height="512" fill="url(#rageUnderglow)" />
+
+    <!-- Subtle Cyber Grid -->
+    <g opacity="0.16" stroke="#38bdf8" stroke-width="1.5" fill="none">
+      <line x1="0" y1="128" x2="512" y2="128" stroke-dasharray="6 12" />
+      <line x1="0" y1="256" x2="512" y2="256" stroke-dasharray="6 12" />
+      <line x1="0" y1="384" x2="512" y2="384" stroke-dasharray="6 12" />
+      <line x1="128" y1="0" x2="128" y2="512" stroke-dasharray="6 12" />
+      <line x1="256" y1="0" x2="256" y2="512" stroke-dasharray="6 12" />
+      <line x1="384" y1="0" x2="384" y2="512" stroke-dasharray="6 12" />
+    </g>
+
+    <!-- LAYER 2: PCB Hardware Circuit Traces -->
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Top-Left Cyan/Blue Traces -->
+      <path d="M 28 152 L 78 152 L 106 180 L 146 180" stroke="#06b6d4" stroke-width="3.5" opacity="0.5" />
+      <circle cx="78" cy="152" r="4.5" fill="#22d3ee" opacity="0.75" />
+      <path d="M 148 28 L 148 72 L 176 100 L 176 132" stroke="#3b82f6" stroke-width="3.5" opacity="0.5" />
+      <circle cx="148" cy="72" r="4.5" fill="#60a5fa" opacity="0.75" />
+      <!-- Bottom-Right Crimson/Orange Rage Traces -->
+      <path d="M 484 360 L 434 360 L 406 332 L 366 332" stroke="#f43f5e" stroke-width="3.5" opacity="0.55" />
+      <circle cx="434" cy="360" r="4.5" fill="#fb7185" opacity="0.8" />
+      <path d="M 364 484 L 364 440 L 336 412 L 336 380" stroke="#f97316" stroke-width="3.5" opacity="0.5" />
+      <circle cx="364" cy="440" r="4.5" fill="#fdba74" opacity="0.75" />
+    </g>
+
+    <!-- LAYER 3: 3D Beveled Outer Squircle Chassis -->
+    <rect x="18" y="18" width="476" height="476" rx="98" fill="none" stroke="#090d16" stroke-width="12" />
+    <rect x="24" y="24" width="464" height="464" rx="92" fill="none" stroke="url(#rimBorder)" stroke-width="4.5" opacity="0.9" />
+
+    <!-- Tech Corner Brackets -->
+    <path d="M 44 114 L 44 78 Q 44 44 78 44 L 114 44" fill="none" stroke="#38bdf8" stroke-width="4.5" stroke-linecap="round" opacity="0.85" />
+    <path d="M 468 398 L 468 434 Q 468 468 434 468 L 398 468" fill="none" stroke="#f43f5e" stroke-width="4.5" stroke-linecap="round" opacity="0.85" />
+
+    <!-- LAYER 4: Jagged "Code Rage" Shockwave Starburst Behind Emblem -->
+    <polygon
+      points="256,56 288,92 332,70 348,112 396,104 388,152 436,174 410,216 452,256 410,296 436,338 388,360 396,408 348,400 332,442 288,420 256,456 224,420 180,442 164,400 116,408 124,360 76,338 102,296 60,256 102,216 76,174 124,152 116,104 164,112 180,70 224,92"
+      fill="#050811"
+      stroke="url(#rimBorder)"
+      stroke-width="2.5"
+      opacity="0.75"
+    />
+
+    <!-- LAYER 5: Upper Lightning Bolt Striking Into the Crown (Top-Right of "/" Trajectory) -->
+    <g filter="url(#boltGlow)">
+      <polygon
+        points="338,32 272,110 292,110 262,162 330,86 308,86"
+        fill="url(#boltFill)"
+      />
+      <polygon
+        points="326,50 280,106 296,106 274,142 320,90 304,90"
+        fill="#ffffff"
+        opacity="0.85"
+      />
+    </g>
+
+    <!-- LAYER 6: Central "CODE RAGE" Cyber-Beast Head -->
+    <g filter="url(#heavyShadow)">
+      <!-- Spiky Rage Crown & Angular Armored Head Silhouette -->
+      <path
+        d="M 256 96
+           L 278 134
+           L 312 104
+           L 322 146
+           L 354 128
+           L 356 178
+           L 370 250
+           L 344 348
+           L 300 396
+           L 256 412
+           L 212 396
+           L 168 348
+           L 142 250
+           L 156 178
+           L 158 128
+           L 190 146
+           L 200 104
+           L 234 134 Z"
+        fill="url(#headArmor)"
+        stroke="url(#headRim)"
+        stroke-width="5"
+        stroke-linejoin="round"
+      />
+
+      <!-- 3D Left & Right Bevel Shading Planes on Head -->
+      <path
+        d="M 256 96 L 234 134 L 200 104 L 190 146 L 158 128 L 156 178 L 142 250 L 168 348 L 212 396 L 256 412 Z"
+        fill="url(#headPlaneLeft)"
+      />
+      <path
+        d="M 256 96 L 278 134 L 312 104 L 322 146 L 354 128 L 356 178 L 370 250 L 344 348 L 300 396 L 256 412 Z"
+        fill="url(#headPlaneRight)"
+      />
+
+      <!-- Forehead High-Voltage Slash Scar (Non-Intersecting Plump Bolt!) -->
+      <g filter="url(#boltGlow)">
+        <polygon
+          points="292,122 238,192 258,192 234,234 290,168 268,168"
+          fill="url(#boltFill)"
+        />
+        <polygon
+          points="282,138 246,188 262,188 246,216 280,172 264,172"
+          fill="#ffffff"
+          opacity="0.88"
+        />
+      </g>
+
+      <!-- Heavy Aggressive Scowling V-Brow Armor -->
+      <path
+        d="M 144 198 L 240 242 L 256 234 L 272 242 L 368 198 L 358 176 L 256 220 L 154 176 Z"
+        fill="#050811"
+        stroke="#334155"
+        stroke-width="2.5"
+        stroke-linejoin="round"
+      />
+      <!-- Hot Crimson Brow Underside Rim -->
+      <polyline
+        points="148,200 242,244 256,236 270,244 364,200"
+        fill="none"
+        stroke="#f43f5e"
+        stroke-width="3"
+        stroke-linecap="round"
+      />
+
+      <!-- Fierce Glowing Left Rage Eye -->
+      <g filter="url(#eyeGlow)">
+        <path
+          d="M 158 210 L 238 246 L 228 278 Q 186 274 164 252 Z"
+          fill="url(#rageEyeOuter)"
+        />
+        <!-- Hot Inner Iris & Glint -->
+        <polygon
+          points="172,222 226,247 220,266 178,252"
+          fill="#fef08a"
+        />
+        <polygon
+          points="192,232 214,242 208,262 196,258"
+          fill="#ffffff"
+        />
+      </g>
+
+      <!-- Fierce Glowing Right Rage Eye -->
+      <g filter="url(#eyeGlow)">
+        <path
+          d="M 354 210 L 274 246 L 284 278 Q 326 274 348 252 Z"
+          fill="url(#rageEyeOuter)"
+        />
+        <!-- Hot Inner Iris & Glint -->
+        <polygon
+          points="340,222 286,247 292,266 334,252"
+          fill="#fef08a"
+        />
+        <polygon
+          points="320,232 298,242 304,262 316,258"
+          fill="#ffffff"
+        />
+      </g>
+
+      <!-- Angry Cheekbone / Nose Bridge Tech Lines -->
+      <path d="M 154 272 L 196 288" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" opacity="0.6" />
+      <path d="M 358 272 L 316 288" stroke="#f43f5e" stroke-width="2.5" stroke-linecap="round" opacity="0.6" />
+
+      <!-- Snarling Fanged Mouth (Clipped Cleanly to Mouth Cavity) -->
+      <g clip-path="url(#mouthClip)">
+        <!-- Glowing Magma Throat Background -->
+        <rect x="164" y="292" width="184" height="98" fill="url(#throatPlasma)" />
+
+        <!-- Throat Energy Grid Lines -->
+        <line x1="256" y1="292" x2="256" y2="390" stroke="#fde047" stroke-width="2" opacity="0.35" />
+        <line x1="216" y1="292" x2="216" y2="390" stroke="#fde047" stroke-width="1.5" opacity="0.25" />
+        <line x1="296" y1="292" x2="296" y2="390" stroke="#fde047" stroke-width="1.5" opacity="0.25" />
+
+        <!-- Upper Razor Fangs (6 Crisp Interlocking Fangs) -->
+        <polygon points="168,294 198,296 184,342" fill="url(#upperFang)" />
+        <polygon points="196,296 226,300 212,350" fill="url(#upperFang)" />
+        <polygon points="226,302 256,304 242,346" fill="url(#upperFang)" />
+        <polygon points="256,304 286,302 270,346" fill="url(#upperFang)" />
+        <polygon points="286,300 316,296 300,350" fill="url(#upperFang)" />
+        <polygon points="314,296 344,294 328,342" fill="url(#upperFang)" />
+
+        <!-- Lower Razor Fangs (6 Crisp Interlocking Fangs) -->
+        <polygon points="180,388 206,388 196,342" fill="url(#lowerFang)" />
+        <polygon points="204,390 232,390 226,340" fill="url(#lowerFang)" />
+        <polygon points="230,392 256,392 244,344" fill="url(#lowerFang)" />
+        <polygon points="256,392 282,392 268,344" fill="url(#lowerFang)" />
+        <polygon points="280,390 308,390 286,340" fill="url(#lowerFang)" />
+        <polygon points="306,388 332,388 316,342" fill="url(#lowerFang)" />
+      </g>
+
+      <!-- Mouth Outer Metallic/Rage Lip Rim -->
+      <path
+        d="M 172 298 Q 214 316 256 316 Q 298 316 340 298 L 324 360 Q 290 384 256 384 Q 222 384 188 360 Z"
+        fill="none"
+        stroke="url(#boltFill)"
+        stroke-width="4"
+        stroke-linejoin="round"
+      />
+    </g>
+
+    <!-- Lower Lightning Bolt Erupting Below Chin (Completing "/" Trajectory, Non-Intersecting!) -->
+    <g filter="url(#boltGlow)">
+      <polygon
+        points="256,388 200,450 222,450 190,486 258,424 234,424"
+        fill="url(#boltFill)"
+      />
+      <polygon
+        points="248,400 208,446 226,446 202,472 248,428 230,428"
+        fill="#ffffff"
+        opacity="0.85"
+      />
+    </g>
+
+    <!-- LAYER 7: Massive 3D Sculpted Code Brackets (< and >) -->
+    <!-- LEFT CODE BRACKET (<) -->
+    <g filter="url(#heavyShadow)">
+      <!-- Upper 3D Facet of < -->
+      <polygon
+        points="158,104 190,136 86,240 106,256 22,256 72,206 54,200 110,144 92,138"
+        fill="url(#bladeTop)"
+      />
+      <!-- Lower 3D Facet of < -->
+      <polygon
+        points="22,256 106,256 86,272 190,376 158,408 92,374 110,368 54,312 72,306"
+        fill="url(#bladeBottom)"
+      />
+      <!-- Inner Bevel Highlight Ridge -->
+      <polyline
+        points="176,122 66,232 92,256 66,280 176,390"
+        fill="none"
+        stroke="#e0f2fe"
+        stroke-width="4.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        opacity="0.92"
+      />
+      <!-- Crisp Cyan Outer Edge -->
+      <polygon
+        points="158,104 190,136 86,240 106,256 86,272 190,376 158,408 92,374 110,368 54,312 72,306 22,256 72,206 54,200 110,144 92,138"
+        fill="none"
+        stroke="#38bdf8"
+        stroke-width="2.5"
+        stroke-linejoin="round"
+      />
+    </g>
+
+    <!-- RIGHT CODE BRACKET (>) -->
+    <g filter="url(#heavyShadow)">
+      <!-- Upper 3D Facet of > -->
+      <polygon
+        points="354,104 322,136 426,240 406,256 490,256 440,206 458,200 402,144 420,138"
+        fill="url(#bladeTop)"
+      />
+      <!-- Lower 3D Facet of > -->
+      <polygon
+        points="490,256 406,256 426,272 322,376 354,408 420,374 402,368 458,312 440,306"
+        fill="url(#bladeBottom)"
+      />
+      <!-- Inner Bevel Highlight Ridge -->
+      <polyline
+        points="336,122 446,232 420,256 446,280 336,390"
+        fill="none"
+        stroke="#e0f2fe"
+        stroke-width="4.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        opacity="0.92"
+      />
+      <!-- Crisp Cyan Outer Edge -->
+      <polygon
+        points="354,104 322,136 426,240 406,256 426,272 322,376 354,408 420,374 402,368 458,312 440,306 490,256 440,206 458,200 402,144 420,138"
+        fill="none"
+        stroke="#38bdf8"
+        stroke-width="2.5"
+        stroke-linejoin="round"
+      />
+    </g>
+
+    <!-- LAYER 8: Crackling Voltage Arcs & Energy Shards -->
+    <g stroke="#fde047" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(#boltGlow)">
+      <polyline points="326,90 356,74 348,54 376,42" />
+      <polyline points="186,418 156,434 164,454 136,466" />
+    </g>
+    <g stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" filter="url(#cyanGlow)">
+      <polyline points="92,114 118,92 110,72" />
+      <polyline points="420,398 394,420 402,440" />
+    </g>
+
+    <!-- Floating High-Energy Shards -->
+    <polygon points="72,120 92,108 82,132" fill="#38bdf8" />
+    <polygon points="440,392 420,404 430,380" fill="#f43f5e" />
+    <polygon points="154,68 172,56 166,78" fill="#fde047" />
+    <polygon points="358,444 340,456 346,434" fill="#fb923c" />
+
+    <!-- LAYER 9: Top-Right Live Inbox Status Beacon (Emerald Power Node) -->
+    <g filter="url(#cyanGlow)">
+      <circle cx="426" cy="86" r="22" fill="#042f2e" stroke="#10b981" stroke-width="3.5" />
+      <circle cx="426" cy="86" r="14" fill="url(#emeraldOrb)" />
+      <circle cx="421" cy="81" r="4.5" fill="#ffffff" opacity="0.92" />
+    </g>
+  </g>
 </svg>
