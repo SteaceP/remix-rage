@@ -18,22 +18,22 @@ Features an architectural dark/light mode aesthetic, real-time WebSocket communi
 
 - **Service Pages**: Computer Repair, Website Development, Cross-Platform Apps, and Family Support
 - **Direct Messaging System**:
-    - Live visitor-to-operator chat backed by Cloudflare Durable Objects
-    - Persistent message history stored in SQLite within Durable Objects
-    - Real-time presence and operator availability status
-    - Rate limiting, token-based session persistence, and message encryption helpers
+  - Live visitor-to-operator chat backed by Cloudflare Durable Objects
+  - Persistent message history stored in SQLite within Durable Objects
+  - Real-time presence and operator availability status
+  - Rate limiting, token-based session persistence, and message encryption helpers
 - **Operator Inbox (`/inbox`)**:
-    - Mobile-first, responsive direct messaging console
-    - Secure authentication via Passkeys / WebAuthn and passcodes
-    - Web Push notifications for inbound messages
+  - Mobile-first, responsive direct messaging console
+  - Secure authentication via Passkeys / WebAuthn and passcodes
+  - Web Push notifications for inbound messages
 - **Modern Architectural UI**:
-    - Cohesive architectural typography and responsive layouts
-    - Seamless dark and light mode support
-    - Accessible focus states and motion-safe animations (`prefers-reduced-motion`)
+  - Cohesive architectural typography and responsive layouts
+  - Seamless dark and light mode support
+  - Accessible focus states and motion-safe animations (`prefers-reduced-motion`)
 - **Security & Performance**:
-    - CSP headers, HSTS, CORS configuration via `public/_headers`
-    - Direct session signing and secure WebSocket protocol validation
-    - Edge caching and minimal cold starts on Cloudflare Workers
+  - CSP headers, HSTS, CORS configuration via `public/_headers`
+  - Direct session signing and secure WebSocket protocol validation
+  - Edge caching and minimal cold starts on Cloudflare Workers
 
 ## 🏗️ Architecture
 
@@ -41,11 +41,11 @@ Features an architectural dark/light mode aesthetic, real-time WebSocket communi
 
 - File-based routing via `@react-router/fs-routes` configured in `app/routes.ts`
 - Routes include:
-    - `app/routes/_index.tsx`: Homepage with architectural hero and service overview
-    - `app/routes/contact.tsx`: Live direct message portal with operator presence
-    - `app/routes/inbox.tsx`: Operator administration console
-    - `app/routes/api.dm.$action.ts`: Direct messaging API and WebSocket upgrade endpoint
-    - `app/routes/*.tsx`: Individual service offerings
+  - `app/routes/_index.tsx`: Homepage with architectural hero and service overview
+  - `app/routes/contact.tsx`: Live direct message portal with operator presence
+  - `app/routes/inbox.tsx`: Operator administration console
+  - `app/routes/api.dm.$action.ts`: Direct messaging API and WebSocket upgrade endpoint
+  - `app/routes/*.tsx`: Individual service offerings
 
 ### Real-Time Direct Message Hub (Durable Object)
 
@@ -63,15 +63,15 @@ Features an architectural dark/light mode aesthetic, real-time WebSocket communi
 
 - Production variables are bound via Cloudflare context (`context.cloudflare.env` or `app/context.ts`)
 - Configured secrets:
-    - `ADMIN_SECRET`: Secret used for authenticating admin sessions and WebAuthn challenges
+  - `ADMIN_SECRET`: Secret used for authenticating admin sessions and WebAuthn challenges
 
 ## 🛠️ Development
 
 ### Prerequisites
 
 ```bash
-node >= 22.12.0
-pnpm >= 9.0.0
+node >= 22.23.4
+pnpm >= 12.15.0
 ```
 
 ### Setup
@@ -143,10 +143,13 @@ public/
 
 1. **Configure Wrangler**: Verify route patterns and Durable Object migrations in `wrangler.jsonc`
 2. **Set Secrets via CLI**:
+
     ```bash
     wrangler secret put ADMIN_SECRET
     ```
+
 3. **Deploy**:
+
     ```bash
     pnpm run deploy
     ```
