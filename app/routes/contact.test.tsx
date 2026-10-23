@@ -85,7 +85,7 @@ describe("Route: /contact", () => {
         expect(data.presence.statusText).toBe("Available");
     });
 
-    it("renders page content, presence status, and admin login link for guests", () => {
+    it("renders page content and presence status without owner shortcut link", () => {
         mockLoaderData.mockReturnValue({
             presence: mockPresence,
             isAdmin: false,
@@ -100,10 +100,10 @@ describe("Route: /contact", () => {
         expect(screen.getByRole("heading", { name: "Direct Message" })).toBeDefined();
         expect(screen.getByText("LIVE DIRECT MESSAGE // ONLINE")).toBeDefined();
         expect(screen.getByText("Real-Time Direct Support")).toBeDefined();
-        expect(screen.getByText(/Owner Login \/\/ Mobile Inbox PWA →/i)).toBeDefined();
+        expect(screen.queryByText(/Owner Login \/\/ Mobile Inbox PWA →/i)).toBeNull();
     });
 
-    it("renders admin logged in link when isAdmin is true", () => {
+    it("renders away status when availability is false", () => {
         mockLoaderData.mockReturnValue({
             presence: {
                 ...mockPresence,
@@ -120,6 +120,6 @@ describe("Route: /contact", () => {
         );
 
         expect(screen.getByText("DIRECT MESSAGE // AWAY")).toBeDefined();
-        expect(screen.getByText(/Open Admin Direct Inbox \(Logged In\) →/i)).toBeDefined();
+        expect(screen.queryByText(/Open Admin Direct Inbox/i)).toBeNull();
     });
 });

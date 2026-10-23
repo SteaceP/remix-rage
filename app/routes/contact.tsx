@@ -1,6 +1,6 @@
 import { type LoaderFunctionArgs, type MetaFunction } from "react-router";
-import { Link, useLoaderData } from "react-router";
-import { FaBolt, FaCode, FaLock, FaMobileAlt, FaShieldAlt, FaTools } from "react-icons/fa";
+import { useLoaderData } from "react-router";
+import { FaBolt, FaCode, FaShieldAlt, FaTools } from "react-icons/fa";
 import { DirectMessageChat } from "~/components/DirectMessageChat";
 import { contactStyles as styles } from "~/styles/components";
 import { getAdminSessionFromRequest, resolveSigningSecret } from "~/utils/auth.server";
@@ -47,7 +47,7 @@ export async function loader({ request, context }: LoaderFunctionArgs) {
 }
 
 export default function Contact() {
-    const { presence, isAdmin } = useLoaderData<typeof loader>() as {
+    const { presence } = useLoaderData<typeof loader>() as {
         presence: AdminPresence;
         isAdmin: boolean;
     };
@@ -119,17 +119,6 @@ export default function Contact() {
                             <span>Confidential &amp; secure • Session saved in your browser</span>
                         </div>
 
-                        <div>
-                            <Link to="/inbox" className={styles.adminShortcutLink}>
-                                <FaMobileAlt className={styles.featureIconSize} />
-                                <span>
-                                    {isAdmin
-                                        ? "Open Admin Direct Inbox (Logged In) →"
-                                        : "Owner Login // Mobile Inbox PWA →"}
-                                </span>
-                                <FaLock className="w-3 h-3" />
-                            </Link>
-                        </div>
                     </div>
 
                     {/* Right Column: Real-Time Direct Message Chat Card */}
